@@ -115,13 +115,13 @@ class ScaleViewModel : BaseScaleViewModel() {
     fun loadMain(date: String) {
         loading("获取订单...")
         val params = mutableMapOf<String,Any>("day" to date)
-        postWithToken<MutableList<OrderInfo>>(Url.orders, params, 201)
+        postWithToken<MutableList<OrderInfo>>(Url.tasks, params, 201)
     }
 
     fun loadDetail(id: String) {
         loading("获取订单...")
         val params = mutableMapOf<String,Any>("order_id" to id)
-        postWithToken<MutableList<OrderInfo>>(Url.orders, params, 203)
+        postWithToken<MutableList<OrderInfo>>(Url.tasks, params, 203)
     }
 
     fun loadUpdate() {

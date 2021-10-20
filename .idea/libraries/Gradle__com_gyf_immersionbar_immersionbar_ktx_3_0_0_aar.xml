@@ -5,9 +5,9 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ff5e8aa522e340574d31eb2ded1aec17/transformed/jetified-immersionbar-ktx-3.0.0/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/ff5e8aa522e340574d31eb2ded1aec17/transformed/jetified-immersionbar-ktx-3.0.0/AndroidManifest.xml" />
       <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/ff5e8aa522e340574d31eb2ded1aec17/transformed/jetified-immersionbar-ktx-3.0.0/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/870113251e3874014f66aca65fc152d8/transformed/jetified-immersionbar-ktx-3.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/870113251e3874014f66aca65fc152d8/transformed/jetified-immersionbar-ktx-3.0.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/870113251e3874014f66aca65fc152d8/transformed/jetified-immersionbar-ktx-3.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/369f01deb86266d4106c23388f624744/transformed/jetified-immersionbar-ktx-3.0.0/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/369f01deb86266d4106c23388f624744/transformed/jetified-immersionbar-ktx-3.0.0/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.gyf.immersionbar/immersionbar-ktx/3.0.0/8061053313b2956e81b91d372feb4d630a2a5f94/immersionbar-ktx-3.0.0-javadoc.jar!/" />

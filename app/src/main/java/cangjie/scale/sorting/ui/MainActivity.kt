@@ -32,7 +32,7 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
         startService(Intent(this, InitService::class.java))
     }
 
-    private val title = arrayListOf("未验收", "已验收")
+    private val title = arrayListOf("待分拣", "已分拣")
     private val mAdapter by lazy {
         BaseFragmentPagerAdapter(
             supportFragmentManager, arrayListOf(
