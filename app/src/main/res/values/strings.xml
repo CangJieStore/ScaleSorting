@@ -6,7 +6,9 @@
     <string name="str_send_date">配送日期:</string>
     <string name="str_detail">详情</string>
     <string name="str_company">供&#160;&#160;&#160;应&#160;&#160;商：</string>
-    <string name="str_strade_no">订单编号：</string>
+    <string name="str_strade_no">分拣任务号：</string>
+    <string name="str_unsorting">待分拣商品：</string>
+    <string name="str_sorted">已分拣商品：</string>
     <string name="str_delivery_date">配送日期：</string>
     <string name="str_check">验收</string>
     <string name="output_photo_directory">Terminal</string>

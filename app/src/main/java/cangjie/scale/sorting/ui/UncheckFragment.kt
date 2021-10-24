@@ -47,9 +47,9 @@ class UncheckFragment : BaseMvvmFragment<FragmentUncheckBinding, ScaleViewModel>
         netTime()
         mBinding!!.adapter = orderAdapter
         orderAdapter.setOnItemClickListener { adapter, view, position ->
-            val intent = Intent(requireActivity(), CheckActivity::class.java)
+            val intent = Intent(requireActivity(), TaskListActivity::class.java)
             val info = adapter.data[position] as OrderInfo
-            intent.putExtra("id", info.trade_no)
+            intent.putExtra("id", info.id)
             startActivity(intent)
         }
     }
@@ -91,7 +91,7 @@ class UncheckFragment : BaseMvvmFragment<FragmentUncheckBinding, ScaleViewModel>
         super.subscribeModel(model)
         model.getOrderInfo().observe(this, Observer {
             it?.let {
-                orderAdapter.setList(it.filter { it -> it.item_count != it.receive_item_count })
+                orderAdapter.setList(it)
             }
         })
     }

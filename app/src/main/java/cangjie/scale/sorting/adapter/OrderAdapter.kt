@@ -22,10 +22,6 @@ class OrderAdapter(type: Int) :
             it.tvOrderNo.text = (getItemPosition(item) + 1).toString()
             it.type = actionTYpe
             it.info = item
-            if (item.item_count.isNotEmpty() && item.receive_item_count.isNotEmpty()) {
-                it.unCheckedCount =
-                    (item.item_count.toInt() - item.receive_item_count.toInt()).toString()
-            }
         }
     }
 }

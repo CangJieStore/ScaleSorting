@@ -95,7 +95,7 @@
                         android:drawableStart="@drawable/ic_delivery_company"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
-                        android:text="@{@string/str_company+info.supplier_name}"
+                        android:text="@{@string/str_company+info.purchaser_count}"
                         android:textColor="@color/black_3"
                         android:textSize="@dimen/sp18" />
 
@@ -117,7 +117,7 @@
                         android:drawableStart="@drawable/ic_delivery_date"
                         android:drawablePadding="@dimen/dp5"
                         android:gravity="center_vertical"
-                        android:text="@{@string/str_delivery_date+info.collect_time}"
+                        android:text="@{@string/str_delivery_date+info.collect_date}"
                         android:textColor="@color/black_3"
                         android:textSize="@dimen/sp18" />
                 </LinearLayout>

@@ -7,11 +7,10 @@ import java.io.Serializable
  * Create by AS at 2020/8/13 18:16
  */
 data class OrderInfo(
+    val id: String,
     val trade_no: String,
     val item_count: String,
-    val receive_item_count: String,
-    val deliver_quantity: String,
-    val collect_time: String,
-    val supplier_name: String,
-    val goods: MutableList<GoodsInfo>
+    val sorting_count: String,
+    val purchaser_count: String,
+    val collect_date: String
 ) : Serializable

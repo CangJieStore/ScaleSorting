@@ -78,7 +78,7 @@ class CheckedFragment : BaseMvvmFragment<FragmentChekedBinding, ScaleViewModel>(
         super.subscribeModel(model)
         model.getOrderInfo().observe(this, Observer {
             it?.let {
-                orderAdapter.setList(it.filter { it -> it.item_count == it.receive_item_count })
+//                orderAdapter.setList(it.filter { it -> it.item_count == it.receive_item_count })
             }
         })
     }

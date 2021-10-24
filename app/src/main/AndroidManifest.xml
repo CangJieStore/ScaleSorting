@@ -65,6 +65,9 @@
         <activity
             android:name=".ui.CheckedDetailActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.TaskListActivity"
+            android:screenOrientation="landscape" />
 
         <service android:name=".service.InitService" />
         <receiver

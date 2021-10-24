@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="taskModel"
+            type="cangjie.scale.sorting.vm.TaskViewModel" />
+
+        <variable
+            name="info"
+            type="cangjie.scale.sorting.entity.OrderInfo" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/shape_main_bg"
+            android:padding="@dimen/dp10">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp25"
+                android:layout_marginTop="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp25"
+                android:src="@drawable/ic_main_logo"
+                android:visibility="invisible" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableStart="@drawable/ic_back"
+                android:drawablePadding="@dimen/dp8"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp25"
+                android:paddingEnd="@dimen/dp25"
+                android:text="@string/str_check"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp20"
+                binding:onClickCommand="@{taskModel.finishCommand}" />
+
+        </RelativeLayout>
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/dp15"
+            binding:cardCornerRadius="@dimen/dp8"
+            binding:contentPadding="@dimen/dp15">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_trade_no"
+                    android:drawablePadding="@dimen/dp5"
+                    android:gravity="center_vertical"
+                    android:text="@{@string/str_strade_no+info.trade_no}"
+                    android:textColor="@color/black_3"
+                    android:textSize="@dimen/sp18" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/ic_delivery_date"
+                    android:drawablePadding="@dimen/dp5"
+                    android:gravity="center_vertical"
+                    android:text="@{@string/str_delivery_date+info.collect_date}"
+                    android:textColor="@color/black_3"
+                    android:textSize="@dimen/sp18" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@{@string/str_unsorting+info.trade_no}"
+                    android:textColor="@color/black_3"
+                    android:textSize="@dimen/sp18" />
+
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:text="@{@string/str_sorted+info.collect_date}"
+                    android:textColor="@color/black_3"
+                    android:textSize="@dimen/sp18" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+        </androidx.cardview.widget.CardView>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

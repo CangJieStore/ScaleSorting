@@ -48,7 +48,7 @@ class CheckedDetailActivity : BaseMvvmActivity<ActivityCheckedDetailBinding, Sca
             .build()
             .addTo(mBinding.ryOrders)
         mBinding.adapter = detailAdapter
-        detailAdapter.setList(currentOrder!!.goods)
+//        detailAdapter.setList(currentOrder!!.goods)
     }
 
     override fun initVariableId(): Int = cangjie.scale.sorting.BR.detailModel

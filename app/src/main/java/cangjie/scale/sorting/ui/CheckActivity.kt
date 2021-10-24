@@ -885,27 +885,27 @@ class CheckActivity : BaseMvvmActivity<ActivityCheckBinding, ScaleViewModel>() {
             it?.let {
                 currentOrder = it
                 mBinding.info = currentOrder
-                checkedAdapter.setList(it.goods.filter { value -> value.receive_quantity.toFloat() > 0f })
-                if (it.goods.size > 0) {
-                    if (currentRepairGood != null) {
-                        currentGoodsInfo = currentRepairGood
-                        it.goods.forEach { value ->
-                            value.isRepair = value.id == currentRepairGood!!.id
-                        }
-                        Log.e("json--", Gson().toJson(it))
-                        checkAdapter.setList(it.goods.filter { value -> value.receive_quantity.toFloat() == 0f || value.repair_receive == "1" })
-                        if (checkAdapter.data.size > 0) {
-                            handlerSelected()
-                        }
-                    } else {
-                        checkAdapter.setList(it.goods.filter { value -> value.receive_quantity.toFloat() == 0f || value.repair_receive == "1" })
-                        if (checkAdapter.data.size > 0) {
-                            currentGoodsInfo = checkAdapter.data[0]
-                            handlerSelected()
-                            checkPosition(currentGoodsInfo!!)
-                        }
-                    }
-                }
+//                checkedAdapter.setList(it.goods.filter { value -> value.receive_quantity.toFloat() > 0f })
+//                if (it.goods.size > 0) {
+//                    if (currentRepairGood != null) {
+//                        currentGoodsInfo = currentRepairGood
+//                        it.goods.forEach { value ->
+//                            value.isRepair = value.id == currentRepairGood!!.id
+//                        }
+//                        Log.e("json--", Gson().toJson(it))
+//                        checkAdapter.setList(it.goods.filter { value -> value.receive_quantity.toFloat() == 0f || value.repair_receive == "1" })
+//                        if (checkAdapter.data.size > 0) {
+//                            handlerSelected()
+//                        }
+//                    } else {
+//                        checkAdapter.setList(it.goods.filter { value -> value.receive_quantity.toFloat() == 0f || value.repair_receive == "1" })
+//                        if (checkAdapter.data.size > 0) {
+//                            currentGoodsInfo = checkAdapter.data[0]
+//                            handlerSelected()
+//                            checkPosition(currentGoodsInfo!!)
+//                        }
+//                    }
+//                }
             }
         })
     }
