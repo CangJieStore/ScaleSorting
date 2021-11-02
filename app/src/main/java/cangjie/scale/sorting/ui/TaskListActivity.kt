@@ -7,6 +7,7 @@ import cangjie.scale.sorting.databinding.ActivityTaskBinding
 import cangjie.scale.sorting.vm.TaskViewModel
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
+import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.hideStatusBar
 import com.gyf.immersionbar.ktx.immersionBar
 
@@ -40,8 +41,8 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
         super.initImmersionBar()
         immersionBar {
             fullScreen(true)
+            hideBar(BarHide.FLAG_HIDE_BAR)
             statusBarDarkFont(false)
-            hideStatusBar()
             init()
         }
     }
