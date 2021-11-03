@@ -68,4 +68,37 @@
         <attr name="scannerAnimationDelay" format="integer" />
         <attr name="frameRatio" format="float" />
     </declare-styleable>
+    <attr name="gapSize" format="dimension" />
+    <declare-styleable name="MagicTabLayout">
+        <attr name="bgColor" format="color" />
+        <attr name="bgImage" format="reference" />
+        <attr name="selectDrawable" format="reference" />
+        <attr name="normalTextColor" format="color" />
+        <attr name="selectTextColor" format="color" />
+        <attr name="titleIconDrawable" format="reference" />
+        <attr name="titleIconPadding" format="dimension" />
+        <attr name="animateSelected" format="boolean" />
+        <attr name="normalTextSize" format="dimension" />
+        <attr name="selectedTextSize" format="dimension" />
+        <attr name="gapSize" />
+        <attr name="topRadius" format="dimension" />
+        <attr name="bottomRadius" format="dimension" />
+        <attr name="bottomSpace" format="dimension" />
+        <attr name="holoColor" format="color" />
+        <attr name="textStyle">
+            <flag name="normal" value="0" />
+            <flag name="bold" value="1" />
+            <flag name="italic" value="2" />
+        </attr>
+
+    </declare-styleable>
+
+    <declare-styleable name="MagicIndicator">
+        <attr name="normalColor" format="color" />
+        <attr name="cursorColor" format="color" />
+        <attr name="gapSize" />
+        <attr name="normalWidth" format="dimension" />
+        <attr name="cursorWidth" format="dimension" />
+        <attr name="itemHeight" format="dimension" />
+    </declare-styleable>
 </resources>

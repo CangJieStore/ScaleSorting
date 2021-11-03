@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-aut"
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:binding="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
@@ -159,49 +159,52 @@
             </androidx.appcompat.widget.LinearLayoutCompat>
         </androidx.cardview.widget.CardView>
 
-        <RadioGroup
-            android:id="@+id/tab_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dp15"
-            android:orientation="horizontal">
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_round_background_tran_selector"
-                android:button="@null"
-                android:checked="true"
-                android:paddingStart="@dimen/dp15"
-                android:paddingTop="@dimen/dp5"
-                android:paddingEnd="@dimen/dp15"
-                android:paddingBottom="@dimen/dp5"
-                android:text="待领取"
-                android:textColor="@color/select_type_color"
-                android:textSize="@dimen/sp15" />
-
-            <androidx.appcompat.widget.AppCompatRadioButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/shape_round_background_tran_selector"
-                android:button="@null"
-                android:paddingStart="@dimen/dp10"
-                android:paddingTop="@dimen/dp5"
-                android:paddingEnd="@dimen/dp10"
-                android:paddingBottom="@dimen/dp5"
-                android:text="已领取"
-                android:textColor="@color/select_type_color"
-                android:textSize="@dimen/sp15" />
-        </RadioGroup>
-
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginStart="@dimen/dp15"
-            android:layout_marginEnd="@dimen/dp15"
-            android:layout_marginBottom="@dimen/dp15"
-            binding:cardCornerRadius="@dimen/dp8"
-            binding:contentPadding="@dimen/dp15"></androidx.cardview.widget.CardView>
+            android:layout_marginTop="@dimen/dp10"
+            android:orientation="vertical">
+
+            <com.cangjie.frame.kit.tab.MagicTabLayout
+                android:id="@+id/tab_purchase"
+                android:layout_width="180dp"
+                android:layout_marginStart="@dimen/dp15"
+                android:layout_height="wrap_content"
+                app:animateSelected="true"
+                app:bottomRadius="0dp"
+                app:bottomSpace="0dp"
+                app:gapSize="4dp"
+                app:holoColor="@color/white"
+                app:normalTextColor="@color/gray_9"
+                app:normalTextSize="16sp"
+                app:selectTextColor="#F15252"
+                app:selectedTextSize="16sp"
+                app:topRadius="10dp" />
+
+            <com.cangjie.frame.kit.rounded.RoundedLinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:rlRoundBottomLeft="true"
+                app:rlRoundBottomRight="true"
+                app:rlRoundTopLeft="false"
+                app:rlRoundTopRight="true"
+                app:rlRoundedCornerRadius="10dp"
+                app:rlRoundingBorderColor="@android:color/transparent"
+                app:rlRoundingBorderWidth="0dp"
+                android:layout_marginStart="@dimen/dp15"
+                android:layout_marginBottom="@dimen/dp15"
+                android:layout_marginEnd="@dimen/dp15"
+                app:rlRoundingElevation=".1dp">
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/vp_purchase"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white" />
+            </com.cangjie.frame.kit.rounded.RoundedLinearLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>
