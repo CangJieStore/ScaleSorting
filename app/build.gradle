@@ -98,4 +98,5 @@ dependencies {
     implementation 'androidx.localbroadcastmanager:localbroadcastmanager:1.0.0'
     implementation 'com.github.li-xiaojun:XPopup:2.6.0'
     implementation 'com.guolindev.permissionx:permissionx:1.6.0'
+    implementation("io.coil-kt:coil:1.4.0")
 }

@@ -176,7 +176,8 @@ class MagicTabLayout @JvmOverloads constructor(
         bgHeight = measuredHeight.toFloat() - bottomSpace
         lineLength = (validWidth - (topRadius * 2 + bottomRadius * 2) * titles.size) / titles.size
         selectTitleWidth = topRadius * 2 + bottomRadius * 2 + lineLength
-        normalTitleWidth = if(titles.size <= 1) 0f else (validWidth - selectTitleWidth) / (titles.size - 1)
+        normalTitleWidth =
+            if (titles.size <= 1) 0f else (validWidth - selectTitleWidth) / (titles.size - 1)
 
         val layerId =
             canvas.saveLayerCompat(0f, 0f, canvasWidth.toFloat(), canvasHeight.toFloat(), null)
@@ -195,6 +196,7 @@ class MagicTabLayout @JvmOverloads constructor(
         if (holoColor != Color.TRANSPARENT) {
             paint.color = holoColor
             paint.style = Paint.Style.FILL
+            paint.setShadowLayer(1f, 0f, 0f, Color.parseColor("#37000000"))
         }
         canvas.drawPath(targetPath, paint)
         if (holoColor == Color.TRANSPARENT) {
@@ -344,7 +346,7 @@ class MagicTabLayout @JvmOverloads constructor(
         for (i in 0 until titles.size) {
             val paint = Paint()
             paint.style = Paint.Style.FILL
-            paint.isAntiAlias=true
+            paint.isAntiAlias = true
             paint.textAlign = Paint.Align.CENTER
             paint.textSize = normalTextSize.toFloat()
             when (textStyle) {

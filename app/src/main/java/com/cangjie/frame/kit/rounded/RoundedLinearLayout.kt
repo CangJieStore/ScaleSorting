@@ -1,14 +1,11 @@
 package com.cangjie.frame.kit.rounded
 
 import android.widget.FrameLayout
-import android.graphics.RectF
 import android.graphics.drawable.GradientDrawable
 import android.annotation.TargetApi
 import android.content.Context
+import android.graphics.*
 import android.os.Build
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Path
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import cangjie.scale.sorting.R
@@ -113,7 +110,7 @@ class RoundedLinearLayout : LinearLayoutCompat {
         mPaint.color = mRoundingBorderColor
         mPaint.style = Paint.Style.STROKE
         mPaint.strokeWidth = (mRoundingBorderWidth * 2).toFloat()
-        mBackground.setColor(mRoundingBorderColor or -0x1000000)
+        mBackground.setColor(Color.parseColor("#37000000"))
         mBackground.cornerRadii = buildRoundCornerRadii(mRoundedCornerRadius.toFloat())
         super.setBackgroundDrawable(mBackground)
     }

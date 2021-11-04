@@ -22,9 +22,9 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
 
     override fun layoutId(): Int = R.layout.activity_task
 
+
     override fun initActivity(savedInstanceState: Bundle?) {
         orderId = intent.getStringExtra("id").toString()
-        viewModel.getProjectByGoods(orderId, "0")
         val list = arrayListOf(
             Title("待领取", "待领取", "待领取"),
             Title("已领取", "已领取", "已领取")
@@ -36,26 +36,24 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
 
         mBinding.vpPurchase.adapter = FragmentPagerAdapter(
             this, listOf(
-                { TaskItemFragment.newInstance(1) },
-                { TaskItemFragment.newInstance(2) }
+                { TaskToGetFragment.newInstance(0, orderId) },
+                { TaskReceivedFragment.newInstance(0, orderId) }
             )
         )
-
         mBinding.vpPurchase.registerOnPageChangeCallback(object :
             ViewPager2.OnPageChangeCallback() {
-            override fun onPageScrolled(
-                position: Int,
-                positionOffset: Float,
-                positionOffsetPixels: Int
-            ) {
-                super.onPageScrolled(position, positionOffset, positionOffsetPixels)
-            }
-
             override fun onPageSelected(position: Int) {
                 super.onPageSelected(position)
                 mBinding.tabPurchase.select(position)
             }
         })
+        mBinding.rgPurchaseType.setOnCheckedChangeListener { _, childId ->
+            if (childId == R.id.rb_goods) {
+
+            } else {
+
+            }
+        }
     }
 
     override fun initVariableId(): Int = BR.taskModel

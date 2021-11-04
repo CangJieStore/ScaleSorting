@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="180dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.cangjie.frame.kit.rounded.RoundedFrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/dp15"
+                android:layout_marginEnd="@dimen/dp15"
+                android:layout_marginBottom="@dimen/dp15"
+                app:rlRoundBottomLeft="true"
+                app:rlRoundBottomRight="true"
+                app:rlRoundTopLeft="true"
+                app:rlRoundTopRight="true"
+                app:rlRoundedCornerRadius="10dp"
+                app:rlRoundingBorderColor="#37000000"
+                app:rlRoundingBorderWidth="0dp"
+                app:rlRoundingElevation=".1dp">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_goods_img"
+                    android:layout_width="180dp"
+                    android:layout_height="180dp" />
+            </com.cangjie.frame.kit.rounded.RoundedFrameLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_goods_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/dp10"
+                android:textColor="@color/black_3"
+                android:textSize="@dimen/sp18" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_customer_count"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/black_3"
+                android:textSize="@dimen/sp18" />
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </FrameLayout>
+</layout>
