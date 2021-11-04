@@ -2,54 +2,87 @@
 <layout xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
         <androidx.appcompat.widget.LinearLayoutCompat
-            android:layout_width="180dp"
+            android:id="@+id/ll_goods"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <com.cangjie.frame.kit.rounded.RoundedFrameLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/dp15"
-                android:layout_marginEnd="@dimen/dp15"
-                android:layout_marginBottom="@dimen/dp15"
-                app:rlRoundBottomLeft="true"
-                app:rlRoundBottomRight="true"
-                app:rlRoundTopLeft="true"
-                app:rlRoundTopRight="true"
-                app:rlRoundedCornerRadius="10dp"
-                app:rlRoundingBorderColor="#37000000"
-                app:rlRoundingBorderWidth="0dp"
-                app:rlRoundingElevation=".1dp">
+                android:layout_height="120dp"
+                android:foreground="?android:attr/selectableItemBackground"
+                app:cardBackgroundColor="@android:color/white"
+                app:cardCornerRadius="4dp"
+                app:cardElevation="2dp"
+                app:cardUseCompatPadding="true"
+                app:contentPadding="@dimen/dp15">
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/iv_goods_img"
-                    android:layout_width="180dp"
-                    android:layout_height="180dp" />
-            </com.cangjie.frame.kit.rounded.RoundedFrameLayout>
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+            </androidx.cardview.widget.CardView>
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_goods_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:padding="@dimen/dp10"
                 android:textColor="@color/black_3"
-                android:textSize="@dimen/sp18" />
+                android:textSize="@dimen/sp16" />
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/tv_customer_count"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp5"
                 android:gravity="center"
                 android:textColor="@color/black_3"
-                android:textSize="@dimen/sp18" />
+                android:textSize="@dimen/sp16" />
 
         </androidx.appcompat.widget.LinearLayoutCompat>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_customer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:foreground="?android:attr/selectableItemBackground"
+            android:visibility="gone"
+            app:cardBackgroundColor="@android:color/white"
+            app:cardCornerRadius="4dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            app:contentPadding="@dimen/dp15">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_customer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp22" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_goods_count"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp5"
+                    android:gravity="center"
+                    android:textColor="@color/black"
+                    android:textSize="@dimen/sp18" />
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </androidx.cardview.widget.CardView>
 
     </FrameLayout>
 </layout>

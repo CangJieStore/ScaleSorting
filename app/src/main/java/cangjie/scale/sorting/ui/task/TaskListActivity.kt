@@ -5,12 +5,14 @@ import androidx.viewpager2.widget.ViewPager2
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityTaskBinding
+import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.vm.TaskViewModel
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.tab.Title
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
+import org.greenrobot.eventbus.EventBus
 
 /**
  * @author: guruohan
@@ -25,6 +27,7 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
 
     override fun initActivity(savedInstanceState: Bundle?) {
         orderId = intent.getStringExtra("id").toString()
+        viewModel.getProjectByGoods(orderId, "0",0)
         val list = arrayListOf(
             Title("待领取", "待领取", "待领取"),
             Title("已领取", "已领取", "已领取")
@@ -49,9 +52,11 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
         })
         mBinding.rgPurchaseType.setOnCheckedChangeListener { _, childId ->
             if (childId == R.id.rb_goods) {
-
+                viewModel.getProjectByGoods(orderId, "0",0)
+                EventBus.getDefault().post(MessageEvent(5010,""))
             } else {
-
+                viewModel.getProjectByGoods(orderId, "0",1)
+                EventBus.getDefault().post(MessageEvent(5011,""))
             }
         }
     }
@@ -65,6 +70,20 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
                 finish()
             }
         }
+    }
+
+    override fun subscribeModel(model: TaskViewModel) {
+        super.subscribeModel(model)
+        model.getTaskData().observe(this, {
+            mBinding.info = it
+            if (it.purchaser != null) {
+                mBinding.tvUnpCount.text = "待分拣客户:" + it.purchaser_count
+                mBinding.tvPCount.text = "已分拣客户:" + it.sorting_count
+            } else if (it.goods != null) {
+                mBinding.tvUnpCount.text = "待分拣商品:" + it.item_count
+                mBinding.tvPCount.text = "已分拣商品:" + it.sorting_count
+            }
+        })
     }
 
     override fun initImmersionBar() {

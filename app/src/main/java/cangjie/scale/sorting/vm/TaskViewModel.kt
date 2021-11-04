@@ -21,10 +21,14 @@ class TaskViewModel : BaseScaleViewModel() {
         }
     })
 
-    fun getProjectByGoods(oid: String, cate: String) {
+    fun getProjectByGoods(oid: String, cate: String, type: Int) {
         loading("")
         val params = mutableMapOf<String, Any>("id" to oid, "state" to cate)
-        postWithToken<GoodsTaskInfo>(Url.sorting_goods, params, 100)
+        if(type==0){
+            postWithToken<GoodsTaskInfo>(Url.sorting_goods, params, 100)
+        }else{
+            postWithToken<GoodsTaskInfo>(Url.sorting_purchaser, params, 100)
+        }
     }
 
     override fun success(code: Int, result: Any?) {

@@ -63,7 +63,7 @@ class TaskReceivedFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewM
     }
 
     private fun changeType() {
-        viewModel.getProjectByGoods(orderId, "1")
+        viewModel.getProjectByGoods(orderId, "1",0)
     }
 
     override fun subscribeModel(model: TaskViewModel) {
