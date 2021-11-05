@@ -36,7 +36,7 @@ import kotlin.concurrent.fixedRateTimer
  */
 class InitService : Service(), CoroutineScope by MainScope() {
 
-    lateinit var timer: Timer
+//    lateinit var timer: Timer
     private val corLife = CoroutineCycle()
     private var booksDao: SubmitOrderDao? = null
 
@@ -58,28 +58,28 @@ class InitService : Service(), CoroutineScope by MainScope() {
 //                ToastUtils.show("初始化称重主板错误！")
 //            }
 //        }
-        timer = fixedRateTimer("", false, 0, 60000) {
-            val single: Single<MutableList<SubmitOrder>> = Single.create { emitter ->
-                booksDao = AppDatabase.get(ScaleApplication.instance!!).orderDao()
-                val orders = booksDao!!.getUpload()
-                emitter.onSuccess(orders)
-            }
-            single.subscribe(object : SingleObserver<MutableList<SubmitOrder>> {
-                override fun onSuccess(o: MutableList<SubmitOrder>) {
-                    Log.e("orders", Gson().toJson(o))
-                    for (item in o) {
-                        upload(item)
-                    }
-                }
-
-                override fun onSubscribe(d: Disposable) {
-
-                }
-
-                override fun onError(e: Throwable) {
-                }
-            })
-        }
+//        timer = fixedRateTimer("", false, 0, 60000) {
+//            val single: Single<MutableList<SubmitOrder>> = Single.create { emitter ->
+//                booksDao = AppDatabase.get(ScaleApplication.instance!!).orderDao()
+//                val orders = booksDao!!.getUpload()
+//                emitter.onSuccess(orders)
+//            }
+//            single.subscribe(object : SingleObserver<MutableList<SubmitOrder>> {
+//                override fun onSuccess(o: MutableList<SubmitOrder>) {
+//                    Log.e("orders", Gson().toJson(o))
+//                    for (item in o) {
+//                        upload(item)
+//                    }
+//                }
+//
+//                override fun onSubscribe(d: Disposable) {
+//
+//                }
+//
+//                override fun onError(e: Throwable) {
+//                }
+//            })
+//        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -128,7 +128,7 @@ class InitService : Service(), CoroutineScope by MainScope() {
             EventBus.getDefault().unregister(this)
         }
 //        SerialPortUtilForScale.Instance().CloseSerialPort()
-        corLife.close()
-        timer.cancel()
+//        corLife.close()
+//        timer.cancel()
     }
 }

@@ -16,6 +16,10 @@ object Url {
     const val sorting_purchaser = "openapi/sorting/?op=purchaser_task_item"
     const val tasks_item = "openapi/sorting/?op=purchaser_task_receive"
 
+    const val goods_sorting = "openapi/sorting/?op=goods_sorting"
+    const val customer_sorting = "openapi/sorting/?op=purchaser_sorting"
+    const val purchase_batch = "openapi/sorting/?op=goods_batch"
+
     const val submit = "supplier/steelyard/?op=weight"
     const val upload = "supplier/steelyard/?op=picture"
     const val again = "supplier/steelyard/?op=repair"

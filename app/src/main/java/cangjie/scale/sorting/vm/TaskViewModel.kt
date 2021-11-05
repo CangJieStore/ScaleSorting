@@ -24,11 +24,26 @@ class TaskViewModel : BaseScaleViewModel() {
     fun getProjectByGoods(oid: String, cate: String, type: Int) {
         loading("")
         val params = mutableMapOf<String, Any>("id" to oid, "state" to cate)
-        if(type==0){
+        if (type == 0) {
             postWithToken<GoodsTaskInfo>(Url.sorting_goods, params, 100)
-        }else{
+        } else {
             postWithToken<GoodsTaskInfo>(Url.sorting_purchaser, params, 100)
         }
+    }
+
+    fun receiveTask(taskId: String, purchaserId: String, taskType: Int) {
+        loading(" ")
+        val params = mutableMapOf<String, Any>()
+        var url = ""
+        if (taskType == 1) {
+            params["sorting_id"] = taskId
+            params["purchaser_id"] = purchaserId
+            url = Url.tasks_item
+        } else {
+            params["id"] = taskId
+            url = Url.goods_item
+        }
+        postWithToken<String>(url, params, 200)
     }
 
     override fun success(code: Int, result: Any?) {
@@ -37,6 +52,10 @@ class TaskViewModel : BaseScaleViewModel() {
         when (code) {
             100 -> {
                 taskLiveData.postValue(result as GoodsTaskInfo)
+            }
+            200 -> {
+                toast("领取成功")
+                action(MsgEvent(100))
             }
         }
 

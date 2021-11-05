@@ -10,6 +10,6 @@ class GoodsTaskInfo(
     val item_count: Int,
     val sorting_count: Int,
     val purchaser_count: Int,
-    val goods: MutableList<TaskGoodsItem>,
-    val purchaser: MutableList<TaskGoodsItem>
+    val goods: MutableList<TaskGoodsItem>?,
+    val purchaser: MutableList<TaskGoodsItem>?
 )

@@ -68,6 +68,9 @@
         <activity
             android:name=".ui.task.TaskListActivity"
             android:screenOrientation="landscape" />
+        <activity
+            android:name=".ui.purchase.PurchaseActivity"
+            android:screenOrientation="landscape" />
 
         <service android:name=".service.InitService" />
         <receiver
