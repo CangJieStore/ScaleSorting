@@ -11,9 +11,11 @@ import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.FragmentReceiveItemBinding
 import cangjie.scale.sorting.entity.MessageEvent
-import cangjie.scale.sorting.ui.purchase.PurchaseActivity
+import cangjie.scale.sorting.ui.purchase.PurchaseCustomerActivity
+import cangjie.scale.sorting.ui.purchase.PurchaseGoodsActivity
 import cangjie.scale.sorting.vm.TaskViewModel
 import com.cangjie.frame.core.BaseMvvmFragment
+import com.cangjie.frame.core.db.CangJie
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -95,14 +97,26 @@ class TaskReceivedFragment : BaseMvvmFragment<FragmentReceiveItemBinding, TaskVi
             val dataItem = taskReceiveAdapter.data[position]
             val bundle = Bundle()
             bundle.putSerializable("item", dataItem)
-            val intent = Intent(requireActivity(), PurchaseActivity::class.java)
-            intent.putExtras(bundle)
-            startActivity(intent)
+            if (dataItem.name != null) {
+                val intent = Intent(requireActivity(), PurchaseGoodsActivity::class.java)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            } else {
+                val intent = Intent(requireActivity(), PurchaseCustomerActivity::class.java)
+                intent.putExtras(bundle)
+                startActivity(intent)
+            }
         }
     }
 
     private fun changeType(type: Int) {
         viewModel.getProjectByGoods(orderId, "1", type)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        pType = CangJie.getInt("pType")
+        changeType(pType)
     }
 
     override fun subscribeModel(model: TaskViewModel) {

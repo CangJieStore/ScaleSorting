@@ -18,11 +18,13 @@ import com.cangjie.frame.kit.show
 import com.cangjie.frame.kit.update.model.DownloadInfo
 import com.cangjie.frame.kit.update.model.TypeConfig
 import com.cangjie.frame.kit.update.utils.AppUpdateUtils
+import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
 import kotlinx.coroutines.launch
 
 import org.greenrobot.eventbus.EventBus
 import java.net.URL
+import java.text.SimpleDateFormat
 import java.util.*
 
 class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
@@ -47,7 +49,9 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
         mBinding.vpOrders.adapter = mAdapter
         mBinding.tabOrders.setViewPager(mBinding.vpOrders)
         mBinding.tabOrders.currentTab = 0
-        netTime()
+        val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+        val date = Date(System.currentTimeMillis())
+        viewModel.chooseDateFiled.set(simpleDateFormat.format(date))
     }
 
     private fun netTime() {
@@ -72,6 +76,7 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
         super.initImmersionBar()
         immersionBar {
             fullScreen(true)
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             statusBarDarkFont(false)
             init()
         }

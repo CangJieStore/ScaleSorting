@@ -25,7 +25,7 @@
             android:id="@+id/tv_name"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1.0"
+            android:layout_weight="0.6"
             android:gravity="center"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp16" />
@@ -39,7 +39,7 @@
             android:id="@+id/tv_unit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:gravity="center"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp16" />
@@ -53,7 +53,7 @@
             android:id="@+id/tv_quantity"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:gravity="center"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp16" />
@@ -64,10 +64,10 @@
             android:background="@color/gray_c" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_purchase_batch"
+            android:id="@+id/tv_delivery_unit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="0.5"
             android:gravity="center"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp16" />
@@ -78,13 +78,14 @@
             android:background="@color/gray_c" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_extra"
+            android:id="@+id/tv_goods_batch"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.6"
+            android:layout_weight="1.2"
             android:gravity="center"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp16" />
+
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 

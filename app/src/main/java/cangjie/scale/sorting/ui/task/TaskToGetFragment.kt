@@ -4,28 +4,21 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
-import android.widget.LinearLayout
 import androidx.core.os.bundleOf
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.FragmentTaskItemBinding
-import cangjie.scale.sorting.entity.GoodsTaskInfo
 import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.vm.TaskViewModel
 import com.cangjie.frame.core.BaseMvvmFragment
+import com.cangjie.frame.core.db.CangJie
 import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.show
-import com.cangjie.frame.kit.tab.dp
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
+import com.cangjie.frame.kit.state.MultiStateContainer
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.kongzue.dialogx.DialogX
-import com.kongzue.dialogx.dialogs.MessageDialog
-import com.kongzue.dialogx.interfaces.OnDialogButtonClickListener
-import com.kongzue.dialogx.util.TextInfo
+import okhttp3.internal.notify
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -35,6 +28,8 @@ import org.greenrobot.eventbus.ThreadMode
  * @date: 2021/11/3
  */
 class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewModel>() {
+    private lateinit var multiState: MultiStateContainer
+
     companion object {
         fun newInstance(type: Int, oId: String) = TaskToGetFragment().apply {
             arguments = bundleOf("type" to type, "oId" to oId)
@@ -88,14 +83,16 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
             }
         }
         mBinding?.let {
-            requireActivity().dividerBuilder()
-                .color(Color.TRANSPARENT)
-                .size(10, TypedValue.COMPLEX_UNIT_DIP)
-                .showFirstDivider()
-                .showSideDividers()
-                .showLastDivider()
-                .build()
-                .addTo(mBinding!!.ryPurchaseTarget)
+            if (it.ryPurchaseTarget.itemDecorationCount == 0) {
+                requireActivity().dividerBuilder()
+                    .color(Color.TRANSPARENT)
+                    .size(10, TypedValue.COMPLEX_UNIT_DIP)
+                    .showFirstDivider()
+                    .showSideDividers()
+                    .showLastDivider()
+                    .build()
+                    .addTo(mBinding!!.ryPurchaseTarget)
+            }
             it.ryPurchaseTarget.adapter = taskAdapter
             it.ryPurchaseTarget.layoutManager = layoutManager
         }
@@ -107,30 +104,27 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
     }
 
     private fun showGetTips(data: TaskGoodsItem) {
-        DialogX.implIMPLMode = DialogX.IMPL_MODE.DIALOG_FRAGMENT
         val title = if (data.name != null) {
             data.name + "商品分拣任务?"
         } else {
             data.purchaser_name + "客户分拣任务?"
         }
-        val messageDialog =
-            MessageDialog("领取分拣任务", "确定领取$title", "确定", "取消")
-                .setButtonOrientation(LinearLayout.HORIZONTAL)
-                .setOkButtonClickListener { _, _ ->
-                    if (data.name != null) {
-                        viewModel.receiveTask(data.id, "", 0)
-                    } else {
-                        viewModel.receiveTask(data.sorting_id, data.purchaser_id, 1)
-                    }
-                    false
+        val bundle = Bundle()
+        bundle.putString("title", "领取分拣任务")
+        bundle.putString("content", "确定领取$title")
+        MsgDialogFragment.newInstance(bundle).setBtnAction(object : MsgDialogFragment.BtnAction {
+            override fun action(pos: Int) {
+                if (data.name != null) {
+                    viewModel.receiveTask(data.id, "", 0)
+                } else {
+                    viewModel.receiveTask(data.sorting_id, data.purchaser_id, 1)
                 }
-        messageDialog.okTextInfo = TextInfo().setFontColor(Color.parseColor("#EB5545"))
-        messageDialog.cancelTextInfo = TextInfo().setFontColor(Color.parseColor("#999999"))
-        messageDialog.maxWidth = 400.dp
-        messageDialog.show()
+            }
+        }).show(childFragmentManager, "msg")
     }
 
     private fun changeType(type: Int) {
+        taskAdapter.data.clear()
         viewModel.getProjectByGoods(orderId, "0", type)
     }
 
@@ -155,6 +149,12 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
     override fun toast(notice: String?) {
         super.toast(notice)
         show(requireActivity(), 2000, notice!!)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        pType = CangJie.getInt("pType")
+        changeType(pType)
     }
 
     override fun initVariableId(): Int = BR.itemModel

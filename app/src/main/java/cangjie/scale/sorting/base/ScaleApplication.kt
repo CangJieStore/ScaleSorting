@@ -11,6 +11,7 @@ import com.cangjie.frame.kit.update.model.TypeConfig
 import com.cangjie.frame.kit.update.model.UpdateConfig
 import com.cangjie.frame.kit.update.utils.AppUpdateUtils
 import com.cangjie.frame.kit.update.utils.SSLUtils
+import com.kongzue.dialogx.DialogX
 
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -35,6 +36,7 @@ class ScaleApplication : Application() {
         )
         HttpManager.init(this)
         update()
+        DialogX.init(this)
     }
 
     private fun update() {

@@ -69,8 +69,13 @@
             android:name=".ui.task.TaskListActivity"
             android:screenOrientation="landscape" />
         <activity
-            android:name=".ui.purchase.PurchaseActivity"
-            android:screenOrientation="landscape" />
+            android:name=".ui.purchase.PurchaseCustomerActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".ui.purchase.PurchaseGoodsActivity"
+            android:screenOrientation="landscape"
+            android:windowSoftInputMode="adjustResize" />
 
         <service android:name=".service.InitService" />
         <receiver

@@ -1,5 +1,6 @@
 package cangjie.scale.sorting.ui.purchase
 
+import android.graphics.Color
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.LayoutPurchseItemBinding
 import cangjie.scale.sorting.entity.PurchaseInfo
@@ -18,16 +19,24 @@ class PurchaseAdapter :
     ) {
         holder.dataBinding?.let {
             holder.itemView.isSelected = item.isCurrent
-            it.tvOrder.text = (getItemPosition(item) + 1).toString()
-            if (item.picture != null) {//按客户分拣
-
+            if (item.isCurrent) {
+                it.tvOrder.setTextColor(Color.WHITE)
+                it.tvName.setTextColor(Color.WHITE)
+                it.tvQuantity.setTextColor(Color.WHITE)
+                it.tvUnit.setTextColor(Color.WHITE)
+                it.tvGoodsBatch.setTextColor(Color.WHITE)
             } else {
-                it.tvName.text = item.purchaser
-                it.tvQuantity.text = item.quantity
-                it.tvUnit.text = item.unit
-                it.tvExtra.text = "补货"
-                it.tvPurchaseBatch.text = "0"
+                it.tvOrder.setTextColor(Color.BLACK)
+                it.tvName.setTextColor(Color.BLACK)
+                it.tvQuantity.setTextColor(Color.BLACK)
+                it.tvUnit.setTextColor(Color.BLACK)
+                it.tvGoodsBatch.setTextColor(Color.BLACK)
             }
+            it.tvOrder.text = (getItemPosition(item) + 1).toString()
+            it.tvName.text = item.name
+            it.tvUnit.text = item.unit
+            it.tvQuantity.text = item.quantity
+            it.tvGoodsBatch.text = item.trade_no
         }
     }
 }

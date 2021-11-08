@@ -19,5 +19,6 @@
             android:layout_height="match_parent"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

@@ -1,0 +1,521 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="purchaseModel"
+            type="cangjie.scale.sorting.vm.PurchaseViewModel" />
+
+        <import type="android.view.View" />
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="@drawable/shape_main_bg"
+            android:padding="@dimen/dp10">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dp25"
+                android:layout_marginTop="@dimen/dp5"
+                android:layout_marginBottom="@dimen/dp25"
+                android:src="@drawable/ic_main_logo"
+                android:visibility="invisible" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:drawableStart="@drawable/ic_back"
+                android:drawablePadding="@dimen/dp8"
+                android:gravity="center_vertical"
+                android:paddingStart="@dimen/dp25"
+                android:paddingEnd="@dimen/dp25"
+                android:text="@string/str_check"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp20"
+                binding:onClickCommand="@{purchaseModel.finishCommand}" />
+
+        </RelativeLayout>
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:orientation="vertical">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/dp8"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    app:cardBackgroundColor="@android:color/white"
+                    app:cardCornerRadius="@dimen/dp8"
+                    app:cardElevation="2dp"
+                    app:cardUseCompatPadding="true">
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:id="@+id/tv_purchase_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:padding="@dimen/dp10"
+                            android:textColor="@color/black"
+                            android:textSize="@dimen/sp18" />
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="@dimen/dp8"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:layout_marginBottom="@dimen/dp8"
+                            android:background="@drawable/shape_choose_date"
+                            android:orientation="vertical">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:background="@drawable/shape_table_top"
+                                android:orientation="horizontal">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.3"
+                                    android:gravity="center"
+                                    android:text="选择"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp16" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/gray_c" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="1.0"
+                                    android:gravity="center"
+                                    android:text="批次号"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp16" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/gray_c" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.6"
+                                    android:gravity="center"
+                                    android:text="规格"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp16" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/gray_c" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.6"
+                                    android:gravity="center"
+                                    android:text="库存单位"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp16" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/gray_c" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.6"
+                                    android:gravity="center"
+                                    android:text="库存数量"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp16" />
+
+                                <View
+                                    android:layout_width="1dp"
+                                    android:layout_height="match_parent"
+                                    android:background="@color/gray_c" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="0dp"
+                                    android:layout_height="match_parent"
+                                    android:layout_weight="0.6"
+                                    android:gravity="center"
+                                    android:text="入库日期"
+                                    android:textColor="@color/white"
+                                    android:textSize="@dimen/sp16" />
+
+
+                            </LinearLayout>
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/ry_batch"
+                                android:layout_width="match_parent"
+                                android:layout_height="120dp"
+                                binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+                </androidx.cardview.widget.CardView>
+
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/dp10"
+                    android:orientation="vertical">
+
+                    <com.cangjie.frame.kit.tab.MagicTabLayout
+                        android:id="@+id/tab_purchase"
+                        android:layout_width="190dp"
+                        android:layout_height="50dp"
+                        android:layout_marginStart="14dp"
+                        android:layout_marginBottom="-.1dp"
+                        android:paddingStart="1dp"
+                        android:paddingTop="1dp"
+                        android:paddingEnd="@dimen/dp5"
+                        app:animateSelected="false"
+                        app:bottomRadius="0dp"
+                        app:bottomSpace="0dp"
+                        app:gapSize="4dp"
+                        app:holoColor="@color/white"
+                        app:normalTextColor="@color/gray_9"
+                        app:normalTextSize="16sp"
+                        app:selectTextColor="#F15252"
+                        app:selectedTextSize="16sp"
+                        app:topRadius="10dp" />
+
+                    <com.cangjie.frame.kit.rounded.RoundedLinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="@dimen/dp15"
+                        android:layout_marginEnd="@dimen/dp15"
+                        android:layout_marginBottom="@dimen/dp15"
+                        android:orientation="vertical"
+                        app:rlRoundBottomLeft="true"
+                        app:rlRoundBottomRight="true"
+                        app:rlRoundTopLeft="false"
+                        app:rlRoundTopRight="true"
+                        app:rlRoundedCornerRadius="10dp"
+                        app:rlRoundingBorderColor="#37000000"
+                        app:rlRoundingBorderWidth="0dp"
+                        app:rlRoundingElevation=".2dp">
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@color/white"
+                            android:orientation="vertical">
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/dp10"
+                                android:background="@drawable/shape_choose_date"
+                                android:orientation="vertical"
+                                android:visibility="@{purchaseModel.currentPurchaseType==0?View.VISIBLE:View.GONE}">
+
+                                <include layout="@layout/title_goods_purchase" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/ry_purchase"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                            <androidx.appcompat.widget.LinearLayoutCompat
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/dp10"
+                                android:background="@drawable/shape_choose_date"
+                                android:orientation="vertical"
+                                android:visibility="@{purchaseModel.currentPurchaseType==1?View.VISIBLE:View.GONE}">
+
+                                <include layout="@layout/title_goods_received" />
+
+                                <androidx.recyclerview.widget.RecyclerView
+                                    android:id="@+id/ry_received"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                            </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        </FrameLayout>
+                    </com.cangjie.frame.kit.rounded.RoundedLinearLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp15"
+                android:layout_marginEnd="@dimen/dp15"
+                android:layout_marginBottom="@dimen/dp15"
+                android:layout_weight="1"
+                binding:cardBackgroundColor="@color/white"
+                binding:cardCornerRadius="@dimen/dp8"
+                binding:cardElevation="@dimen/dp_4">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <androidx.appcompat.widget.AppCompatImageView
+                        android:id="@+id/iv_goods_img"
+                        android:layout_width="match_parent"
+                        android:layout_height="160dp"
+                        android:scaleType="fitXY" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/ry_scale_batch"
+                        android:layout_width="match_parent"
+                        android:layout_height="180dp"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                        app:spanCount="3" />
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_toStartOf="@+id/btn_reset_zero">
+
+                            <com.cangjie.frame.kit.DigitalText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/tv_sacal_unit"
+                                android:background="@color/black"
+                                android:gravity="center"
+                                android:padding="12dp"
+                                android:text="@{purchaseModel.currentWeightValue}"
+                                android:textColor="@android:color/holo_red_dark"
+                                android:textSize="50sp" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:id="@+id/tv_sacal_unit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:padding="@dimen/dp10"
+                                android:text="@{purchaseModel.currentUnitFiled}"
+                                android:textColor="@color/black_3"
+                                android:textSize="@dimen/sp24" />
+                        </RelativeLayout>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/btn_reset_zero"
+                            android:layout_width="65dp"
+                            android:layout_height="55dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:background="#6AC75B"
+                            android:gravity="center"
+                            android:text="置零"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/sp16"
+                            android:visibility="visible" />
+
+                    </RelativeLayout>
+
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/dp15"
+                        android:orientation="vertical"
+                        android:paddingStart="@dimen/dp15"
+                        android:paddingEnd="@dimen/dp15">
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:text="@{@string/str_goods_name+purchaseModel.currentPurchaseGoodsFiled}"
+                                android:textColor="@color/black_3"
+                                android:textSize="@dimen/sp18" />
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="@dimen/dp10"
+                                android:layout_weight="1"
+                                android:text="@{@string/str_scale_cal+purchaseModel.scaleTypeFiled}"
+                                android:textColor="@color/black_3"
+                                android:textSize="@dimen/sp18" />
+
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:text="@{@string/str_order_num+purchaseModel.currentGoodsOrderNumFiled+purchaseModel.currentUnitFiled}"
+                            android:textColor="@color/black_3"
+                            android:textSize="@dimen/sp18" />
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:text="@{@string/str_added_num+purchaseModel.currentGoodsReceiveNumField+purchaseModel.currentUnitFiled}"
+                            android:textColor="@color/black_3"
+                            android:textSize="@dimen/sp18" />
+
+
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/str_this_num"
+                                android:textColor="@color/black_3"
+                                android:textSize="@dimen/sp18" />
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@{purchaseModel.thisPurchaseNumFiled}"
+                                    android:textColor="@color/black_3"
+                                    android:textSize="@dimen/sp18"
+                                    android:visibility="@{purchaseModel.currentWeightTypeFiled?View.GONE:View.VISIBLE}" />
+
+                                <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/et_this_num"
+                                    android:layout_width="100dp"
+                                    android:layout_height="wrap_content"
+                                    android:background="@drawable/shape_input_unit"
+                                    android:gravity="center"
+                                    android:hint="请输入"
+                                    android:inputType="numberDecimal"
+                                    android:text="@{purchaseModel.thisPurchaseNumFiled}"
+                                    android:textColor="@color/black_3"
+                                    android:textColorHint="#cccccc"
+                                    android:textSize="@dimen/sp18"
+                                    android:visibility="@{purchaseModel.currentWeightTypeFiled?View.VISIBLE:View.GONE}"
+                                    binding:onClickCommand="@{purchaseModel.editPriceCommand}" />
+
+                            </FrameLayout>
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{purchaseModel.currentUnitFiled}"
+                                android:textColor="@color/black_3"
+                                android:textSize="@dimen/sp18" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp10"
+                            android:text="@{@string/str_surplus_num+purchaseModel.surplusNumFiled+purchaseModel.currentUnitFiled}"
+                            android:textColor="@color/black_3"
+                            android:textSize="@dimen/sp18" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/dp5"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:paddingStart="@dimen/dp15"
+                        android:paddingTop="@dimen/dp15"
+                        android:paddingEnd="@dimen/dp15">
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_clear_btn"
+                            android:text="重新分拣"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/sp16" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_marginEnd="@dimen/dp8"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_take_photo"
+                            android:text="打印标签"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/sp16"
+                            binding:onClickCommand="@{purchaseModel.printCommand}" />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="0dp"
+                            android:layout_height="40dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/shape_login_btn"
+                            android:text="完成提交"
+                            android:textColor="@color/white"
+                            android:textSize="@dimen/sp16" />
+                    </LinearLayout>
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+            </androidx.cardview.widget.CardView>
+
+        </androidx.appcompat.widget.LinearLayoutCompat>
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>

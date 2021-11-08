@@ -24,9 +24,6 @@ class EditShellDialogFragment : DialogFragment() {
 
 
     private var editShellBinding: DialogEditShellBinding? = null
-    private val submitAdapter by lazy {
-        SubmitAdapter()
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -103,6 +100,7 @@ class EditShellDialogFragment : DialogFragment() {
     }
 
     private var action: SubmitAction? = null
+
     fun setAction(ac: SubmitAction): EditShellDialogFragment {
         this.action = ac
         return this

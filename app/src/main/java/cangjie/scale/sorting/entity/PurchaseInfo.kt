@@ -7,8 +7,8 @@ package cangjie.scale.sorting.entity
 class PurchaseInfo(
     val item_id: String,
     val unit: String,
-    val quantity: String,
-    val deliver_quantity: String,
+    val quantity: String?,
+    val deliver_quantity: String?,
     val purchaser: String?,
     val name: String?,
     val trade_no: String?,

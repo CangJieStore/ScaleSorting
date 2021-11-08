@@ -101,4 +101,5 @@
         <attr name="cursorWidth" format="dimension" />
         <attr name="itemHeight" format="dimension" />
     </declare-styleable>
+
 </resources>

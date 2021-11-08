@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.appcompat.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:background="@drawable/sel_bg_item"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_order"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.3"
+            android:gravity="center"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp16" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_c" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp16" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_c" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_unit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp16" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_c" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_quantity"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp16" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_c" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_delivery_unit"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.5"
+            android:gravity="center"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp16" />
+
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@color/gray_c" />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_goods_batch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1.2"
+            android:gravity="center"
+            android:textColor="@color/black_3"
+            android:textSize="@dimen/sp16" />
+
+
+    </androidx.appcompat.widget.LinearLayoutCompat>
+
+</layout>

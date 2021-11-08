@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable/bg_keyboard_done.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/bg_keyboardview_yes.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/keyboard_change.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/keyboard_press_bg.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/king_keyboard_done_key_bg.xml" value="0.2212962962962963" />
+        <entry key="app/src/main/res/drawable/king_keyboard_key_bg.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/king_keyboard_none_key_bg.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/sel_bg_item.xml" value="0.3921875" />
         <entry key="app/src/main/res/drawable/selector_purchase_type.xml" value="0.18796296296296297" />
         <entry key="app/src/main/res/drawable/selector_type_submit.xml" value="0.3921875" />
@@ -17,9 +24,12 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/activity_purchase.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_purchase_goods.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/activity_splash.xml" value="0.14895833333333333" />
         <entry key="app/src/main/res/layout/activity_task.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/activity_theme.xml" value="0.17617753623188406" />
+        <entry key="app/src/main/res/layout/dialog_apply.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/dialog_edit_price.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/dialog_edit_shell.xml" value="0.17617753623188406" />
         <entry key="app/src/main/res/layout/dialog_preview_img.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/dialog_submit.xml" value="0.13728470111448834" />
@@ -28,18 +38,30 @@
         <entry key="app/src/main/res/layout/fragment_receive_item.xml" value="0.21197916666666666" />
         <entry key="app/src/main/res/layout/fragment_task_item.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_uncheck.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/keyboard_preview_layout.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/king_keyboard_container.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_cal_less.xml" value="0.1716485507246377" />
         <entry key="app/src/main/res/layout/layout_check_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_checked_item.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/layout_custom_reply.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_goods_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_img_item.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/layout_keyboard_containor.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/layout_label_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_notification.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_order_item.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/layout_print_item.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/layout_purchse_goods_item.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/layout_purchse_item.xml" value="0.2717391304347826" />
         <entry key="app/src/main/res/layout/layout_receive_item.xml" value="0.28351449275362317" />
         <entry key="app/src/main/res/layout/layout_submit_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_task_item.xml" value="0.24456521739130435" />
         <entry key="app/src/main/res/layout/loading_process.xml" value="0.14895833333333333" />
+        <entry key="app/src/main/res/layout/mult_state_empty.xml" value="0.13728470111448834" />
+        <entry key="app/src/main/res/layout/title_customer_purchase.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/title_customer_received.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/title_goods_purchase.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/title_goods_received.xml" value="0.16304347826086957" />
       </map>
     </option>
   </component>

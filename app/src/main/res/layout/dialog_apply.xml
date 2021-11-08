@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:binding="http://schemas.android.com/apk/res-auto">
+
+    <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:contentPadding="@dimen/dp15"
+        binding:cardBackgroundColor="@color/white"
+        binding:cardCornerRadius="@dimen/dp5"
+        binding:cardElevation="0dp">
+
+        <androidx.appcompat.widget.LinearLayoutCompat
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt_dialog_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical"
+                android:textColor="#6F000000"
+                android:textSize="@dimen/sp20" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/txt_dialog_tip"
+                android:layout_width="match_parent"
+                android:layout_marginTop="@dimen/dp15"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp18" />
+
+            <RelativeLayout
+                android:id="@+id/rl_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp10"
+                android:layout_marginEnd="@dimen/dp15">
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/action_cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="@dimen/dp5"
+                    android:layout_toStartOf="@+id/action_done"
+                    android:padding="@dimen/dp15"
+                    android:text="取消"
+                    android:textColor="@color/gray_9"
+                    android:textSize="@dimen/sp18" />
+
+                <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/action_done"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:padding="@dimen/dp15"
+                    android:text="确定"
+                    android:textColor="#EB5545"
+                    android:textSize="@dimen/sp18" />
+
+            </RelativeLayout>
+        </androidx.appcompat.widget.LinearLayoutCompat>
+    </androidx.cardview.widget.CardView>
+</layout>
