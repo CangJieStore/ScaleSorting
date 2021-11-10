@@ -67,4 +67,16 @@
     <string name="keyboard_demo_new2">安全软键盘(数字)</string>
     <string name="keyboard_demo_new3">安全软键盘(IdCard)</string>
     <string name="mLabelTextSize">mLabelTextSize</string>
+    <string name="str_cann_printer">请先连接打印机</string>
+    <string name="str_choice_printer_command">请选择正确的打印机指令</string>
+    <string name="str_continuity_count">连续打印的数目为空</string>
+    <string name="str_stop_continuityprint">停止连续打印</string>
+    <string name="str_stop_continuityprint_success">成功停止打印</string>
+    <string name="str_disconnect_success">成功断开连接</string>
+    <string name="str_conn_successful">连接成功！</string>
+    <string name="str_conn_fail">连接失败！</string>
+    <string name="str_conn_state_disconnect">连接状态：未连接</string>
+    <string name="str_conn_state_connecting">连接状态：连接中</string>
+    <string name="str_connecting">连接中</string>
+    <string name="str_conn_state_connected">连接状态：已连接</string>
 </resources>

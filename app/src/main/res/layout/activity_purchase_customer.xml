@@ -34,6 +34,7 @@
                 android:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
@@ -307,9 +308,9 @@
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/ry_scale_batch"
                         android:layout_width="match_parent"
+                        android:layout_height="170dp"
                         android:layout_marginTop="@dimen/dp5"
                         android:layout_marginBottom="@dimen/dp5"
-                        android:layout_height="170dp"
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="2" />
 

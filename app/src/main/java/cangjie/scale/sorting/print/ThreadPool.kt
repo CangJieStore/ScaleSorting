@@ -1,7 +1,6 @@
 package cangjie.scale.sorting.print
 
 import android.util.Log
-import cangjie.scale.sorting.print.ThreadFactoryBuilder
 import java.lang.NullPointerException
 import java.util.ArrayDeque
 import java.util.concurrent.*
@@ -88,7 +87,6 @@ class ThreadPool private constructor() {
          * 核心线程数
          */
         private val CORE_POOL_SIZE = CPU_AVAILABLE + 1
-        @JvmStatic
         val instantiation: ThreadPool?
             get() {
                 if (threadPool == null) {

@@ -4,16 +4,20 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.hardware.usb.UsbManager
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
+import androidx.appcompat.widget.AppCompatTextView
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityPurchaseCustomerBinding
 import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.TaskGoodsItem
+import cangjie.scale.sorting.print.Printer
 import cangjie.scale.sorting.scale.FormatUtil
 import cangjie.scale.sorting.scale.ScaleModule
 import cangjie.scale.sorting.scale.SerialPortUtilForScale
@@ -35,8 +39,6 @@ import com.gyf.immersionbar.ktx.immersionBar
  */
 class PurchaseCustomerActivity :
     BaseMvvmActivity<ActivityPurchaseCustomerBinding, PurchaseViewModel>() {
-
-    private var usbManager: UsbManager? = null
 
     private val purchaseAdapter by lazy {
         PurchaseAdapter()
@@ -165,8 +167,11 @@ class PurchaseCustomerActivity :
      * 初始化打印机
      */
     private fun initPrinter() {
-        usbManager = getSystemService(USB_SERVICE) as UsbManager
-
+        Printer.getInstance().setStatusCallback(object : Printer.StatusCallback {
+            override fun status(type: Int, msg: String?) {
+                mBinding.tvTitle.text = "分拣(打印机:$msg)"
+            }
+        }).open(this@PurchaseCustomerActivity)
     }
 
     /**
@@ -199,6 +204,7 @@ class PurchaseCustomerActivity :
     override fun onStart() {
         super.onStart()
         initWeight()
+        initPrinter()
     }
 
     inner class ReadDataReceiver : BroadcastReceiver() {
@@ -237,6 +243,7 @@ class PurchaseCustomerActivity :
         super.onDestroy()
         unregisterReceiver(readDataReceiver)
         SerialPortUtilForScale.Instance().CloseSerialPort()
+        Printer.getInstance().close()
     }
 
     /**
@@ -299,6 +306,13 @@ class PurchaseCustomerActivity :
         currentPurchaseLabelInfo.add(labelInfo)
         labelAdapter.setList(currentPurchaseLabelInfo)
         viewModel.currentGoodsReceiveNumField.set(surplusQuantity.toString())
+        Printer.getInstance().printBitmap(
+            getBitmap(
+                this@PurchaseCustomerActivity,
+                labelInfo,
+                "0" + labelAdapter.data.size
+            ), 460, labelInfo.qrcode, 440, 16
+        )
     }
 
     /**
@@ -312,4 +326,26 @@ class PurchaseCustomerActivity :
         return allQuantity
     }
 
+    /**
+     * 生成打印图片
+     */
+    private fun getBitmap(mContext: Context?, labelInfo: LabelInfo, batchNo: String): Bitmap {
+        val v = View.inflate(
+            mContext,
+            R.layout.layout_print_item,
+            null
+        )
+        val name = v.findViewById<AppCompatTextView>(R.id.tv_goods_title)
+        val quantity = v.findViewById<AppCompatTextView>(R.id.tv_quantity)
+        val batch = v.findViewById<AppCompatTextView>(R.id.tv_batch)
+        val currentQu = v.findViewById<AppCompatTextView>(R.id.tv_current_num)
+        val cus = v.findViewById<AppCompatTextView>(R.id.tv_customer)
+        name.text = "商品名称:" + labelInfo.goodsName
+        quantity.text = "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
+        batch.text =
+            "分拣货号:" + batchNo + "-" + labelInfo.currentNum + "-" + (labelInfo.quantity - labelInfo.deliver_quantity)
+        currentQu.text = "本批数量:" + labelInfo.currentNum
+        cus.text = "客户名称:" + labelInfo.customer
+        return Printer.getInstance().convertViewToBitmap(v)
+    }
 }

@@ -28,7 +28,9 @@
     <uses-permission android:name="android.permission.RESTART_PACKAGES" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-
+    <uses-feature
+        android:name="android.hardware.usb.host"
+        android:required="true" />
     <application
         android:name=".base.ScaleApplication"
         android:allowBackup="true"
