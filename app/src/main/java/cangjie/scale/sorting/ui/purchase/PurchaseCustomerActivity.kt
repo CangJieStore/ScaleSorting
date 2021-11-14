@@ -23,6 +23,7 @@ import cangjie.scale.sorting.scale.ScaleModule
 import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import cangjie.scale.sorting.vm.PurchaseViewModel
 import coil.load
+import com.blankj.utilcode.util.ViewUtils
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.lib.ToastUtils
@@ -55,6 +56,12 @@ class PurchaseCustomerActivity :
 
 
     override fun initVariableId(): Int = BR.purchaseModel
+
+    override fun onStart() {
+        super.onStart()
+        initWeight()
+        initPrinter()
+    }
 
     override fun initActivity(savedInstanceState: Bundle?) {
         taskItemInfo = intent.getSerializableExtra("item") as TaskGoodsItem
@@ -169,7 +176,7 @@ class PurchaseCustomerActivity :
     private fun initPrinter() {
         Printer.getInstance().setStatusCallback(object : Printer.StatusCallback {
             override fun status(type: Int, msg: String?) {
-                mBinding.tvTitle.text = "分拣(打印机:$msg)"
+                mBinding.tvTitle.text = "分拣(打印机$msg)"
             }
         }).open(this@PurchaseCustomerActivity)
     }
@@ -178,18 +185,14 @@ class PurchaseCustomerActivity :
      * 初始化称连接
      */
     private fun initWeight() {
-        Thread {
-            SerialPortUtilForScale.Instance().CloseSerialPort()
-            SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
-            try {
-                ScaleModule.Instance(this@PurchaseCustomerActivity) //初始化称重模块
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                runOnUiThread {
-                    show(this@PurchaseCustomerActivity, 2000, "初始化称重主板错误！")
-                }
+        try {
+            ScaleModule.Instance(this) //初始化称重模块
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            ViewUtils.runOnUiThread {
+                ToastUtils.show("初始化称重主板错误！")
             }
-        }.start()
+        }
         readDataReceiver = ReadDataReceiver()
         registerReceiver(
             readDataReceiver,
@@ -201,16 +204,11 @@ class PurchaseCustomerActivity :
         )
     }
 
-    override fun onStart() {
-        super.onStart()
-        initWeight()
-        initPrinter()
-    }
-
     inner class ReadDataReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (ScaleModule.ERROR == intent.action) {
-                val error = intent.getStringExtra("error")
+                val error = intent.getStringExtra("error") as String
+                Log.e("error", error)
                 ToastUtils.show(error)
             } else {
                 updateWeight()
@@ -226,6 +224,7 @@ class PurchaseCustomerActivity :
                 ).TareWeight,
                 ScaleModule.Instance(this@PurchaseCustomerActivity).SetDotPoint
             )
+            Log.e("weight", currentWeight)
             if (!viewModel.currentWeightTypeFiled.get()) {
                 viewModel.currentWeightValue.set(currentWeight)
                 viewModel.thisPurchaseNumFiled.set(currentWeight)
@@ -235,6 +234,7 @@ class PurchaseCustomerActivity :
 
         } catch (ee: java.lang.Exception) {
             ee.printStackTrace()
+            Log.e("error2", ee.message.toString())
             ToastUtils.show(ee.message!!)
         }
     }
@@ -242,7 +242,6 @@ class PurchaseCustomerActivity :
     override fun onDestroy() {
         super.onDestroy()
         unregisterReceiver(readDataReceiver)
-        SerialPortUtilForScale.Instance().CloseSerialPort()
         Printer.getInstance().close()
     }
 

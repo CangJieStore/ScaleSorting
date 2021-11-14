@@ -74,6 +74,7 @@
             android:name=".ui.purchase.PurchaseCustomerActivity"
             android:screenOrientation="landscape"
             android:windowSoftInputMode="adjustResize" />
+
         <activity
             android:name=".ui.purchase.PurchaseGoodsActivity"
             android:screenOrientation="landscape"

@@ -11,6 +11,8 @@ import cangjie.scale.sorting.db.AppDatabase
 import cangjie.scale.sorting.db.SubmitOrder
 import cangjie.scale.sorting.db.SubmitOrderDao
 import cangjie.scale.sorting.entity.MessageEvent
+import cangjie.scale.sorting.scale.ScaleModule
+import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import com.blankj.utilcode.util.ViewUtils.runOnUiThread
 import com.cangjie.frame.core.db.CangJie
 import com.cangjie.frame.kit.lib.ToastUtils
@@ -36,7 +38,7 @@ import kotlin.concurrent.fixedRateTimer
  */
 class InitService : Service(), CoroutineScope by MainScope() {
 
-//    lateinit var timer: Timer
+    //    lateinit var timer: Timer
     private val corLife = CoroutineCycle()
     private var booksDao: SubmitOrderDao? = null
 
@@ -49,15 +51,15 @@ class InitService : Service(), CoroutineScope by MainScope() {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
         }
-//        SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
-//        try {
-//            ScaleModule.Instance(this) //初始化称重模块
-//        } catch (e: java.lang.Exception) {
-//            e.printStackTrace()
-//            runOnUiThread {
-//                ToastUtils.show("初始化称重主板错误！")
-//            }
-//        }
+        SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
+        try {
+            ScaleModule.Instance(this) //初始化称重模块
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            runOnUiThread {
+                ToastUtils.show("初始化称重主板错误！")
+            }
+        }
 //        timer = fixedRateTimer("", false, 0, 60000) {
 //            val single: Single<MutableList<SubmitOrder>> = Single.create { emitter ->
 //                booksDao = AppDatabase.get(ScaleApplication.instance!!).orderDao()
@@ -91,7 +93,7 @@ class InitService : Service(), CoroutineScope by MainScope() {
 
     private fun returnZero() {
         try {
-            cangjie.scale.sorting.scale.ScaleModule.Instance(this).ZeroClear()
+            ScaleModule.Instance(this).ZeroClear()
         } catch (e: Exception) {
             runOnUiThread {
                 ToastUtils.show("置零失败")
@@ -127,7 +129,7 @@ class InitService : Service(), CoroutineScope by MainScope() {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
-//        SerialPortUtilForScale.Instance().CloseSerialPort()
+        SerialPortUtilForScale.Instance().CloseSerialPort()
 //        corLife.close()
 //        timer.cancel()
     }

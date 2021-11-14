@@ -50,6 +50,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun initActivity(savedInstanceState: Bundle?) {
         taskItemInfo = intent.getSerializableExtra("item") as TaskGoodsItem
+        initWeight()
         initPurchase()
         setData(taskItemInfo)
     }
@@ -160,18 +161,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     }
 
     private fun initWeight() {
-        Thread {
-            SerialPortUtilForScale.Instance().CloseSerialPort()
-            SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
-            try {
-                ScaleModule.Instance(this@PurchaseGoodsActivity) //初始化称重模块
-            } catch (e: java.lang.Exception) {
-                e.printStackTrace()
-                runOnUiThread {
-                    show(this@PurchaseGoodsActivity, 2000, "初始化称重主板错误！")
-                }
-            }
-        }.start()
         readDataReceiver = ReadDataReceiver()
         registerReceiver(
             readDataReceiver,
@@ -181,11 +170,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             readDataReceiver,
             IntentFilter(ScaleModule.ERROR)
         )
-    }
-
-    override fun onStart() {
-        super.onStart()
-        initWeight()
     }
 
     inner class ReadDataReceiver : BroadcastReceiver() {

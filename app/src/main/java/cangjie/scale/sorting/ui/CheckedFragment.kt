@@ -24,6 +24,7 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import java.net.URL
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -46,7 +47,7 @@ class CheckedFragment : BaseMvvmFragment<FragmentChekedBinding, ScaleViewModel>(
             .build()
             .addTo(mBinding!!.ryOrders)
         mBinding!!.adapter = orderAdapter
-//        netTime()
+        netTime()
         orderAdapter.setOnItemClickListener { adapter, view, position ->
             val intent = Intent(requireActivity(), CheckedDetailActivity::class.java)
             val info = adapter.data[position] as OrderInfo
@@ -59,13 +60,21 @@ class CheckedFragment : BaseMvvmFragment<FragmentChekedBinding, ScaleViewModel>(
     private fun netTime() {
         lifecycleScope.launch {
             workOnIO {
-                val infoUrl = URL("http://www.baidu.com")
-                val connection = infoUrl.openConnection()
-                connection.connect()
-                val ld = connection.date
-                val now = DateUtil.dateToString(Date(ld), DateUtil.DATE_FORMAT)
-                chooseDate = now
-                viewModel.loadMain(now)
+                try {
+                    val infoUrl = URL("http://www.baidu.com")
+                    val connection = infoUrl.openConnection()
+                    connection.connect()
+                    val ld = connection.date
+                    val now = DateUtil.dateToString(Date(ld), DateUtil.DATE_FORMAT)
+                    chooseDate = now
+                    viewModel.loadMain(now)
+                } catch (e: Exception) {
+                    val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd")
+                    val date = Date(System.currentTimeMillis())
+                    chooseDate = simpleDateFormat.format(date)
+                    viewModel.loadMain(simpleDateFormat.format(date))
+                }
+
             }
         }
     }
