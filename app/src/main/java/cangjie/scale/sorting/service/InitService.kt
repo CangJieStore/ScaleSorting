@@ -31,6 +31,7 @@ import rxhttp.toStr
 import java.io.File
 import java.util.*
 import kotlin.concurrent.fixedRateTimer
+import kotlin.system.exitProcess
 
 /**
  * @author CangJie
@@ -51,15 +52,15 @@ class InitService : Service(), CoroutineScope by MainScope() {
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this)
         }
-        SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
-        try {
-            ScaleModule.Instance(this) //初始化称重模块
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            runOnUiThread {
-                ToastUtils.show("初始化称重主板错误！")
-            }
-        }
+//        SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
+//        try {
+//            ScaleModule.Instance(this) //初始化称重模块
+//        } catch (e: java.lang.Exception) {
+//            e.printStackTrace()
+//            runOnUiThread {
+//                ToastUtils.show("初始化称重主板错误！")
+//            }
+//        }
 //        timer = fixedRateTimer("", false, 0, 60000) {
 //            val single: Single<MutableList<SubmitOrder>> = Single.create { emitter ->
 //                booksDao = AppDatabase.get(ScaleApplication.instance!!).orderDao()
@@ -129,7 +130,10 @@ class InitService : Service(), CoroutineScope by MainScope() {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this)
         }
-        SerialPortUtilForScale.Instance().CloseSerialPort()
+        if (CangJie.getString("token", "").isNotEmpty()) {
+            SerialPortUtilForScale.Instance().CloseSerialPort()
+            exitProcess(0)
+        }
 //        corLife.close()
 //        timer.cancel()
     }

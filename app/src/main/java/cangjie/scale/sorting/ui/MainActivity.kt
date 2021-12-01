@@ -78,11 +78,18 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
     override fun layoutId(): Int = R.layout.activity_main
 
     override fun initImmersionBar() {
-        super.initImmersionBar()
         immersionBar {
             fullScreen(true)
             hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             statusBarDarkFont(false)
+            init()
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        immersionBar {
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             init()
         }
     }

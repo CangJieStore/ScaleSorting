@@ -3,6 +3,7 @@ package cangjie.scale.sorting.base
 import android.app.Application
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.base.http.HttpManager
+import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import com.cangjie.frame.core.db.CangJie
 import com.cangjie.frame.kit.OkHttp3Connection
 import com.cangjie.frame.kit.lib.ToastUtils
@@ -26,6 +27,7 @@ class ScaleApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setApplication(this)
+        SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
         CangJie.init(this)
         CangJie.config {
             multiProcess = true
