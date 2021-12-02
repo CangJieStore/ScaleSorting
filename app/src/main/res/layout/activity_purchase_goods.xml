@@ -34,6 +34,7 @@
                 android:visibility="invisible" />
 
             <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/tv_pur_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"

@@ -138,11 +138,18 @@ class PurchaseCustomerActivity :
     }
 
     override fun initImmersionBar() {
-        super.initImmersionBar()
         immersionBar {
             fullScreen(true)
-            hideBar(BarHide.FLAG_HIDE_BAR)
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             statusBarDarkFont(false)
+            init()
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        immersionBar {
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             init()
         }
     }
@@ -241,7 +248,7 @@ class PurchaseCustomerActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(readDataReceiver)
+        readDataReceiver?.let { unregisterReceiver(it) }
         Printer.getInstance().close()
     }
 

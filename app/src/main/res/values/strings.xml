@@ -79,4 +79,5 @@
     <string name="str_conn_state_connecting">连接状态：连接中</string>
     <string name="str_connecting">连接中</string>
     <string name="str_conn_state_connected">连接状态：已连接</string>
+    <string name="str_query">检索</string>
 </resources>

@@ -12,11 +12,13 @@ import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityPurchaseGoodsBinding
 import cangjie.scale.sorting.entity.TaskGoodsItem
+import cangjie.scale.sorting.print.Printer
 import cangjie.scale.sorting.scale.FormatUtil
 import cangjie.scale.sorting.scale.ScaleModule
 import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import cangjie.scale.sorting.vm.PurchaseViewModel
 import coil.load
+import com.blankj.utilcode.util.ViewUtils
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.lib.ToastUtils
@@ -48,9 +50,14 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun initVariableId(): Int = BR.purchaseModel
 
+    override fun onStart() {
+        super.onStart()
+        initWeight()
+        initPrinter()
+    }
+
     override fun initActivity(savedInstanceState: Bundle?) {
         taskItemInfo = intent.getSerializableExtra("item") as TaskGoodsItem
-        initWeight()
         initPurchase()
         setData(taskItemInfo)
     }
@@ -128,11 +135,18 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     }
 
     override fun initImmersionBar() {
-        super.initImmersionBar()
         immersionBar {
             fullScreen(true)
-            hideBar(BarHide.FLAG_HIDE_BAR)
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             statusBarDarkFont(false)
+            init()
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        immersionBar {
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             init()
         }
     }
@@ -161,6 +175,14 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     }
 
     private fun initWeight() {
+        try {
+            ScaleModule.Instance(this) //初始化称重模块
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            ViewUtils.runOnUiThread {
+                ToastUtils.show("初始化称重主板错误！")
+            }
+        }
         readDataReceiver = ReadDataReceiver()
         registerReceiver(
             readDataReceiver,
@@ -170,6 +192,17 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             readDataReceiver,
             IntentFilter(ScaleModule.ERROR)
         )
+    }
+
+    /**
+     * 初始化打印机
+     */
+    private fun initPrinter() {
+        Printer.getInstance().setStatusCallback(object : Printer.StatusCallback {
+            override fun status(type: Int, msg: String?) {
+                mBinding.tvPurTitle.text = "分拣(打印机$msg)"
+            }
+        }).open(this@PurchaseGoodsActivity)
     }
 
     inner class ReadDataReceiver : BroadcastReceiver() {
@@ -206,8 +239,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun onDestroy() {
         super.onDestroy()
-        unregisterReceiver(readDataReceiver)
-        SerialPortUtilForScale.Instance().CloseSerialPort()
+        readDataReceiver?.let { unregisterReceiver(it) }
+        Printer.getInstance().close()
+
     }
 
     private fun showInputPrice() {

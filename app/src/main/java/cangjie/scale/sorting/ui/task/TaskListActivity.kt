@@ -5,6 +5,7 @@ import androidx.viewpager2.widget.ViewPager2
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityTaskBinding
+import cangjie.scale.sorting.entity.GoodsTaskInfo
 import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.vm.TaskViewModel
 import com.cangjie.frame.core.BaseMvvmActivity
@@ -27,6 +28,7 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
 
 
     override fun initActivity(savedInstanceState: Bundle?) {
+        mBinding.info = GoodsTaskInfo("******", "****-**-**", 0, 0, 0, null, null)
         orderId = intent.getStringExtra("id").toString()
         viewModel.getProjectByGoods(orderId, "0", 0)
         val list = arrayListOf(
@@ -90,11 +92,18 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
         })
     }
 
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        immersionBar {
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+            init()
+        }
+    }
+
     override fun initImmersionBar() {
-        super.initImmersionBar()
         immersionBar {
             fullScreen(true)
-            hideBar(BarHide.FLAG_HIDE_BAR)
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             statusBarDarkFont(false)
             init()
         }
