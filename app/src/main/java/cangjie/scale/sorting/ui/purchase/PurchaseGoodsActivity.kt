@@ -4,13 +4,17 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
+import androidx.appcompat.widget.AppCompatTextView
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityPurchaseGoodsBinding
+import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.print.Printer
 import cangjie.scale.sorting.scale.FormatUtil
@@ -46,6 +50,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     override fun layoutId(): Int = R.layout.activity_purchase_goods
     private var taskItemInfo: TaskGoodsItem? = null
     private var readDataReceiver: ReadDataReceiver? = null
+    private val currentPurchaseLabelInfo = mutableListOf<LabelInfo>()
 
 
     override fun initVariableId(): Int = BR.purchaseModel
@@ -65,7 +70,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     private fun setData(itemData: TaskGoodsItem?) {
         itemData?.let {
             viewModel.currentType.set(0)
-            Log.e("info", Gson().toJson(it))
             viewModel.currentPurchaseGoodsFiled.set(it.name)
             viewModel.getUnPurchaseTask(0, it.id, "")
             mBinding.ivGoodsImg.load(it.picture)
@@ -94,10 +98,43 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             .addTo(mBinding.ryPurchase)
         mBinding.ryPurchase.adapter = purchaseAdapter
         purchaseAdapter.setOnItemClickListener { _, _, position ->
-            purchaseAdapter.data[position].isCurrent = true
-            purchaseAdapter.notifyItemChanged(position)
+            selectCurrent(position)
+        }
+        if (mBinding.ryScaleBatch.itemDecorationCount == 0) {
+            dividerBuilder()
+                .color(Color.TRANSPARENT)
+                .size(10, TypedValue.COMPLEX_UNIT_DIP)
+                .showLastDivider()
+                .showSideDividers()
+                .showFirstDivider()
+                .build()
+                .addTo(mBinding.ryScaleBatch)
         }
         mBinding.ryScaleBatch.adapter = labelAdapter
+    }
+
+    /**
+     * 选中待分拣客户
+     */
+    private fun selectCurrent(pos: Int) {
+        refreshData(pos)
+        val indexData = purchaseAdapter.data[pos]
+        viewModel.currentInfoFiled.set(indexData)
+        viewModel.currentUnitFiled.set(" " + indexData.unit)
+        calType(indexData.unit)
+        viewModel.thisPurchaseNumFiled.set("")
+        viewModel.currentGoodsOrderNumFiled.set(indexData.quantity)
+        viewModel.currentGoodsReceiveNumField.set(indexData.deliver_quantity)
+        if (indexData.deliver_quantity != null && indexData.quantity != null) {
+            viewModel.surplusNumFiled.set((indexData.quantity.toFloat() - indexData.deliver_quantity.toFloat()).toString())
+        }
+    }
+
+    private fun refreshData(pos: Int) {
+        for (index in 0 until purchaseAdapter.data.size) {
+            purchaseAdapter.data[index].isCurrent = index == pos
+            purchaseAdapter.notifyItemChanged(index)
+        }
     }
 
     override fun handleEvent(msg: MsgEvent) {
@@ -110,7 +147,12 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 showInputPrice()
             }
             2 -> {
-                makeNewLabel()
+                if (viewModel.currentPrinterStatus.get() == 2) {
+                    makeNewLabel()
+                } else {
+                    toast("未连接打印机或打印机故障")
+                }
+
             }
         }
     }
@@ -120,15 +162,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         model.getPurchaseData().observe(this, {
             purchaseAdapter.setList(it)
             if (purchaseAdapter.data.size > 0) {
-                purchaseAdapter.data[0].isCurrent = true
-                val indexData = purchaseAdapter.data[0]
-                viewModel.currentInfoFiled.set(indexData)
-                viewModel.currentUnitFiled.set(" " + indexData.unit)
-                viewModel.currentGoodsReceiveNumField.set(indexData.deliver_quantity)
-                if (indexData.deliver_quantity != null && indexData.quantity != null) {
-                    viewModel.surplusNumFiled.set((indexData.quantity.toFloat() - indexData.deliver_quantity.toFloat()).toString())
-                }
-                purchaseAdapter.notifyItemChanged(0)
+                selectCurrent(0)
                 viewModel.getAllBatch(purchaseAdapter.data[0].item_id)
             }
         })
@@ -200,6 +234,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     private fun initPrinter() {
         Printer.getInstance().setStatusCallback(object : Printer.StatusCallback {
             override fun status(type: Int, msg: String?) {
+                viewModel.currentPrinterStatus.set(type)
                 mBinding.tvPurTitle.text = "分拣(打印机$msg)"
             }
         }).open(this@PurchaseGoodsActivity)
@@ -244,6 +279,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     }
 
+    override fun toast(notice: String?) {
+        super.toast(notice)
+        show(this, 2000, notice ?: "")
+    }
+
     private fun showInputPrice() {
         EditPriceDialogFragment("本批数量", "请输入本次分拣数量...").setContentCallback(object :
             EditPriceDialogFragment.ContentCallback {
@@ -257,15 +297,71 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
      * 生成标签
      */
     private fun makeNewLabel() {
-        var goodsName = ""
-        goodsName = if (viewModel.currentType.get() == 0) {
-            viewModel.currentPurchaseGoodsFiled.get().toString()
-        } else {
-            viewModel.currentInfoFiled.get()?.name.toString()
+        if (viewModel.currentWeightTypeFiled.get()) {
+            if (viewModel.thisPurchaseNumFiled.get().isNullOrEmpty()) {
+                toast("请输入本次分拣数量")
+                return
+            }
         }
-        val strQuantity = viewModel.currentInfoFiled.get()?.quantity
-        val quantity = strQuantity?.toFloat() ?: 0f
-//        val labelInfo = LabelInfo(goodsName, quantity,viewModel.thisPurchaseNumFiled.get())
+        val goodsName = viewModel.currentPurchaseGoodsFiled.get()
+        val strQuantity = viewModel.currentGoodsOrderNumFiled.get()
+        val allQuantity = strQuantity?.toFloat() ?: 0f
+        val surplusQuantity =
+            viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f + calCurrentSurplusNum()
+        val currentQuantity = viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f
+        val labelInfo = LabelInfo(
+            goodsName,
+            allQuantity,
+            currentQuantity,
+            surplusQuantity,
+            taskItemInfo?.purchaser_name,
+            viewModel.currentUnitFiled.get(),
+            "www.baidu.com"
+        )
+        currentPurchaseLabelInfo.add(labelInfo)
+        labelAdapter.setList(currentPurchaseLabelInfo)
+        viewModel.currentGoodsReceiveNumField.set(surplusQuantity.toString())
+        Printer.getInstance().printBitmap(
+            getBitmap(
+                this@PurchaseGoodsActivity,
+                labelInfo,
+                "0" + labelAdapter.data.size
+            ), 460, labelInfo.qrcode, 440, 16
+        )
+    }
+
+    /**
+     * 计算当前分拣累计数量
+     */
+    private fun calCurrentSurplusNum(): Float {
+        var allQuantity = viewModel.currentGoodsReceiveNumField.get()?.toFloat() ?: 0f
+        labelAdapter.data.forEach {
+            allQuantity += it.currentNum
+        }
+        return allQuantity
+    }
+
+    /**
+     * 生成打印图片
+     */
+    private fun getBitmap(mContext: Context?, labelInfo: LabelInfo, batchNo: String): Bitmap {
+        val v = View.inflate(
+            mContext,
+            R.layout.layout_print_item,
+            null
+        )
+        val name = v.findViewById<AppCompatTextView>(R.id.tv_goods_title)
+        val quantity = v.findViewById<AppCompatTextView>(R.id.tv_quantity)
+        val batch = v.findViewById<AppCompatTextView>(R.id.tv_batch)
+        val currentQu = v.findViewById<AppCompatTextView>(R.id.tv_current_num)
+        val cus = v.findViewById<AppCompatTextView>(R.id.tv_customer)
+        name.text = "商品名称:" + labelInfo.goodsName
+        quantity.text = "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
+        batch.text =
+            "分拣货号:" + batchNo + "-" + labelInfo.currentNum + "-" + (labelInfo.quantity - labelInfo.deliver_quantity)
+        currentQu.text = "本批数量:" + labelInfo.currentNum
+        cus.text = "客户名称:" + labelInfo.customer
+        return Printer.getInstance().convertViewToBitmap(v)
     }
 
 }

@@ -71,7 +71,6 @@ class PurchaseCustomerActivity :
 
     private fun setData(itemData: TaskGoodsItem?) {
         itemData?.let {
-            Log.e("info", Gson().toJson(it))
             viewModel.currentType.set(1)
             viewModel.getUnPurchaseTask(1, it.sorting_id, it.purchaser_id)
             mBinding.tvPurchaseTitle.text = "客户名称:" + it.purchaser_name

@@ -99,6 +99,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.1"
                         android:gravity="center"
+                        android:text="待分拣商品:0"
                         android:textColor="@color/black_3"
                         android:textSize="@dimen/sp18" />
 
@@ -109,6 +110,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1.1"
                         android:gravity="center"
+                        android:text="已分拣商品:0"
                         android:textColor="@color/black_3"
                         android:textSize="@dimen/sp18" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -118,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/dp5"
                     android:gravity="center_vertical"
+                    android:visibility="gone"
                     android:orientation="horizontal">
 
                     <androidx.appcompat.widget.AppCompatTextView

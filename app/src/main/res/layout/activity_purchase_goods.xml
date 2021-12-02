@@ -357,7 +357,7 @@
                             android:text="置零"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp16"
-                            android:visibility="visible" />
+                            android:visibility="@{purchaseModel.currentWeightTypeFiled==false?View.VISIBLE:View.GONE}" />
 
                     </RelativeLayout>
 
@@ -369,35 +369,26 @@
                         android:paddingStart="@dimen/dp15"
                         android:paddingEnd="@dimen/dp15">
 
-                        <androidx.appcompat.widget.LinearLayoutCompat
+                        <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:weightSum="2">
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:text="@{@string/str_goods_name+purchaseModel.currentPurchaseGoodsFiled}"
-                                android:textColor="@color/black_3"
-                                android:textSize="@dimen/sp18" />
-
-                            <androidx.appcompat.widget.AppCompatTextView
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_marginStart="@dimen/dp10"
-                                android:layout_weight="1"
-                                android:text="@{@string/str_scale_cal+purchaseModel.scaleTypeFiled}"
-                                android:textColor="@color/black_3"
-                                android:textSize="@dimen/sp18" />
-
-                        </androidx.appcompat.widget.LinearLayoutCompat>
+                            android:text="@{@string/str_goods_name+purchaseModel.currentPurchaseGoodsFiled}"
+                            android:textColor="@color/black_3"
+                            android:textSize="@dimen/sp18" />
 
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginTop="@dimen/dp5"
+                            android:text="@{@string/str_scale_cal+purchaseModel.scaleTypeFiled}"
+                            android:textColor="@color/black_3"
+                            android:textSize="@dimen/sp18" />
+
+
+                        <androidx.appcompat.widget.AppCompatTextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp5"
                             android:text="@{@string/str_order_num+purchaseModel.currentGoodsOrderNumFiled+purchaseModel.currentUnitFiled}"
                             android:textColor="@color/black_3"
                             android:textSize="@dimen/sp18" />
@@ -405,7 +396,7 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginTop="@dimen/dp5"
                             android:text="@{@string/str_added_num+purchaseModel.currentGoodsReceiveNumField+purchaseModel.currentUnitFiled}"
                             android:textColor="@color/black_3"
                             android:textSize="@dimen/sp18" />
@@ -414,7 +405,7 @@
                         <androidx.appcompat.widget.LinearLayoutCompat
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginTop="@dimen/dp5"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
 
@@ -466,7 +457,7 @@
                         <androidx.appcompat.widget.AppCompatTextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/dp10"
+                            android:layout_marginTop="@dimen/dp5"
                             android:text="@{@string/str_surplus_num+purchaseModel.surplusNumFiled+purchaseModel.currentUnitFiled}"
                             android:textColor="@color/black_3"
                             android:textSize="@dimen/sp18" />

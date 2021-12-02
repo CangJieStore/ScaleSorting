@@ -30,6 +30,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
     var currentInfoFiled = ObservableField<PurchaseInfo>()
     var currentType = ObservableField(0)
     var currentPurchaseType = ObservableField(0)
+    var currentPrinterStatus = ObservableField(0)
 
 
     var finishCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
