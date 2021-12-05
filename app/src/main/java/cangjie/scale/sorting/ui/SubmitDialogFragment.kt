@@ -2,6 +2,7 @@ package cangjie.scale.sorting.ui
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -12,8 +13,12 @@ import androidx.fragment.app.DialogFragment
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.adapter.SubmitAdapter
 import cangjie.scale.sorting.databinding.DialogSubmitBinding
+import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.SubmitInfo
+import cangjie.scale.sorting.ui.purchase.LabelAdapter
 import com.fondesa.recyclerviewdivider.dividerBuilder
+import com.gyf.immersionbar.BarHide
+import com.gyf.immersionbar.ktx.immersionBar
 import kotlinx.android.synthetic.main.dialog_submit.*
 
 /**
@@ -23,10 +28,10 @@ import kotlinx.android.synthetic.main.dialog_submit.*
 class SubmitDialogFragment : DialogFragment() {
 
 
-    private var data: MutableList<SubmitInfo> = arrayListOf()
+    private var data: MutableList<LabelInfo> = arrayListOf()
     private var submitBinding: DialogSubmitBinding? = null
     private val submitAdapter by lazy {
-        SubmitAdapter()
+        LabelAdapter()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +42,10 @@ class SubmitDialogFragment : DialogFragment() {
 
     override fun onStart() {
         super.onStart()
+        immersionBar {
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+            init()
+        }
         dialog!!.setCanceledOnTouchOutside(false)
         val dialogWindow = dialog!!.window
         dialogWindow!!.setGravity(Gravity.CENTER)
@@ -58,85 +67,45 @@ class SubmitDialogFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        data = arguments?.get("info") as MutableList<SubmitInfo>
-        submitBinding!!.ivClose.setOnClickListener {
-            dismiss()
-        }
-        submitBinding!!.rbType1.setOnClickListener {
-            rb_type1.isChecked = true
-            rb_type2.isChecked = false
-        }
-        submitBinding!!.rbType2.setOnClickListener {
-            rb_type2.isChecked = true
-            rb_type1.isChecked = false
-        }
-        if (data.size > 0) {
-            submitBinding!!.tvSubmitName.text = "商品名称：" + data[0].name
-            submitBinding!!.tvBuyCount.text =
-                "收货价格：" + if (data[0].costPrice.isNullOrEmpty()) "0.00" else String.format(
-                    "%.2f元",
-                    data[0].costPrice!!.toFloat()
-                )
-            submitBinding!!.tvSubmitTotal.text = "验收总数量：" + calTotal()
-            submitBinding!!.tvSendUnit.text = "收货单位：" + data[0].receive_unit
-            requireActivity().dividerBuilder()
-                .color(Color.parseColor("#cccccc"))
-                .size(1, TypedValue.COMPLEX_UNIT_DIP)
-                .showLastDivider()
-                .build()
-                .addTo(submitBinding!!.rySubmit)
-            submitBinding!!.adapter = submitAdapter
-            submitAdapter.setList(data)
-            submitBinding!!.btnSubmit.setOnClickListener {
-                if (action != null) {
-                    dismiss()
-                    val count = if (data[0].matchCount.isNullOrEmpty()) "" else data[0].matchCount!!
-                    val price = if (data[0].matchPrice.isNullOrEmpty()) "" else data[0].matchPrice!!
-                    val csPrice =
-                        if (data[0].costPrice.isNullOrEmpty()) "0.00" else data[0].costPrice!!
-                    action!!.submit(
-                        data[0].id,
-                        connectTotal(),
-                        data[0].isLess,
-                        count,
-                        price,
-                        csPrice
-                    )
+        data = arguments?.get("info") as MutableList<LabelInfo>
+        submitBinding?.let {
+            it.ivClose.setOnClickListener { dismissAllowingStateLoss() }
+            if (data.size > 0) {
+                it.tvSubmitName.text = "商品名称：" + data[0].goodsName
+                it.tvBuyCount.text = "订单数量：" + data[0].quantity
+                it.tvSubmitTotal.text = "分拣数量：" + calNum()
+                it.tvSendUnit.text = "配送单位：" + data[0].unit
+                if (it.rySubmit.itemDecorationCount == 0) {
+                    requireActivity().dividerBuilder()
+                        .color(Color.TRANSPARENT)
+                        .size(10, TypedValue.COMPLEX_UNIT_DIP)
+                        .showLastDivider()
+                        .showSideDividers()
+                        .showFirstDivider()
+                        .build()
+                        .addTo(it.rySubmit)
+                }
+                it.adapter = submitAdapter
+                submitAdapter.setList(data)
+                it.btnSubmit.setOnClickListener {
+                    dismissAllowingStateLoss()
+                    action?.submit(calNum())
                 }
             }
         }
     }
 
-    private fun calTotal(): String {
+    private fun calNum(): Float {
         var total = 0f
-        if (data.size > 0) {
-            for (item in data) {
-                total += item.batch_count.toFloat()
-            }
+        data.forEach {
+            total += it.currentNum
         }
-        return total.toString()
+        return total
     }
 
-    private fun connectTotal(): String {
-        val buffer = StringBuffer()
-        if (data.size > 0) {
-            for (item in data) {
-                buffer.append(item.batch_count)
-                buffer.append(",")
-            }
-        }
-        return buffer.toString()
-    }
 
     interface SubmitAction {
-        fun submit(
-            id: String,
-            count: String,
-            isLess: Int,
-            dCount: String,
-            dPrice: String,
-            costPrice: String
-        )
+        fun submit(quantity: Float)
     }
 
     private var action: SubmitAction? = null

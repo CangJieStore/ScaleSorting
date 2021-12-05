@@ -52,8 +52,10 @@
         <entry key="app/src/main/res/layout/layout_order_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_print_item.xml" value="0.16304347826086957" />
         <entry key="app/src/main/res/layout/layout_purchse_goods_item.xml" value="0.16304347826086957" />
+        <entry key="app/src/main/res/layout/layout_purchse_goods_sorted_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_purchse_item.xml" value="0.2717391304347826" />
         <entry key="app/src/main/res/layout/layout_receive_item.xml" value="0.28351449275362317" />
+        <entry key="app/src/main/res/layout/layout_stock_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_submit_item.xml" value="0.13728470111448834" />
         <entry key="app/src/main/res/layout/layout_task_item.xml" value="0.24456521739130435" />
         <entry key="app/src/main/res/layout/loading_process.xml" value="0.14895833333333333" />

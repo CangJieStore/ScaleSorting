@@ -36,21 +36,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
-        android:gravity="center"
-        android:text="订单单位"
-        android:textColor="@color/white"
-        android:textSize="@dimen/sp16" />
-
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="@color/gray_c" />
-
-    <androidx.appcompat.widget.AppCompatTextView
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_weight="0.7"
         android:gravity="center"
         android:text="订单数量"
         android:textColor="@color/white"
@@ -64,7 +50,7 @@
     <androidx.appcompat.widget.AppCompatTextView
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="0.5"
+        android:layout_weight="0.7"
         android:gravity="center"
         android:text="配送单位"
         android:textColor="@color/white"

@@ -20,5 +20,6 @@ class TaskGoodsItem(
     val purchaser_id: String,
     val item_count: Int,
     val sorting_count: Int,
-    val purchaser_name: String
+    val staff_name: String,
+    val purchaser_name: String?
 ) : Serializable

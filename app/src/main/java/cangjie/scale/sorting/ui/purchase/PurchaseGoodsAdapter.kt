@@ -21,7 +21,8 @@ class PurchaseGoodsAdapter :
             it.tvOrder.text = (getItemPosition(item) + 1).toString()
             it.tvName.text = item.purchaser
             it.tvQuantity.text = item.quantity
-            it.tvUnit.text = item.unit
+            it.tvDeliveryUnit.text = item.unit
+            it.tvGoodsOrderNo.text = item.trade_no
         }
     }
 }

@@ -36,7 +36,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:padding="@dimen/dp15"
-                    android:text="验收完毕"
+                    android:text="分拣完成"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp22" />
 
@@ -73,7 +73,7 @@
                         android:textSize="@dimen/sp18" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_buy_count"
+                        android:id="@+id/tv_send_unit"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -95,11 +95,10 @@
                         android:textSize="@dimen/sp18" />
 
                     <androidx.appcompat.widget.AppCompatTextView
-                        android:id="@+id/tv_send_unit"
+                        android:id="@+id/tv_buy_count"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="收货单位："
                         android:textColor="@color/black_3"
                         android:textSize="@dimen/sp18" />
                 </androidx.appcompat.widget.LinearLayoutCompat>
@@ -114,126 +113,14 @@
                 android:background="@drawable/shape_choose_date"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/ry_submit"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:background="@drawable/shape_table_top"
-                    android:orientation="horizontal">
+                    android:layout_height="200dp"
+                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+                    app:spanCount="4"
+                    binding:adapter="@{adapter}" />
 
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="批次"
-                        android:textColor="@color/black_3"
-                        android:textSize="@dimen/sp18" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/gray_c" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="验收数量"
-                        android:textColor="@color/black_3"
-                        android:textSize="@dimen/sp18" />
-
-                    <View
-                        android:layout_width="1dp"
-                        android:layout_height="match_parent"
-                        android:background="@color/gray_c" />
-
-                    <androidx.appcompat.widget.AppCompatTextView
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="图片"
-                        android:textColor="@color/black_3"
-                        android:textSize="@dimen/sp18" />
-
-                </LinearLayout>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/ry_submit"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        binding:adapter="@{adapter}" />
-                </RelativeLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dp15"
-                android:visibility="gone"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="商品类型"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp18" />
-
-                <androidx.appcompat.widget.AppCompatTextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp15"
-                    android:text="提示：请选择商品入库类型"
-                    android:textColor="#F14646"
-                    android:textSize="@dimen/sp18" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="@dimen/dp_40"
-                android:visibility="gone"
-                android:paddingEnd="@dimen/dp_40">
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rb_type1"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/dp15"
-                    android:layout_marginEnd="@dimen/dp15"
-                    android:layout_weight="1"
-                    android:background="@drawable/selector_type_submit"
-                    android:button="@null"
-                    android:checked="true"
-                    android:gravity="center"
-                    android:text="即入即出型"
-                    android:textColor="@color/color_input_submit"
-                    android:textSize="@dimen/sp18" />
-
-                <androidx.appcompat.widget.AppCompatRadioButton
-                    android:id="@+id/rb_type2"
-                    android:layout_width="0dp"
-                    android:layout_height="45dp"
-                    android:layout_marginStart="@dimen/dp15"
-                    android:layout_weight="1"
-                    android:background="@drawable/selector_type_submit"
-                    android:button="@null"
-                    android:gravity="center"
-                    android:text="先入后领型"
-                    android:textColor="@color/color_input_submit"
-                    android:textSize="@dimen/sp18" />
             </LinearLayout>
 
 

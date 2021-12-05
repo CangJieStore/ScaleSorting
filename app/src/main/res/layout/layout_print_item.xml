@@ -4,16 +4,16 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:paddingLeft="20dp"
+    android:paddingStart="@dimen/dp15"
     android:paddingTop="15dp">
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_goods_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="商品名称:大白菜"
+        android:text="商品名称:"
         android:textColor="#000000"
-        android:textSize="50sp" />
+        android:textSize="@dimen/sp22" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_quantity"
@@ -22,7 +22,7 @@
         android:layout_marginTop="5dp"
         android:text="订货数量:180斤"
         android:textColor="#000000"
-        android:textSize="50sp" />
+        android:textSize="@dimen/sp22" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_batch"
@@ -31,7 +31,7 @@
         android:layout_marginTop="5dp"
         android:text="分拣货号:02-58-56"
         android:textColor="#000000"
-        android:textSize="50sp" />
+        android:textSize="@dimen/sp22" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_current_num"
@@ -40,7 +40,7 @@
         android:layout_marginTop="5dp"
         android:text="配送数量:58斤"
         android:textColor="#000000"
-        android:textSize="50sp" />
+        android:textSize="@dimen/sp22" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/tv_customer"
@@ -49,5 +49,5 @@
         android:layout_marginTop="5dp"
         android:text="客户名称:景宁县城北中学"
         android:textColor="#000000"
-        android:textSize="50sp" />
+        android:textSize="@dimen/sp22" />
 </LinearLayout>

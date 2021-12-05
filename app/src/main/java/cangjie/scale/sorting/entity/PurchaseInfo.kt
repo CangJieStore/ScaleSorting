@@ -13,5 +13,5 @@ class PurchaseInfo(
     val name: String?,
     val trade_no: String?,
     val picture: String?,
-    var isCurrent: Boolean
+    var isCurrent: Boolean,
 )

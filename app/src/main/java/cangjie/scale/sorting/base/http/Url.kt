@@ -6,19 +6,20 @@ object Url {
 
     @JvmField
     @DefaultDomain
-    var baseUrl = "https://ps.shian360.com/"
+    var baseUrl = "https://api.shian360.com/"
 
-    const val update = "openapi/sorting/?op=upgrade"
-    const val login = "openapi/sorting/?op=login"
-    const val tasks = "openapi/sorting/?op=task"
-    const val sorting_goods = "openapi/sorting/?op=goods_task_item"
-    const val goods_item = "openapi/sorting/?op=goods_task_receive"
-    const val sorting_purchaser = "openapi/sorting/?op=purchaser_task_item"
-    const val tasks_item = "openapi/sorting/?op=purchaser_task_receive"
+    const val update = "supplier/sorting/?op=upgrade"
+    const val login = "supplier/sorting/?op=login"
+    const val tasks = "supplier/sorting/?op=task"
+    const val sorting_goods = "supplier/sorting/?op=goods_task_item"
+    const val goods_item = "supplier/sorting/?op=goods_task_receive"
+    const val sorting_purchaser = "supplier/sorting/?op=purchaser_task_item"
+    const val tasks_item = "supplier/sorting/?op=purchaser_task_receive"
 
-    const val goods_sorting = "openapi/sorting/?op=goods_sorting"
-    const val customer_sorting = "openapi/sorting/?op=purchaser_sorting"
-    const val purchase_batch = "openapi/sorting/?op=goods_batch"
+    const val goods_sorting = "supplier/sorting/?op=goods_sorting"
+    const val customer_sorting = "supplier/sorting/?op=purchaser_sorting"
+    const val purchase_batch = "supplier/sorting/?op=goods_batch"
+    const val submit_sorting = "supplier/sorting/?op=fill"
 
     const val submit = "supplier/steelyard/?op=weight"
     const val upload = "supplier/steelyard/?op=picture"

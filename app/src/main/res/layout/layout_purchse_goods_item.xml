@@ -13,7 +13,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.3"
             android:gravity="center"
-            android:textColor="@color/black_3"
+            android:textColor="@color/color_b_w"
             android:textSize="@dimen/sp16" />
 
         <View
@@ -27,22 +27,9 @@
             android:layout_height="match_parent"
             android:layout_weight="1.2"
             android:gravity="center"
-            android:textColor="@color/black_3"
+            android:textColor="@color/color_b_w"
             android:textSize="@dimen/sp16" />
 
-        <View
-            android:layout_width="1dp"
-            android:layout_height="match_parent"
-            android:background="@color/gray_c" />
-
-        <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_unit"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.5"
-            android:gravity="center"
-            android:textColor="@color/black_3"
-            android:textSize="@dimen/sp16" />
 
         <View
             android:layout_width="1dp"
@@ -53,9 +40,9 @@
             android:id="@+id/tv_quantity"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.7"
             android:gravity="center"
-            android:textColor="@color/black_3"
+            android:textColor="@color/color_b_w"
             android:textSize="@dimen/sp16" />
 
         <View
@@ -67,9 +54,9 @@
             android:id="@+id/tv_delivery_unit"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="0.5"
+            android:layout_weight="0.7"
             android:gravity="center"
-            android:textColor="@color/black_3"
+            android:textColor="@color/color_b_w"
             android:textSize="@dimen/sp16" />
 
         <View
@@ -78,12 +65,12 @@
             android:background="@color/gray_c" />
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/tv_goods_batch"
+            android:id="@+id/tv_goods_order_no"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.2"
             android:gravity="center"
-            android:textColor="@color/black_3"
+            android:textColor="@color/color_b_w"
             android:textSize="@dimen/sp16" />
 
 

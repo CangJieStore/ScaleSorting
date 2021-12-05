@@ -4,7 +4,9 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import cangjie.scale.sorting.base.http.Url
+import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.entity.PurchaseInfo
+import cangjie.scale.sorting.entity.StockInfo
 import com.cangjie.frame.core.binding.BindingAction
 import com.cangjie.frame.core.binding.BindingCommand
 import com.cangjie.frame.core.event.MsgEvent
@@ -17,6 +19,7 @@ import com.cangjie.frame.kit.tab.Title
 class PurchaseViewModel : BaseScaleViewModel() {
 
     private val purchaseLiveData = MutableLiveData<MutableList<PurchaseInfo>>()
+    private val stockLiveData = MutableLiveData<MutableList<StockInfo>>()
     var showStatusFiled = ObservableField(0)
     var currentPurchaseGoodsFiled = ObservableField("")
     var currentGoodsOrderNumFiled = ObservableField("")
@@ -28,6 +31,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
     var currentWeightTypeFiled = ObservableBoolean(false)
     var currentWeightValue = ObservableField("0.00")
     var currentInfoFiled = ObservableField<PurchaseInfo>()
+    var currentBatchFiled = ObservableField<StockInfo>()
     var currentType = ObservableField(0)
     var currentPurchaseType = ObservableField(0)
     var currentPrinterStatus = ObservableField(0)
@@ -48,6 +52,16 @@ class PurchaseViewModel : BaseScaleViewModel() {
             action(MsgEvent(2))
         }
     })
+    var repurchaseCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(3))
+        }
+    })
+    var submitCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(4))
+        }
+    })
 
     fun getUnPurchaseTask(taskType: Int, taskId: String, pId: String) {
         loading("")
@@ -65,7 +79,18 @@ class PurchaseViewModel : BaseScaleViewModel() {
     fun getAllBatch(itemId: String) {
         loading("")
         val params = mutableMapOf<String, Any>("item_id" to itemId)
-        postWithToken<String>(Url.purchase_batch, params, 200)
+        postWithToken<MutableList<StockInfo>>(Url.purchase_batch, params, 200)
+    }
+
+    fun submit(itemId: String, batchId: String, quantity: String) {
+        loading("")
+        val params = mutableMapOf<String, Any>(
+            "item_id" to itemId,
+            "batch_id" to batchId,
+            "quantity" to quantity,
+            "type" to "goods"
+        )
+        postWithToken<String>(Url.submit_sorting, params, 201)
     }
 
     override fun success(code: Int, result: Any?) {
@@ -76,13 +101,16 @@ class PurchaseViewModel : BaseScaleViewModel() {
                 purchaseLiveData.postValue(result as MutableList<PurchaseInfo>)
             }
             200 -> {
-
+                stockLiveData.postValue(result as MutableList<StockInfo>)
+            }
+            201 -> {
+                action(MsgEvent(5))
             }
         }
     }
 
     fun getPurchaseData() = purchaseLiveData
-
+    fun getStockData() = stockLiveData
     override fun error(errorCode: Int, errorMsg: String?) {
         super.error(errorCode, errorMsg)
         dismissLoading()

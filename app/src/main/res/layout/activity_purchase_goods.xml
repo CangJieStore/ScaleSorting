@@ -117,7 +117,7 @@
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="1.0"
+                                    android:layout_weight="1.2"
                                     android:gravity="center"
                                     android:text="批次号"
                                     android:textColor="@color/white"
@@ -145,7 +145,7 @@
                                 <androidx.appcompat.widget.AppCompatTextView
                                     android:layout_width="0dp"
                                     android:layout_height="match_parent"
-                                    android:layout_weight="0.6"
+                                    android:layout_weight="0.4"
                                     android:gravity="center"
                                     android:text="库存单位"
                                     android:textColor="@color/white"
@@ -481,6 +481,7 @@
                             android:background="@drawable/shape_clear_btn"
                             android:text="重新分拣"
                             android:textColor="@color/white"
+                            binding:onClickCommand="@{purchaseModel.repurchaseCommand}"
                             android:textSize="@dimen/sp16" />
 
                         <androidx.appcompat.widget.AppCompatButton
@@ -501,7 +502,8 @@
                             android:background="@drawable/shape_login_btn"
                             android:text="完成提交"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/sp16" />
+                            android:textSize="@dimen/sp16"
+                            binding:onClickCommand="@{purchaseModel.submitCommand}"/>
                     </LinearLayout>
 
                 </androidx.appcompat.widget.LinearLayoutCompat>

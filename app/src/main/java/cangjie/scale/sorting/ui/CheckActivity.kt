@@ -394,27 +394,27 @@ class CheckActivity : BaseMvvmActivity<ActivityCheckBinding, ScaleViewModel>() {
                         }
                     }
                 }
-                SubmitDialogFragment.newInstance(bundle)!!
-                    .setAction(object : SubmitDialogFragment.SubmitAction {
-                        override fun submit(
-                            id: String,
-                            count: String,
-                            isLess: Int,
-                            dCount: String,
-                            dPrice: String,
-                            cPrice: String
-                        ) {
-                            viewModel.submit(
-                                id,
-                                count,
-                                isLess,
-                                cPrice,
-                                dCount,
-                                dPrice,
-                                currentGoodsInfo!!.repair_receive
-                            )
-                        }
-                    }).show(supportFragmentManager, "submit")
+//                SubmitDialogFragment.newInstance(bundle)!!
+//                    .setAction(object : SubmitDialogFragment.SubmitAction {
+//                        override fun submit(
+//                            id: String,
+//                            count: String,
+//                            isLess: Int,
+//                            dCount: String,
+//                            dPrice: String,
+//                            cPrice: String
+//                        ) {
+//                            viewModel.submit(
+//                                id,
+//                                count,
+//                                isLess,
+//                                cPrice,
+//                                dCount,
+//                                dPrice,
+//                                currentGoodsInfo!!.repair_receive
+//                            )
+//                        }
+//                    }).show(supportFragmentManager, "submit")
 
             }
             7 -> {//take photo

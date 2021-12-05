@@ -24,13 +24,13 @@ class TaskReceiveAdapter :
                 it.llGoods.visibility = View.GONE
                 it.cardCustomer.visibility = View.VISIBLE
                 it.tvCustomer.text = item.purchaser_name
-                it.tvGoodsCount.text = "领取人:" + item.purchaser_name
+                it.tvGoodsCount.text = "领取人:" + item.staff_name
             } else {
                 it.llGoods.visibility = View.VISIBLE
                 it.cardCustomer.visibility = View.GONE
                 it.ivGoodsImg.load(item.picture)
                 it.tvGoodsName.text = item.name
-                it.tvCustomerCount.text = "领取人：" + item.purchaser_name
+                it.tvCustomerCount.text = "领取人：" + item.staff_name
             }
         }
     }
