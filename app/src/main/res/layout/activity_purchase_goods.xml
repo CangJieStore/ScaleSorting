@@ -357,6 +357,7 @@
                             android:text="置零"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp16"
+                            binding:onClickCommand="@{purchaseModel.resetZeroCommand}"
                             android:visibility="@{purchaseModel.currentWeightTypeFiled==false?View.VISIBLE:View.GONE}" />
 
                     </RelativeLayout>

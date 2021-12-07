@@ -166,7 +166,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         data?.let {
             viewModel.currentUnitFiled.set(" " + it.unit)
             calType(it.unit)
-            viewModel.thisPurchaseNumFiled.set("")
+            if (!viewModel.currentWeightTypeFiled.get()) {
+                viewModel.thisPurchaseNumFiled.set("0.00")
+            } else {
+                viewModel.thisPurchaseNumFiled.set("")
+            }
             viewModel.currentGoodsOrderNumFiled.set(it.quantity)
             viewModel.currentGoodsReceiveNumField.set(it.deliver_quantity)
             if (it.deliver_quantity != null && it.quantity != null) {
@@ -242,7 +246,21 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 labelAdapter.notifyDataSetChanged()
                 viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
             }
+            //置零
+            6 -> {
+                returnZero()
+                updateWeight()
+            }
+        }
+    }
 
+    private fun returnZero() {
+        try {
+            ScaleModule.Instance(this).ZeroClear()
+        } catch (e: Exception) {
+            ViewUtils.runOnUiThread {
+                ToastUtils.show("置零失败")
+            }
         }
     }
 
@@ -356,8 +374,8 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 ScaleModule.Instance(this@PurchaseGoodsActivity).SetDotPoint
             )
             if (!viewModel.currentWeightTypeFiled.get()) {
-                viewModel.currentWeightValue.set(currentWeight)
-                viewModel.thisPurchaseNumFiled.set(currentWeight)
+                viewModel.currentWeightValue.set(formatUnit(currentWeight))
+                viewModel.thisPurchaseNumFiled.set(formatUnit(currentWeight))
             } else {
                 viewModel.currentWeightValue.set("0.00")
             }
@@ -368,6 +386,32 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
+    /**
+     *
+     */
+    private fun formatUnit(currentWeight: String): String {
+        viewModel.currentInfoFiled.get()?.let {
+            return  when(it.unit){
+                "斤" -> {
+                    (FormatUtil.roundByScale(
+                        currentWeight.toDouble() * 2,
+                        2
+                    )).toString()
+                }
+                "克" -> {
+                    (FormatUtil.roundByScale(
+                        currentWeight.toDouble() * 1000,
+                        2
+                    ))
+                        .toString()
+                }
+                else -> {
+                    currentWeight
+                }
+            }
+        }
+        return currentWeight
+    }
     override fun onDestroy() {
         super.onDestroy()
         readDataReceiver?.let { unregisterReceiver(it) }
@@ -422,7 +466,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         labelAdapter.setList(currentPurchaseLabelInfo)
         viewModel.currentGoodsReceiveNumField.set((surplusQuantity).toString())
         viewModel.surplusNumFiled.set((allQuantity - surplusQuantity).toString())
-        viewModel.thisPurchaseNumFiled.set("")
+        if (viewModel.currentWeightTypeFiled.get()) {
+            viewModel.thisPurchaseNumFiled.set("")
+        }
         if (viewModel.currentPrinterStatus.get() == 2) {
             Printer.getInstance().printBitmap(
                 getBitmap(
@@ -460,11 +506,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         val currentQu = v.findViewById<AppCompatTextView>(R.id.tv_current_num)
         val cus = v.findViewById<AppCompatTextView>(R.id.tv_customer)
         var spilt = "-"
-        val leftNum=labelInfo.quantity - labelInfo.deliver_quantity
-        if (leftNum<= 0) {
+        val leftNum = labelInfo.quantity - labelInfo.deliver_quantity
+        if (leftNum <= 0) {
             spilt = "E-"
         }
-        name.text = "商品名称:" + labelInfo.goodsName?.substring(0,6)
+        name.text = "商品名称:" + labelInfo.goodsName?.substring(0, 6)
         quantity.text = "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
         batch.text =
             "分拣货号:" + batchNo + spilt + labelInfo.currentNum + "-" + leftNum.toString()

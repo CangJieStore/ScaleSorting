@@ -62,7 +62,11 @@ class PurchaseViewModel : BaseScaleViewModel() {
             action(MsgEvent(4))
         }
     })
-
+    var resetZeroCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(6))
+        }
+    })
     fun getUnPurchaseTask(taskType: Int, taskId: String, pId: String) {
         loading("")
         val params = mutableMapOf<String, Any>()
