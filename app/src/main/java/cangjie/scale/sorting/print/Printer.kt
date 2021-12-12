@@ -79,9 +79,6 @@ class Printer private constructor() {
     fun printBitmap(
         bitmap: Bitmap,
         nWidth: Int,
-        qrcode: String,
-        codeX: Int,
-        codeY: Int = 0
     ) {
         val tsc = LabelCommand()
         tsc.addSize(width, height)
@@ -93,14 +90,6 @@ class Printer private constructor() {
         tsc.addTear(EscCommand.ENABLE.ON)
         tsc.addCls()
         tsc.addBitmap(0, 0, LabelCommand.BITMAP_MODE.OVERWRITE, nWidth, bitmap)
-        tsc.addQRCode(
-            codeX,
-            codeY,
-            LabelCommand.EEC.LEVEL_L,
-            5,
-            LabelCommand.ROTATION.ROTATION_0,
-            qrcode
-        )
         tsc.addPrint(1, 1)
         tsc.addSound(2, 100)
         ThreadPool.instantiation?.addSerialTask(Runnable {
@@ -355,6 +344,7 @@ class Printer private constructor() {
                 View.MeasureSpec.UNSPECIFIED
             )
         )
+        Log.e("wh", view.measuredWidth.toString() + "---" + view.measuredHeight.toString())
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
         view.buildDrawingCache()
         return view.drawingCache

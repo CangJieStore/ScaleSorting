@@ -92,7 +92,7 @@ class TaskReceivedFragment : BaseMvvmFragment<FragmentReceiveItemBinding, TaskVi
             it.ryReceiveTarget.layoutManager = layoutManager
             it.ryReceiveTarget.adapter = taskReceiveAdapter
         }
-        changeType(0)
+//        changeType(0)
         taskReceiveAdapter.setOnItemClickListener { _, _, position ->
             val dataItem = taskReceiveAdapter.data[position]
             val bundle = Bundle()
@@ -115,8 +115,8 @@ class TaskReceivedFragment : BaseMvvmFragment<FragmentReceiveItemBinding, TaskVi
 
     override fun onResume() {
         super.onResume()
-        pType = CangJie.getInt("pType")
-        changeType(pType)
+//        pType = CangJie.getInt("pType")
+        changeType(0)
     }
 
     override fun subscribeModel(model: TaskViewModel) {

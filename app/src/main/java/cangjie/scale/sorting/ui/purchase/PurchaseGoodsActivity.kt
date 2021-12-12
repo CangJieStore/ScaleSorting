@@ -9,7 +9,9 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.View
+import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
@@ -20,13 +22,13 @@ import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.print.Printer
 import cangjie.scale.sorting.scale.FormatUtil
 import cangjie.scale.sorting.scale.ScaleModule
-import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import cangjie.scale.sorting.ui.SubmitDialogFragment
 import cangjie.scale.sorting.vm.PurchaseViewModel
 import coil.load
 import com.blankj.utilcode.util.ViewUtils
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
+import com.cangjie.frame.kit.CodeUtils
 import com.cangjie.frame.kit.lib.ToastUtils
 import com.cangjie.frame.kit.show
 import com.cangjie.frame.kit.tab.Title
@@ -34,6 +36,8 @@ import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.gson.Gson
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
+import id.zelory.cekrek.Cekrek
+import id.zelory.cekrek.extension.cekrekToBitmap
 
 /**
  * @author CangJie
@@ -126,13 +130,17 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         mBinding.ryPurchase.adapter = purchaseAdapter
         mBinding.ryBatch.adapter = stockAdapter
         mBinding.ryReceived.adapter = sortedAdapter
+        sortedAdapter.setHandleAction(object : PurchaseGoodsSortedAdapter.HandleAction {
+            override fun action(itemId: String) {
+                viewModel.again(itemId)
+            }
+        })
         purchaseAdapter.setOnItemClickListener { _, _, position ->
             selectCurrent(position)
         }
         stockAdapter.setOnItemClickListener { _, _, position ->
             selectBatchCurrent(position)
         }
-
         if (mBinding.ryScaleBatch.itemDecorationCount == 0) {
             dividerBuilder()
                 .color(Color.TRANSPARENT)
@@ -204,15 +212,19 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //打印标签
             2 -> {
-                makeNewLabel()
+                viewModel.currentInfoFiled.get()?.let {
+                    makeNewLabel()
+                }
             }
             //重新分拣
             3 -> {
-                viewModel.thisPurchaseNumFiled.set("0.00")
-                currentPurchaseLabelInfo.clear()
-                labelAdapter.data.clear()
-                labelAdapter.notifyDataSetChanged()
-                resetData(viewModel.currentInfoFiled.get())
+                viewModel.currentInfoFiled.get()?.let {
+                    viewModel.thisPurchaseNumFiled.set("0.00")
+                    currentPurchaseLabelInfo.clear()
+                    labelAdapter.data.clear()
+                    labelAdapter.notifyDataSetChanged()
+                    resetData(viewModel.currentInfoFiled.get())
+                }
             }
             //完成提交
             4 -> {
@@ -245,12 +257,18 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 labelAdapter.data.clear()
                 labelAdapter.notifyDataSetChanged()
                 viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
+
             }
             //置零
             6 -> {
                 returnZero()
                 updateWeight()
             }
+            300 -> {
+                mBinding.tabPurchase.select(0)
+                viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
+            }
+
         }
     }
 
@@ -272,6 +290,14 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             if (purchaseAdapter.data.size > 0) {
                 selectCurrent(0)
                 viewModel.getAllBatch(purchaseAdapter.data[0].item_id)
+            } else {
+                viewModel.currentGoodsReceiveNumField.set("0.00")
+                viewModel.surplusNumFiled.set("0.00")
+                viewModel.currentInfoFiled.set(null)
+                if (stockAdapter.data.size > 0) {
+                    stockAdapter.data.clear()
+                    stockAdapter.notifyDataSetChanged()
+                }
             }
         })
         model.getStockData().observe(this, {
@@ -391,7 +417,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
      */
     private fun formatUnit(currentWeight: String): String {
         viewModel.currentInfoFiled.get()?.let {
-            return  when(it.unit){
+            return when (it.unit) {
                 "斤" -> {
                     (FormatUtil.roundByScale(
                         currentWeight.toDouble() * 2,
@@ -412,6 +438,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
         return currentWeight
     }
+
     override fun onDestroy() {
         super.onDestroy()
         readDataReceiver?.let { unregisterReceiver(it) }
@@ -458,10 +485,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             allQuantity,
             currentQuantity,
             surplusQuantity,
-            taskItemInfo?.purchaser_name,
+            viewModel.currentInfoFiled.get()?.purchaser,
             viewModel.currentUnitFiled.get(),
-            "www.baidu.com"
+            viewModel.currentBatchFiled.get()?.qrcode.toString()
         )
+        Log.e("label", Gson().toJson(labelInfo))
         currentPurchaseLabelInfo.add(labelInfo)
         labelAdapter.setList(currentPurchaseLabelInfo)
         viewModel.currentGoodsReceiveNumField.set((surplusQuantity).toString())
@@ -472,10 +500,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         if (viewModel.currentPrinterStatus.get() == 2) {
             Printer.getInstance().printBitmap(
                 getBitmap(
-                    this@PurchaseGoodsActivity,
                     labelInfo,
                     "0" + labelAdapter.data.size
-                ), 460, labelInfo.qrcode, 440, 16
+                ), 544
             )
         }
     }
@@ -494,29 +521,37 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     /**
      * 生成打印图片
      */
-    private fun getBitmap(mContext: Context?, labelInfo: LabelInfo, batchNo: String): Bitmap {
-        val v = View.inflate(
-            mContext,
-            R.layout.layout_print_item,
-            null
-        )
+    private fun getBitmap(labelInfo: LabelInfo, batchNo: String): Bitmap {
+        val v = LayoutInflater.from(this@PurchaseGoodsActivity)
+            .inflate(R.layout.layout_print_item, null)
         val name = v.findViewById<AppCompatTextView>(R.id.tv_goods_title)
         val quantity = v.findViewById<AppCompatTextView>(R.id.tv_quantity)
         val batch = v.findViewById<AppCompatTextView>(R.id.tv_batch)
         val currentQu = v.findViewById<AppCompatTextView>(R.id.tv_current_num)
         val cus = v.findViewById<AppCompatTextView>(R.id.tv_customer)
+        val cus2 = v.findViewById<AppCompatTextView>(R.id.tv_customer2)
+        val ivQrcode = v.findViewById<AppCompatImageView>(R.id.iv_qrcode)
+        ivQrcode.setImageBitmap(CodeUtils.createImage(labelInfo.qrcode, 160, 160))
         var spilt = "-"
         val leftNum = labelInfo.quantity - labelInfo.deliver_quantity
         if (leftNum <= 0) {
             spilt = "E-"
         }
-        name.text = "商品名称:" + labelInfo.goodsName?.substring(0, 6)
+        name.text = "商品名称:" + labelInfo.goodsName
         quantity.text = "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
         batch.text =
             "分拣货号:" + batchNo + spilt + labelInfo.currentNum + "-" + leftNum.toString()
         currentQu.text = "本批数量:" + labelInfo.currentNum
-        cus.text = "客户名称:青岛海信电器"
-        return Printer.getInstance().convertViewToBitmap(v)
+        val customerName = "客户名称:" + labelInfo.customer
+        if (customerName.length > 14) {
+            cus.text = customerName.substring(0, 14)
+            cus2.visibility = View.VISIBLE
+            cus2.text = customerName.substring(14, customerName.length)
+        } else {
+            cus.text = customerName
+            cus2.visibility = View.GONE
+        }
+        return v.cekrekToBitmap()
     }
 
 }

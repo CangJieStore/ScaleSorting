@@ -67,6 +67,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
             action(MsgEvent(6))
         }
     })
+
     fun getUnPurchaseTask(taskType: Int, taskId: String, pId: String) {
         loading("")
         val params = mutableMapOf<String, Any>()
@@ -97,6 +98,12 @@ class PurchaseViewModel : BaseScaleViewModel() {
         postWithToken<String>(Url.submit_sorting, params, 201)
     }
 
+    fun again(id: String) {
+        loading("")
+        val params = mutableMapOf<String, Any>("item_id" to id)
+        postWithToken<Any>(Url.again, params, 204)
+    }
+
     override fun success(code: Int, result: Any?) {
         super.success(code, result)
         dismissLoading()
@@ -109,6 +116,9 @@ class PurchaseViewModel : BaseScaleViewModel() {
             }
             201 -> {
                 action(MsgEvent(5))
+            }
+            204 -> {
+                action(MsgEvent(300))
             }
         }
     }

@@ -422,6 +422,7 @@
                                 android:layout_height="wrap_content">
 
                                 <androidx.appcompat.widget.AppCompatTextView
+                                    android:id="@+id/tv_weight_value"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:text="@{purchaseModel.thisPurchaseNumFiled}"

@@ -70,7 +70,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:textColor="@color/white"
+            android:textColor="@color/color_b_w"
             android:textSize="@dimen/sp16" />
 
         <View
@@ -84,7 +84,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="补拣"
+            android:text="重拣"
             android:textColor="@color/theme_color"
             android:textSize="@dimen/sp16" />
 

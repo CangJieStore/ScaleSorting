@@ -11,5 +11,7 @@ class StockInfo(
     val unit: String,
     val stock: Float,
     val collect_date: String,
-    var isCurrent: Boolean
+    var isCurrent: Boolean,
+    val qrcode: String,
+    val spec: String
 )

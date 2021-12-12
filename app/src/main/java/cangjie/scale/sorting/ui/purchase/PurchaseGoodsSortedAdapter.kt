@@ -24,6 +24,7 @@ class PurchaseGoodsSortedAdapter :
             it.tvName.text = item.purchaser
             it.tvQuantity.text = item.quantity
             it.tvDeliveryUnit.text = item.unit
+            it.tvSortBatch.text = item.deliver_quantity
             it.tvHandle.setOnClickListener {
                 handleAction?.action(item.item_id)
             }

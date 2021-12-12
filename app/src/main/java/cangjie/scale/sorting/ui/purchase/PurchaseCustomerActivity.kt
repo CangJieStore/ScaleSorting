@@ -316,7 +316,7 @@ class PurchaseCustomerActivity :
                 this@PurchaseCustomerActivity,
                 labelInfo,
                 "0" + labelAdapter.data.size
-            ), 460, labelInfo.qrcode, 440, 16
+            ), 460
         )
     }
 

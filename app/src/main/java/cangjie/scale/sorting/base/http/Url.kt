@@ -23,6 +23,6 @@ object Url {
 
     const val submit = "supplier/steelyard/?op=weight"
     const val upload = "supplier/steelyard/?op=picture"
-    const val again = "supplier/steelyard/?op=repair"
+    const val again = "supplier/sorting/?op=fill_clear "
     const val clear = "supplier/steelyard/?op=clear"
 }

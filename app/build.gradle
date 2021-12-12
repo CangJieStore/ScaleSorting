@@ -101,4 +101,6 @@ dependencies {
     implementation 'com.guolindev.permissionx:permissionx:1.6.0'
     implementation("io.coil-kt:coil:1.4.0")
     implementation "com.github.kongzue.DialogX:DialogX:0.0.43.beta19"
+    implementation 'com.google.zxing:core:3.3.0'
+    implementation 'id.zelory:cekrek:1.0.0'
 }
