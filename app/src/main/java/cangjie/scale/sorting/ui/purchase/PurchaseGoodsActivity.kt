@@ -217,12 +217,20 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //打印标签
             2 -> {
+                if (viewModel.currentBatchFiled.get() == null) {
+                    toast("暂无库存，分拣失败")
+                    return
+                }
                 viewModel.currentInfoFiled.get()?.let {
                     makeNewLabel()
                 }
             }
             //重新分拣
             3 -> {
+                if (viewModel.currentBatchFiled.get() == null) {
+                    toast("暂无库存，分拣失败")
+                    return
+                }
                 viewModel.currentInfoFiled.get()?.let {
                     viewModel.thisPurchaseNumFiled.set("0.00")
                     currentPurchaseLabelInfo.clear()
@@ -233,6 +241,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //完成提交
             4 -> {
+                if (viewModel.currentBatchFiled.get() == null) {
+                    toast("暂无库存，分拣失败")
+                    return
+                }
                 if (labelAdapter.data.size == 0) {
                     toast("请先分拣才能完成提交")
                     return
@@ -494,7 +506,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.currentUnitFiled.get(),
             viewModel.currentBatchFiled.get()?.qrcode.toString()
         )
-        Log.e("label", Gson().toJson(labelInfo))
         currentPurchaseLabelInfo.add(labelInfo)
         labelAdapter.setList(currentPurchaseLabelInfo)
         viewModel.currentGoodsReceiveNumField.set((surplusQuantity).toString())
@@ -503,11 +514,12 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.thisPurchaseNumFiled.set("")
         }
         if (viewModel.currentPrinterStatus.get() == 2) {
+//            Printer.getInstance().printText(labelInfo, 550, "0" + labelAdapter.data.size)
             Printer.getInstance().printBitmap(
                 getBitmap(
                     labelInfo,
                     "0" + labelAdapter.data.size
-                ), 544
+                ), 550
             )
         }
     }

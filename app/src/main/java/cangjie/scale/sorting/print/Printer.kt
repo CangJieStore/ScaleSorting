@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import cangjie.scale.sorting.R
+import cangjie.scale.sorting.entity.LabelInfo
 import com.gprinter.command.EscCommand
 import com.gprinter.command.LabelCommand
 import java.util.*
@@ -86,10 +87,96 @@ class Printer private constructor() {
         tsc.addDirection(LabelCommand.DIRECTION.FORWARD, LabelCommand.MIRROR.NORMAL)
         tsc.addQueryPrinterStatus(LabelCommand.RESPONSE_MODE.ON)
         tsc.addReference(0, 0)
-        tsc.addDensity(LabelCommand.DENSITY.DNESITY4)
+        tsc.addDensity(LabelCommand.DENSITY.DNESITY15)
         tsc.addTear(EscCommand.ENABLE.ON)
         tsc.addCls()
         tsc.addBitmap(0, 0, LabelCommand.BITMAP_MODE.OVERWRITE, nWidth, bitmap)
+        tsc.addPrint(1, 1)
+        tsc.addSound(2, 100)
+        ThreadPool.instantiation?.addSerialTask(Runnable {
+            if (DeviceConnFactoryManager.deviceConnFactoryManagers[id] == null ||
+                !DeviceConnFactoryManager.deviceConnFactoryManagers[id]?.connState!!
+            ) {
+                return@Runnable
+            }
+            DeviceConnFactoryManager.deviceConnFactoryManagers[id]?.sendDataImmediately(
+                tsc.command
+            )
+        })
+    }
+
+    fun printText(
+        labelInfo: LabelInfo,
+        nWidth: Int,
+        batchNo: String
+    ) {
+        var spilt = "-"
+        val leftNum = labelInfo.quantity - labelInfo.deliver_quantity
+        if (leftNum <= 0) {
+            spilt = "E-"
+        }
+        val tsc = LabelCommand()
+        tsc.addSize(width, height)
+        tsc.addGap(gapSize)
+        tsc.addDirection(LabelCommand.DIRECTION.FORWARD, LabelCommand.MIRROR.NORMAL)
+        tsc.addQueryPrinterStatus(LabelCommand.RESPONSE_MODE.ON)
+        tsc.addReference(0, 0)
+        tsc.addDensity(LabelCommand.DENSITY.DNESITY15)
+        tsc.addTear(EscCommand.ENABLE.ON)
+        tsc.addCls()
+        tsc.addText(
+            20,
+            16,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "商品名称:" + labelInfo.goodsName
+        );
+        tsc.addText(
+            20,
+            86,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
+        );
+        tsc.addText(
+            20,
+            156,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "分拣货号:" + batchNo + spilt + labelInfo.currentNum + "-" + leftNum.toString()
+        );
+        tsc.addText(
+            20,
+            226,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "本批数量:" + labelInfo.currentNum + labelInfo.unit
+        );
+        tsc.addText(
+            20,
+            296,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "客户名称:" + labelInfo.customer
+        );
+        tsc.addQRCode(
+            400,
+            16,
+            LabelCommand.EEC.LEVEL_L,
+            4,
+            LabelCommand.ROTATION.ROTATION_0,
+            labelInfo.qrcode
+        )
         tsc.addPrint(1, 1)
         tsc.addSound(2, 100)
         ThreadPool.instantiation?.addSerialTask(Runnable {
