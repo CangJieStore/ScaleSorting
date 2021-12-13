@@ -4,12 +4,15 @@ import android.content.Intent
 import android.os.Bundle
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityLoginBinding
+import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import cangjie.scale.sorting.vm.ScaleViewModel
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.show
+import com.gyf.immersionbar.BarHide
 
 import com.gyf.immersionbar.ktx.immersionBar
+import kotlin.system.exitProcess
 
 /**
  * @author: guruohan
@@ -19,7 +22,8 @@ class LoginActivity : BaseMvvmActivity<ActivityLoginBinding, ScaleViewModel>() {
 
     override fun initActivity(savedInstanceState: Bundle?) {
         mBinding.tvExit.setOnClickListener {
-            finish()
+            SerialPortUtilForScale.Instance().CloseSerialPort()
+            exitProcess(0)
         }
     }
 
@@ -27,12 +31,18 @@ class LoginActivity : BaseMvvmActivity<ActivityLoginBinding, ScaleViewModel>() {
 
     override fun layoutId(): Int = R.layout.activity_login
     override fun initImmersionBar() {
-        super.initImmersionBar()
         immersionBar {
             fullScreen(true)
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
             statusBarDarkFont(true, 0.2f)
             init()
         }
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        SerialPortUtilForScale.Instance().CloseSerialPort()
+        exitProcess(0)
     }
 
     override fun toast(notice: String?) {
@@ -42,6 +52,14 @@ class LoginActivity : BaseMvvmActivity<ActivityLoginBinding, ScaleViewModel>() {
 
     override fun loading(word: String?) {
         show(this, 2000, word!!)
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+        immersionBar {
+            hideBar(BarHide.FLAG_HIDE_NAVIGATION_BAR)
+            init()
+        }
     }
 
     override fun handleEvent(msg: MsgEvent) {

@@ -161,6 +161,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         refreshData(pos)
         val indexData = purchaseAdapter.data[pos]
         viewModel.currentInfoFiled.set(indexData)
+        if (labelAdapter.data.size > 0) {
+            currentPurchaseLabelInfo.clear()
+            labelAdapter.data.clear()
+            labelAdapter.notifyDataSetChanged()
+        }
         resetData(indexData)
     }
 
