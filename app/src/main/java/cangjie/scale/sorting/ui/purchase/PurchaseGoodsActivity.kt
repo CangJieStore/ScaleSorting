@@ -514,13 +514,13 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.thisPurchaseNumFiled.set("")
         }
         if (viewModel.currentPrinterStatus.get() == 2) {
-//            Printer.getInstance().printText(labelInfo, 550, "0" + labelAdapter.data.size)
-            Printer.getInstance().printBitmap(
-                getBitmap(
-                    labelInfo,
-                    "0" + labelAdapter.data.size
-                ), 550
-            )
+            Printer.getInstance().printText(labelInfo, 550, "0" + labelAdapter.data.size)
+//            Printer.getInstance().printBitmap(
+//                getBitmap(
+//                    labelInfo,
+//                    "0" + labelAdapter.data.size
+//                ), 550
+//            )
         }
     }
 
