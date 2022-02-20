@@ -1,8 +1,10 @@
 package cangjie.scale.sorting.vm
 
+import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import cangjie.scale.sorting.base.http.Url
 import cangjie.scale.sorting.entity.GoodsTaskInfo
+import cangjie.scale.sorting.entity.TaskGoodsItem
 import com.cangjie.frame.core.binding.BindingAction
 import com.cangjie.frame.core.binding.BindingCommand
 import com.cangjie.frame.core.event.MsgEvent
@@ -14,6 +16,7 @@ import com.cangjie.frame.core.event.MsgEvent
 class TaskViewModel : BaseScaleViewModel() {
 
     private val taskLiveData = MutableLiveData<GoodsTaskInfo>()
+    var currentGoodsItem = ObservableField<TaskGoodsItem>()
 
     var finishCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
         override fun call() {

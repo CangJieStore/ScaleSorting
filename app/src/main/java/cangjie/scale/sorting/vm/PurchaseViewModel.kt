@@ -87,6 +87,12 @@ class PurchaseViewModel : BaseScaleViewModel() {
         postWithToken<MutableList<StockInfo>>(Url.purchase_batch, params, 200)
     }
 
+    fun getSortedBatch(itemId: String) {
+        loading("")
+        val params = mutableMapOf<String, Any>("item_id" to itemId)
+        postWithToken<MutableList<StockInfo>>(Url.sorting_batch, params, 210)
+    }
+
     fun submit(itemId: String, batchId: String, quantity: String) {
         loading("")
         val params = mutableMapOf<String, Any>(
@@ -119,6 +125,9 @@ class PurchaseViewModel : BaseScaleViewModel() {
             }
             204 -> {
                 action(MsgEvent(300))
+            }
+            210 -> {
+
             }
         }
     }

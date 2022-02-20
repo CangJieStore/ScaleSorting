@@ -19,6 +19,7 @@ class TaskReceiveAdapter :
         holder: BaseDataBindingHolder<LayoutReceiveItemBinding>,
         item: TaskGoodsItem
     ) {
+        //是登录账户领取，未分拣完红色，分拣完绿色，非登录账户领取灰色不可点击
         holder.dataBinding?.let {
             if (item.purchaser_name != null) {
                 it.llGoods.visibility = View.GONE

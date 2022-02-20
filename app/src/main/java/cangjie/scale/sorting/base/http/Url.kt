@@ -25,4 +25,5 @@ object Url {
     const val upload = "supplier/steelyard/?op=picture"
     const val again = "supplier/sorting/?op=fill_clear "
     const val clear = "supplier/steelyard/?op=clear"
+    const val sorting_batch = "supplier/sorting/?op=goods_item_batch"
 }

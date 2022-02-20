@@ -1,5 +1,6 @@
 package cangjie.scale.sorting.ui.task
 
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.util.TypedValue
@@ -11,6 +12,7 @@ import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.FragmentTaskItemBinding
 import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.entity.TaskGoodsItem
+import cangjie.scale.sorting.ui.purchase.PurchaseGoodsActivity
 import cangjie.scale.sorting.vm.TaskViewModel
 import com.cangjie.frame.core.BaseMvvmFragment
 import com.cangjie.frame.core.db.CangJie
@@ -28,7 +30,6 @@ import org.greenrobot.eventbus.ThreadMode
  * @date: 2021/11/3
  */
 class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewModel>() {
-    private lateinit var multiState: MultiStateContainer
 
     companion object {
         fun newInstance(type: Int, oId: String) = TaskToGetFragment().apply {
@@ -98,6 +99,7 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
         }
         taskAdapter.setOnItemClickListener { _, _, position ->
             val dataItem = taskAdapter.data[position]
+            viewModel.currentGoodsItem.set(dataItem)
             showGetTips(dataItem)
         }
         changeType(0)
@@ -143,6 +145,11 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
         super.handleEvent(msg)
         if (msg.code == 100) {
             changeType(pType)
+            val bundle = Bundle()
+            bundle.putSerializable("item", viewModel.currentGoodsItem.get())
+            val intent = Intent(requireActivity(), PurchaseGoodsActivity::class.java)
+            intent.putExtras(bundle)
+            startActivity(intent)
         }
     }
 

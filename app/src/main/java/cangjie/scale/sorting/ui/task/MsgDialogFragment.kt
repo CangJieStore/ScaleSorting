@@ -16,6 +16,7 @@ import com.gyf.immersionbar.ktx.immersionBar
 /**
  * @author: guruohan
  * @date: 2021/11/6
+ * 领取成功后直接进入分拣页面
  */
 class MsgDialogFragment : DialogFragment() {
 

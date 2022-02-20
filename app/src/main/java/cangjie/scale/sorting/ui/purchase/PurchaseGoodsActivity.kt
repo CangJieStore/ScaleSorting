@@ -32,6 +32,8 @@ import com.cangjie.frame.kit.CodeUtils
 import com.cangjie.frame.kit.lib.ToastUtils
 import com.cangjie.frame.kit.show
 import com.cangjie.frame.kit.tab.Title
+import com.chad.library.adapter.base.BaseQuickAdapter
+import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.google.gson.Gson
 import com.gyf.immersionbar.BarHide
@@ -130,6 +132,12 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         mBinding.ryPurchase.adapter = purchaseAdapter
         mBinding.ryBatch.adapter = stockAdapter
         mBinding.ryReceived.adapter = sortedAdapter
+        sortedAdapter.setOnItemClickListener(object : OnItemClickListener {
+            override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
+                val item = sortedAdapter.data[position]
+
+            }
+        })
         sortedAdapter.setHandleAction(object : PurchaseGoodsSortedAdapter.HandleAction {
             override fun action(itemId: String) {
                 viewModel.again(itemId)
