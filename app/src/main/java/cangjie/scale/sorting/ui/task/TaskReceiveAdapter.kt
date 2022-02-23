@@ -1,5 +1,6 @@
 package cangjie.scale.sorting.ui.task
 
+import android.graphics.Color
 import android.view.View
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.LayoutReceiveItemBinding
@@ -27,6 +28,21 @@ class TaskReceiveAdapter :
                 it.tvCustomer.text = item.purchaser_name
                 it.tvGoodsCount.text = "领取人:" + item.staff_name
             } else {
+                //not self
+                if (item.staff_own != 1) {
+                    it.mask.visibility = View.VISIBLE
+                    it.tvGoodsName.setTextColor(Color.parseColor("#dddddd"))
+                    it.tvCustomerCount.setTextColor(Color.parseColor("#dddddd"))
+                } else {
+                    it.mask.visibility = View.GONE
+                    if (item.quantity == item.sorting_quantity) {
+                        it.tvGoodsName.setTextColor(Color.parseColor("#52A645"))
+                        it.tvCustomerCount.setTextColor(Color.parseColor("#52A645"))
+                    } else {
+                        it.tvGoodsName.setTextColor(Color.parseColor("#F15252"))
+                        it.tvCustomerCount.setTextColor(Color.parseColor("#F15252"))
+                    }
+                }
                 it.llGoods.visibility = View.VISIBLE
                 it.cardCustomer.visibility = View.GONE
                 it.ivGoodsImg.load(item.picture)

@@ -1,10 +1,10 @@
 <component name="libraryTable">
   <library name="Gradle: com.github.kongzue.DialogX:DialogX:0.0.43.beta19@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7188edd9340c538c3c2231f0441cb0ec/transformed/jetified-DialogX-0.0.43.beta19/jars/classes.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/7188edd9340c538c3c2231f0441cb0ec/transformed/jetified-DialogX-0.0.43.beta19/jars/libs/DialogXInterface.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7188edd9340c538c3c2231f0441cb0ec/transformed/jetified-DialogX-0.0.43.beta19/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/7188edd9340c538c3c2231f0441cb0ec/transformed/jetified-DialogX-0.0.43.beta19/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/20681c0b69ecd9d79918551834f9a818/transformed/jetified-DialogX-0.0.43.beta19/jars/classes.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/20681c0b69ecd9d79918551834f9a818/transformed/jetified-DialogX-0.0.43.beta19/jars/libs/DialogXInterface.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/20681c0b69ecd9d79918551834f9a818/transformed/jetified-DialogX-0.0.43.beta19/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/20681c0b69ecd9d79918551834f9a818/transformed/jetified-DialogX-0.0.43.beta19/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
