@@ -64,6 +64,12 @@ class TaskViewModel : BaseScaleViewModel() {
 
     }
 
+    var detailClose: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(3))
+        }
+    })
+
     fun getTaskData() = taskLiveData
 
     override fun error(errorCode: Int, errorMsg: String?) {

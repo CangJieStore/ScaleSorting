@@ -4,22 +4,13 @@ import android.app.Service
 import android.content.Intent
 import android.os.IBinder
 import android.provider.MediaStore
-import android.util.Log
-import cangjie.scale.sorting.base.ScaleApplication
 import cangjie.scale.sorting.base.http.Url
-import cangjie.scale.sorting.db.AppDatabase
-import cangjie.scale.sorting.db.SubmitOrder
-import cangjie.scale.sorting.db.SubmitOrderDao
 import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.scale.ScaleModule
 import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import com.blankj.utilcode.util.ViewUtils.runOnUiThread
 import com.cangjie.frame.core.db.CangJie
 import com.cangjie.frame.kit.lib.ToastUtils
-import com.google.gson.Gson
-import io.reactivex.rxjava3.core.Single
-import io.reactivex.rxjava3.core.SingleObserver
-import io.reactivex.rxjava3.disposables.Disposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.MainScope
 import org.greenrobot.eventbus.EventBus
@@ -41,7 +32,6 @@ class InitService : Service(), CoroutineScope by MainScope() {
 
     //    lateinit var timer: Timer
     private val corLife = CoroutineCycle()
-    private var booksDao: SubmitOrderDao? = null
 
     override fun onBind(intent: Intent): IBinder? {
         return null
@@ -102,28 +92,6 @@ class InitService : Service(), CoroutineScope by MainScope() {
         }
     }
 
-    private fun upload(order: SubmitOrder) {
-        corLife.launch({
-            RxHttp.postForm(Url.upload)
-                .add("access_token", CangJie.getString("token"))
-                .add("id", order.goodsId)
-                .add("batch", order.batchId)
-                .addFile("file", File(order.batchPath))
-                .toStr()
-                .awaitResult()
-            val file = File(order.batchPath)
-            contentResolver.delete(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                MediaStore.Images.Media.DATA + "=?",
-                arrayOf(order.batchPath)
-            )
-            file.delete()
-            order.isUpload = 2
-            booksDao!!.update(order)
-        }, {
-
-        })
-    }
 
     override fun onDestroy() {
         super.onDestroy()

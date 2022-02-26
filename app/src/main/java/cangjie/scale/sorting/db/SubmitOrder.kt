@@ -7,7 +7,6 @@ import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-@Entity(tableName = "orders_table")
 data class SubmitOrder(
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "id")

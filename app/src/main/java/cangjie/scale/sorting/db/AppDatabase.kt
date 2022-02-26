@@ -8,13 +8,13 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-@Database(entities = [SubmitOrder::class], version = 1, exportSchema = false)
+@Database(entities = [OrderLabel::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
-    abstract fun orderDao(): SubmitOrderDao
+    abstract fun orderDao(): OrderLabelDao
 
     companion object {
-        private const val DATABASE_NAME = "submit_order"
+        private const val DATABASE_NAME = "sort_order"
 
         @Volatile
         private var INSTANCE: AppDatabase? = null

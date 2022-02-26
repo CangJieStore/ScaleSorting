@@ -147,6 +147,7 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
             changeType(pType)
             val bundle = Bundle()
             bundle.putSerializable("item", viewModel.currentGoodsItem.get())
+            bundle.putInt("from", 0)
             val intent = Intent(requireActivity(), PurchaseGoodsActivity::class.java)
             intent.putExtras(bundle)
             startActivity(intent)

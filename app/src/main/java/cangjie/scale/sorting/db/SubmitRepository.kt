@@ -1,15 +1,12 @@
 package cangjie.scale.sorting.db
 
-import androidx.lifecycle.LiveData
 
-class SubmitRepository(private val orderDao: SubmitOrderDao) {
+class SubmitRepository(private val orderDao: OrderLabelDao) {
 
-    val allOrders: LiveData<MutableList<SubmitOrder>> = orderDao.getAll()
+    suspend fun insert(book: List<OrderLabel>) = orderDao.insertList(book)
 
-    suspend fun insert(book: SubmitOrder) = orderDao.insert(book)
+    suspend fun get(id: String) = orderDao.getAll(id)
 
-    suspend fun update(book: SubmitOrder) = orderDao.update(book)
-
-    suspend fun delete(book: SubmitOrder) = orderDao.delete(book)
+    suspend fun delete(id:String)=orderDao.delete(id)
 
 }

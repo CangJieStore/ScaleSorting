@@ -199,25 +199,37 @@
                     android:layout_marginTop="@dimen/dp10"
                     android:orientation="vertical">
 
-                    <com.cangjie.frame.kit.tab.MagicTabLayout
-                        android:id="@+id/tab_purchase"
-                        android:layout_width="190dp"
-                        android:layout_height="50dp"
-                        android:layout_marginStart="14dp"
+                    <androidx.appcompat.widget.LinearLayoutCompat
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="14.5dp"
                         android:layout_marginBottom="-.1dp"
-                        android:paddingStart="1dp"
-                        android:paddingTop="1dp"
-                        android:paddingEnd="@dimen/dp5"
-                        app:animateSelected="false"
-                        app:bottomRadius="0dp"
-                        app:bottomSpace="0dp"
-                        app:gapSize="4dp"
-                        app:holoColor="@color/white"
-                        app:normalTextColor="@color/gray_9"
-                        app:normalTextSize="16sp"
-                        app:selectTextColor="#F15252"
-                        app:selectedTextSize="16sp"
-                        app:topRadius="10dp" />
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                            android:id="@+id/btn_un_sort"
+                            android:layout_width="95dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/tab_selector"
+                            android:button="@null"
+                            android:checked="true"
+                            android:gravity="center"
+                            android:text="待分拣"
+                            android:textColor="@color/tab_color_red"
+                            android:textSize="@dimen/sp16" />
+
+                        <androidx.appcompat.widget.AppCompatRadioButton
+                            android:id="@+id/btn_sorted"
+                            android:layout_width="95dp"
+                            android:layout_height="50dp"
+                            android:background="@drawable/tab_selector"
+                            android:button="@null"
+                            android:gravity="center"
+                            android:text="已分拣"
+                            android:textColor="@color/tab_color"
+                            android:textSize="@dimen/sp16" />
+                    </androidx.appcompat.widget.LinearLayoutCompat>
+
 
                     <com.cangjie.frame.kit.rounded.RoundedLinearLayout
                         android:layout_width="match_parent"
@@ -276,6 +288,7 @@
                                     binding:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
                             </androidx.appcompat.widget.LinearLayoutCompat>
+
 
                         </FrameLayout>
                     </com.cangjie.frame.kit.rounded.RoundedLinearLayout>
@@ -357,8 +370,8 @@
                             android:text="置零"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp16"
-                            binding:onClickCommand="@{purchaseModel.resetZeroCommand}"
-                            android:visibility="@{purchaseModel.currentWeightTypeFiled==false?View.VISIBLE:View.GONE}" />
+                            android:visibility="@{purchaseModel.currentWeightTypeFiled==false?View.VISIBLE:View.GONE}"
+                            binding:onClickCommand="@{purchaseModel.resetZeroCommand}" />
 
                     </RelativeLayout>
 
@@ -465,48 +478,68 @@
                             android:textSize="@dimen/sp18" />
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
-                    <LinearLayout
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp5"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal"
                         android:paddingStart="@dimen/dp15"
                         android:paddingTop="@dimen/dp15"
                         android:paddingEnd="@dimen/dp15">
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="0dp"
+                            android:id="@+id/btn_print_again"
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:layout_marginEnd="@dimen/dp8"
-                            android:layout_weight="1"
                             android:background="@drawable/shape_clear_btn"
-                            android:text="重新分拣"
-                            android:textColor="@color/white"
-                            binding:onClickCommand="@{purchaseModel.repurchaseCommand}"
-                            android:textSize="@dimen/sp16" />
-
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_marginEnd="@dimen/dp8"
-                            android:layout_weight="1"
-                            android:background="@drawable/shape_take_photo"
-                            android:text="打印标签"
+                            android:text="重打标签"
                             android:textColor="@color/white"
                             android:textSize="@dimen/sp16"
-                            binding:onClickCommand="@{purchaseModel.printCommand}" />
+                            android:visibility="gone"
+                            binding:onClickCommand="@{purchaseModel.printAgainCommand}" />
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:layout_width="0dp"
-                            android:layout_height="40dp"
-                            android:layout_weight="1"
-                            android:background="@drawable/shape_login_btn"
-                            android:text="完成提交"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp16"
-                            binding:onClickCommand="@{purchaseModel.submitCommand}"/>
-                    </LinearLayout>
+                        <LinearLayout
+                            android:id="@+id/btn_normal_sort"
+                            android:layout_width="match_parent"
+                            android:visibility="gone"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="@dimen/dp8"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_clear_btn"
+                                android:text="重新分拣"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp16"
+                                binding:onClickCommand="@{purchaseModel.repurchaseCommand}" />
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="@dimen/dp8"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_take_photo"
+                                android:text="打印标签"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp16"
+                                binding:onClickCommand="@{purchaseModel.printCommand}" />
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_login_btn"
+                                android:text="完成提交"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp16"
+                                binding:onClickCommand="@{purchaseModel.submitCommand}" />
+                        </LinearLayout>
+
+                    </FrameLayout>
+
 
                 </androidx.appcompat.widget.LinearLayoutCompat>
             </androidx.cardview.widget.CardView>

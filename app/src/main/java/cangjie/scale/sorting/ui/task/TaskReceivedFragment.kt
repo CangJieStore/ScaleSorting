@@ -95,16 +95,19 @@ class TaskReceivedFragment : BaseMvvmFragment<FragmentReceiveItemBinding, TaskVi
 //        changeType(0)
         taskReceiveAdapter.setOnItemClickListener { _, _, position ->
             val dataItem = taskReceiveAdapter.data[position]
-            val bundle = Bundle()
-            bundle.putSerializable("item", dataItem)
-            if (dataItem.name != null) {
-                val intent = Intent(requireActivity(), PurchaseGoodsActivity::class.java)
-                intent.putExtras(bundle)
-                startActivity(intent)
-            } else {
-                val intent = Intent(requireActivity(), PurchaseCustomerActivity::class.java)
-                intent.putExtras(bundle)
-                startActivity(intent)
+            if (dataItem.staff_own == 1) {
+                val bundle = Bundle()
+                bundle.putSerializable("item", dataItem)
+                bundle.putInt("from", 0)
+                if (dataItem.name != null) {
+                    val intent = Intent(requireActivity(), PurchaseGoodsActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                } else {
+                    val intent = Intent(requireActivity(), PurchaseCustomerActivity::class.java)
+                    intent.putExtras(bundle)
+                    startActivity(intent)
+                }
             }
         }
     }

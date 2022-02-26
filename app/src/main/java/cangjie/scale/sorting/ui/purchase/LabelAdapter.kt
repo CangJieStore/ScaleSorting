@@ -12,11 +12,19 @@ import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder
  */
 class LabelAdapter :
     BaseQuickAdapter<LabelInfo, BaseDataBindingHolder<LayoutLabelItemBinding>>(R.layout.layout_label_item) {
+
+    private var current = -1
     override fun convert(holder: BaseDataBindingHolder<LayoutLabelItemBinding>, item: LabelInfo) {
         holder.dataBinding?.let {
+            holder.itemView.isSelected = current == holder.layoutPosition
             it.tvBatch.text = "分拣批次：" + (getItemPosition(item) + 1)
             it.tvUnit.text = "配送单位：" + item.unit
             it.tvNum.text = "本批数量：" + item.currentNum
         }
+    }
+
+    fun selectPos(pos: Int) {
+        this.current = pos
+        notifyDataSetChanged()
     }
 }

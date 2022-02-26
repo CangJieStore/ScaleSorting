@@ -48,13 +48,12 @@ class CheckedFragment : BaseMvvmFragment<FragmentChekedBinding, ScaleViewModel>(
             .addTo(mBinding!!.ryOrders)
         mBinding!!.adapter = orderAdapter
         netTime()
-//        orderAdapter.setOnItemClickListener { adapter, view, position ->
-//            val intent = Intent(requireActivity(), CheckedDetailActivity::class.java)
-//            val info = adapter.data[position] as OrderInfo
-//            intent.putExtra("info", info)
-//            intent.putExtra("date", chooseDate)
-//            startActivity(intent)
-//        }
+        orderAdapter.setOnItemClickListener { adapter, view, position ->
+            val intent = Intent(requireActivity(), CheckedDetailActivity::class.java)
+            val info = adapter.data[position] as OrderInfo
+            intent.putExtra("id", info.id)
+            startActivity(intent)
+        }
     }
 
     private fun netTime() {

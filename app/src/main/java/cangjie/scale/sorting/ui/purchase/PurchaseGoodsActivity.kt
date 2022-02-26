@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -16,6 +15,7 @@ import androidx.appcompat.widget.AppCompatTextView
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityPurchaseGoodsBinding
+import cangjie.scale.sorting.db.OrderLabel
 import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.PurchaseInfo
 import cangjie.scale.sorting.entity.TaskGoodsItem
@@ -31,14 +31,9 @@ import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.CodeUtils
 import com.cangjie.frame.kit.lib.ToastUtils
 import com.cangjie.frame.kit.show
-import com.cangjie.frame.kit.tab.Title
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
 import com.fondesa.recyclerviewdivider.dividerBuilder
-import com.google.gson.Gson
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
-import id.zelory.cekrek.Cekrek
 import id.zelory.cekrek.extension.cekrekToBitmap
 
 /**
@@ -64,6 +59,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun layoutId(): Int = R.layout.activity_purchase_goods
     private var taskItemInfo: TaskGoodsItem? = null
+    private var fromType = 0
     private var readDataReceiver: ReadDataReceiver? = null
     private val currentPurchaseLabelInfo = arrayListOf<LabelInfo>()
 
@@ -78,6 +74,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun initActivity(savedInstanceState: Bundle?) {
         taskItemInfo = intent.getSerializableExtra("item") as TaskGoodsItem
+        fromType = intent.getIntExtra("from", 0)
         initPurchase()
         setData(taskItemInfo)
     }
@@ -97,14 +94,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
 
     private fun initPurchase() {
-        val list = arrayListOf(
-            Title("待分拣", "待分拣", "待分拣"),
-            Title("已分拣", "已分拣", "已分拣")
-        )
-        mBinding.tabPurchase.setTitles(list)
-        mBinding.tabPurchase.onSelectChangeListener = {
-            viewModel.currentPurchaseType.set(it)
-        }
+        tabSelect(fromType)
         if (mBinding.ryPurchase.itemDecorationCount == 0) {
             dividerBuilder()
                 .color(Color.parseColor("#cccccc"))
@@ -132,12 +122,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         mBinding.ryPurchase.adapter = purchaseAdapter
         mBinding.ryBatch.adapter = stockAdapter
         mBinding.ryReceived.adapter = sortedAdapter
-        sortedAdapter.setOnItemClickListener(object : OnItemClickListener {
-            override fun onItemClick(adapter: BaseQuickAdapter<*, *>, view: View, position: Int) {
-                val item = sortedAdapter.data[position]
-
-            }
-        })
+        sortedAdapter.setOnItemClickListener { adapter, view, position -> //                val item = sortedAdapter.data[position]
+            selectSortedCurrent(position)
+        }
         sortedAdapter.setHandleAction(object : PurchaseGoodsSortedAdapter.HandleAction {
             override fun action(itemId: String) {
                 viewModel.again(itemId)
@@ -159,7 +146,55 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 .build()
                 .addTo(mBinding.ryScaleBatch)
         }
+        labelAdapter.setOnItemClickListener { adapter, view, position ->
+            if (mBinding.btnSorted.isChecked) {
+                val label = labelAdapter.data[position]
+                labelAdapter.selectPos(position)
+                viewModel.currentLabel.set(label)
+                viewModel.thisPurchaseNumFiled.set(label.currentNum.toString())
+                viewModel.currentGoodsOrderNumFiled.set(label.quantity.toString())
+                viewModel.currentGoodsReceiveNumField.set(label.deliver_quantity.toString())
+                if (label.deliver_quantity != null && label.quantity != null) {
+                    viewModel.surplusNumFiled.set((label.quantity - label.deliver_quantity).toString())
+                }
+            }
+        }
         mBinding.ryScaleBatch.adapter = labelAdapter
+    }
+
+    private fun tabSelect(pos: Int) {
+        mBinding.btnUnSort.setOnCheckedChangeListener { p0, isChecked ->
+            if (isChecked) {
+                viewModel.currentPurchaseType.set(0)
+                mBinding.btnSorted.isChecked = false
+                mBinding.etThisNum.isEnabled = true
+                mBinding.btnPrintAgain.visibility = View.GONE
+                mBinding.btnNormalSort.visibility = View.VISIBLE
+            }
+        }
+        mBinding.btnSorted.setOnCheckedChangeListener { p0, isChecked ->
+            if (isChecked) {
+                viewModel.currentPurchaseType.set(1)
+                mBinding.btnUnSort.isChecked = false
+                mBinding.etThisNum.isEnabled = false
+                mBinding.btnPrintAgain.visibility = View.VISIBLE
+                mBinding.btnNormalSort.visibility = View.GONE
+                if (sortedAdapter.data.size > 0) {
+                    selectSortedCurrent(0)
+                }
+            }
+        }
+        when (pos) {
+            0 -> {
+                mBinding.btnUnSort.isChecked = true
+                mBinding.btnSorted.isChecked = false
+            }
+            1 -> {
+                mBinding.btnUnSort.isChecked = false
+                mBinding.btnSorted.isChecked = true
+            }
+        }
+
     }
 
     /**
@@ -168,6 +203,22 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     private fun selectCurrent(pos: Int) {
         refreshData(pos)
         val indexData = purchaseAdapter.data[pos]
+        viewModel.currentInfoFiled.set(indexData)
+        if (labelAdapter.data.size > 0) {
+            currentPurchaseLabelInfo.clear()
+            labelAdapter.data.clear()
+            labelAdapter.notifyDataSetChanged()
+        }
+        resetData(indexData)
+    }
+
+    /**
+     * 选中已分拣客户
+     */
+    private fun selectSortedCurrent(pos: Int) {
+        refreshSortedData(pos)
+        val indexData = sortedAdapter.data[pos]
+        viewModel.get(indexData.item_id)
         viewModel.currentInfoFiled.set(indexData)
         if (labelAdapter.data.size > 0) {
             currentPurchaseLabelInfo.clear()
@@ -207,6 +258,13 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
+    private fun refreshSortedData(pos: Int) {
+        for (index in 0 until sortedAdapter.data.size) {
+            sortedAdapter.data[index].isCurrent = index == pos
+            sortedAdapter.notifyItemChanged(index)
+        }
+    }
+
     private fun refreshBatchData(pos: Int) {
         for (index in 0 until stockAdapter.data.size) {
             stockAdapter.data[index].isCurrent = index == pos
@@ -231,6 +289,15 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 }
                 viewModel.currentInfoFiled.get()?.let {
                     makeNewLabel()
+                }
+            }
+            20 -> {
+                if (viewModel.currentPrinterStatus.get() == 2) {
+                    viewModel.currentLabel.get()?.let {
+                        Printer.getInstance().printText(it, 550, "0" + labelAdapter.data.size)
+                    }
+                } else {
+                    toast("请先连接标签打印机")
                 }
             }
             //重新分拣
@@ -277,6 +344,22 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //提交完成
             5 -> {
+                val labelList = arrayListOf<OrderLabel>()
+                for (item in currentPurchaseLabelInfo) {
+                    val itemLabel = OrderLabel(
+                        itemId = viewModel.currentInfoFiled.get()?.item_id.toString(),
+                        goodsName = item.goodsName.toString(),
+                        quantity = item.quantity,
+                        currentNum = item.currentNum,
+                        deliver_quantity = item.deliver_quantity,
+                        customer = item.customer.toString(),
+                        unit = item.unit.toString(),
+                        qrcode = item.qrcode,
+                        batchId = item.batchId
+                    )
+                    labelList.add(itemLabel)
+                }
+                viewModel.add(labelList)
                 toast("提交成功")
                 currentPurchaseLabelInfo.clear()
                 labelAdapter.data.clear()
@@ -290,7 +373,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 updateWeight()
             }
             300 -> {
-                mBinding.tabPurchase.select(0)
+                tabSelect(0)
                 viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
             }
 
@@ -324,12 +407,19 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                     stockAdapter.notifyDataSetChanged()
                 }
             }
+            if (sortedAdapter.data.size > 0 && mBinding.btnSorted.isChecked) {
+                selectSortedCurrent(0)
+            }
+
         })
         model.getStockData().observe(this, {
             stockAdapter.setList(it)
             if (it.size > 0) {
                 selectBatchCurrent(0)
             }
+        })
+        model.getLabelData().observe(this, {
+            labelAdapter.setList(it)
         })
     }
 

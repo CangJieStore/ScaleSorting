@@ -430,16 +430,17 @@ class CheckActivity : BaseMvvmActivity<ActivityCheckBinding, ScaleViewModel>() {
                 takePhoto(currentNum)
             }
             200 -> {//submit response
-                for (item in submitList) {
-                    viewModel.add(
-                        SubmitOrder(
-                            goodsId = currentGoodsInfo!!.id,
-                            batchId = item.batch,
-                            batchPath = item.batch_path,
-                            isUpload = 1
-                        )
-                    )
-                }
+//                viewModel.add(l)
+//                for (item in submitList) {
+//                    viewModel.add(
+//                        SubmitOrder(
+//                            goodsId = currentGoodsInfo!!.id,
+//                            batchId = item.batch,
+//                            batchPath = item.batch_path,
+//                            isUpload = 1
+//                        )
+//                    )
+//                }
                 viewModel.loadDetail(orderID!!)
                 toast("提交成功")
                 submitList.clear()

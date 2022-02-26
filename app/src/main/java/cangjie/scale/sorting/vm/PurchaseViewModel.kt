@@ -1,9 +1,16 @@
 package cangjie.scale.sorting.vm
 
+import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import cangjie.scale.sorting.base.ScaleApplication
 import cangjie.scale.sorting.base.http.Url
+import cangjie.scale.sorting.db.AppDatabase
+import cangjie.scale.sorting.db.OrderLabel
+import cangjie.scale.sorting.db.SubmitRepository
+import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.MessageEvent
 import cangjie.scale.sorting.entity.PurchaseInfo
 import cangjie.scale.sorting.entity.StockInfo
@@ -11,6 +18,8 @@ import com.cangjie.frame.core.binding.BindingAction
 import com.cangjie.frame.core.binding.BindingCommand
 import com.cangjie.frame.core.event.MsgEvent
 import com.cangjie.frame.kit.tab.Title
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 /**
  * @author CangJie
@@ -20,6 +29,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
 
     private val purchaseLiveData = MutableLiveData<MutableList<PurchaseInfo>>()
     private val stockLiveData = MutableLiveData<MutableList<StockInfo>>()
+    private val labelLiveData = MutableLiveData<MutableList<LabelInfo>>()
     var showStatusFiled = ObservableField(0)
     var currentPurchaseGoodsFiled = ObservableField("")
     var currentGoodsOrderNumFiled = ObservableField("")
@@ -35,6 +45,8 @@ class PurchaseViewModel : BaseScaleViewModel() {
     var currentType = ObservableField(0)
     var currentPurchaseType = ObservableField(0)
     var currentPrinterStatus = ObservableField(0)
+    var currentLabel = ObservableField<LabelInfo>()
+    private val bookRepository: SubmitRepository
 
 
     var finishCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
@@ -50,6 +62,11 @@ class PurchaseViewModel : BaseScaleViewModel() {
     var printCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
         override fun call() {
             action(MsgEvent(2))
+        }
+    })
+    var printAgainCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(20))
         }
     })
     var repurchaseCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
@@ -124,6 +141,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
                 action(MsgEvent(5))
             }
             204 -> {
+                delete(currentInfoFiled.get()?.item_id.toString())
                 action(MsgEvent(300))
             }
             210 -> {
@@ -132,8 +150,42 @@ class PurchaseViewModel : BaseScaleViewModel() {
         }
     }
 
+    init {
+        val orderDao = AppDatabase.get(ScaleApplication.instance!!, viewModelScope).orderDao()
+        bookRepository = SubmitRepository(orderDao)
+    }
+
+    fun add(book: List<OrderLabel>) = viewModelScope.launch(Dispatchers.IO) {
+        bookRepository.insert(book)
+    }
+
+    fun get(itemId: String) = viewModelScope.launch(Dispatchers.IO) {
+        val result = bookRepository.get(itemId)
+        val labels = mutableListOf<LabelInfo>()
+        for (item in result) {
+            val labelInfo = LabelInfo(
+                item.goodsName,
+                item.quantity,
+                item.currentNum,
+                item.deliver_quantity,
+                item.customer,
+                item.unit,
+                item.qrcode,
+                item.batchId
+            )
+            labels.add(labelInfo)
+        }
+        labelLiveData.postValue(labels)
+    }
+
+    fun delete(itemId: String) = viewModelScope.launch(Dispatchers.IO) {
+        bookRepository.delete(itemId)
+    }
+
+
     fun getPurchaseData() = purchaseLiveData
     fun getStockData() = stockLiveData
+    fun getLabelData() = labelLiveData
     override fun error(errorCode: Int, errorMsg: String?) {
         super.error(errorCode, errorMsg)
         dismissLoading()

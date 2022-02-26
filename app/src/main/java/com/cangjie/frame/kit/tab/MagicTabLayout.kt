@@ -131,6 +131,7 @@ class MagicTabLayout @JvmOverloads constructor(
             }
             start()
         }
+        postInvalidate()
         if (animateSelected) {
             selectedTextScaleAnimator?.cancel()
             titleScale = 0f
@@ -204,7 +205,7 @@ class MagicTabLayout @JvmOverloads constructor(
         }
         canvas.restoreToCount(layerId)
 
-        drawSelected(canvas, bgHeight.toInt(), (topRadius * 2 + lineLength).toInt(), canvasHeight)
+//        drawSelected(canvas, bgHeight.toInt(), (topRadius * 2 + lineLength).toInt(), canvasHeight)
 
         drawTitles(canvas)
     }
@@ -361,7 +362,6 @@ class MagicTabLayout @JvmOverloads constructor(
                     paint.textSkewX = 0f
                 }
             }
-
             val fontMetrics: Paint.FontMetrics = paint.fontMetrics
             val top = fontMetrics.top //为基线到字体上边框的距离
             val bottom = fontMetrics.bottom //为基线到字体下边框的距离

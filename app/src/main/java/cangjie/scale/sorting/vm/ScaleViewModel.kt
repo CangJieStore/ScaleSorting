@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import cangjie.scale.sorting.base.ScaleApplication
 import cangjie.scale.sorting.base.http.Url
 import cangjie.scale.sorting.db.AppDatabase
+import cangjie.scale.sorting.db.OrderLabel
 import cangjie.scale.sorting.db.SubmitOrder
 import cangjie.scale.sorting.db.SubmitRepository
 import cangjie.scale.sorting.entity.LoginInfo
@@ -30,7 +31,6 @@ class ScaleViewModel : BaseScaleViewModel() {
     var chooseDateFiled = ObservableField<String>()
     var currentOrder = MutableLiveData<OrderInfo>()
     var updateData = MutableLiveData<Update>()
-    private val books: LiveData<MutableList<SubmitOrder>>
 
     var showStatusFiled = ObservableField(0)
 
@@ -114,13 +114,13 @@ class ScaleViewModel : BaseScaleViewModel() {
 
     fun loadMain(date: String) {
         loading("获取订单...")
-        val params = mutableMapOf<String,Any>("day" to date)
+        val params = mutableMapOf<String, Any>("day" to date)
         postWithToken<MutableList<OrderInfo>>(Url.tasks, params, 201)
     }
 
     fun loadDetail(id: String) {
         loading("获取订单...")
-        val params = mutableMapOf<String,Any>("order_id" to id)
+        val params = mutableMapOf<String, Any>("order_id" to id)
         postWithToken<MutableList<OrderInfo>>(Url.tasks, params, 203)
     }
 
@@ -154,13 +154,13 @@ class ScaleViewModel : BaseScaleViewModel() {
 
     fun clear(id: String) {
         loading("请求中...")
-        val params = mutableMapOf<String,Any>("id" to id)
+        val params = mutableMapOf<String, Any>("id" to id)
         postWithToken<Any>(Url.clear, params, 223)
     }
 
     fun again(id: String) {
         loading("请求中...")
-        val params = mutableMapOf<String,Any>("id" to id)
+        val params = mutableMapOf<String, Any>("id" to id)
         postWithToken<Any>(Url.again, params, 204)
     }
 
@@ -213,18 +213,9 @@ class ScaleViewModel : BaseScaleViewModel() {
     init {
         val orderDao = AppDatabase.get(ScaleApplication.instance!!, viewModelScope).orderDao()
         bookRepository = SubmitRepository(orderDao)
-        books = bookRepository.allOrders
     }
 
-    fun add(book: SubmitOrder) = viewModelScope.launch(Dispatchers.IO) {
+    fun add(book: List<OrderLabel>) = viewModelScope.launch(Dispatchers.IO) {
         bookRepository.insert(book)
-    }
-
-    fun update(book: SubmitOrder) = viewModelScope.launch(Dispatchers.IO) {
-        bookRepository.update(book)
-    }
-
-    fun delete(book: SubmitOrder) = viewModelScope.launch(Dispatchers.IO) {
-        bookRepository.delete(book)
     }
 }

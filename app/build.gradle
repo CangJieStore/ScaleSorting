@@ -81,9 +81,9 @@ dependencies {
 
     implementation 'org.greenrobot:eventbus:3.2.0'
     //room
-    implementation "androidx.room:room-runtime:2.3.0"
-    kapt "androidx.room:room-compiler:2.3.0"
-    implementation "androidx.room:room-ktx:2.3.0"
+    implementation "androidx.room:room-runtime:2.4.1"
+    kapt "androidx.room:room-compiler:2.4.1"
+    implementation "androidx.room:room-ktx:2.4.1"
     implementation 'com.qj.picker:MDDatePicker:1.0.1'
     implementation 'com.github.AriesHoo.UIWidget:tab-layout:3.2.25'
     implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:3.0.4'
