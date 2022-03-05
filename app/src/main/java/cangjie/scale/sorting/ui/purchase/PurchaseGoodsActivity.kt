@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.appcompat.widget.AppCompatTextView
+import androidx.lifecycle.viewModelScope
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.ActivityPurchaseGoodsBinding
@@ -20,8 +21,9 @@ import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.PurchaseInfo
 import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.print.Printer
-import cangjie.scale.sorting.scale.FormatUtil
-import cangjie.scale.sorting.scale.ScaleModule
+import cangjie.scale.sorting.scale.*
+import cangjie.scale.sorting.scale.message.IMessage
+import cangjie.scale.sorting.scale.message.ReadMessage
 import cangjie.scale.sorting.ui.SubmitDialogFragment
 import cangjie.scale.sorting.vm.PurchaseViewModel
 import coil.load
@@ -35,6 +37,12 @@ import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
 import id.zelory.cekrek.extension.cekrekToBitmap
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
+import org.greenrobot.eventbus.ThreadMode
 
 /**
  * @author CangJie
@@ -60,7 +68,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     override fun layoutId(): Int = R.layout.activity_purchase_goods
     private var taskItemInfo: TaskGoodsItem? = null
     private var fromType = 0
-    private var readDataReceiver: ReadDataReceiver? = null
     private val currentPurchaseLabelInfo = arrayListOf<LabelInfo>()
 
 
@@ -94,6 +101,13 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
 
     private fun initPurchase() {
+        if (fromType == 0) {
+            mBinding.btnNormalSort.visibility = View.VISIBLE
+            mBinding.btnPrintAgain.visibility = View.GONE
+        } else {
+            mBinding.btnNormalSort.visibility = View.GONE
+            mBinding.btnPrintAgain.visibility = View.VISIBLE
+        }
         tabSelect(fromType)
         if (mBinding.ryPurchase.itemDecorationCount == 0) {
             dividerBuilder()
@@ -370,7 +384,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             //置零
             6 -> {
                 returnZero()
-                updateWeight()
+//                updateWeight()
             }
             300 -> {
                 tabSelect(0)
@@ -382,7 +396,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     private fun returnZero() {
         try {
-            ScaleModule.Instance(this).ZeroClear()
+            SerialPortManager.instance().send(ByteUtil.hexStr2bytes("5A03"))
         } catch (e: Exception) {
             ViewUtils.runOnUiThread {
                 ToastUtils.show("置零失败")
@@ -463,24 +477,33 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
+    /** 设备过滤器 */
+    private val deviceFilter = object : DeviceFilter {
+        override fun allow(device: String): Boolean {
+            // 不允许打开usb的串口
+            return !device.contains("usb", true)
+        }
+    }
+
     private fun initWeight() {
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
         try {
-            ScaleModule.Instance(this) //初始化称重模块
+            viewModel.viewModelScope.launch {
+                val opened = withContext(Dispatchers.IO) {
+                    SerialPortManager.instance().open(9600, deviceFilter)
+                }
+                if (!opened) {
+                    ToastUtils.show("初始化称重主板错误！")
+                }
+            }
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             ViewUtils.runOnUiThread {
                 ToastUtils.show("初始化称重主板错误！")
             }
         }
-        readDataReceiver = ReadDataReceiver()
-        registerReceiver(
-            readDataReceiver,
-            IntentFilter(ScaleModule.WeightValueChanged)
-        )
-        registerReceiver(
-            readDataReceiver,
-            IntentFilter(ScaleModule.ERROR)
-        )
     }
 
     /**
@@ -495,36 +518,33 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }).open(this@PurchaseGoodsActivity)
     }
 
-    inner class ReadDataReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (ScaleModule.ERROR == intent.action) {
-                val error = intent.getStringExtra("error")
-                ToastUtils.show(error)
-            } else {
-                updateWeight()
-            }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onEvent(message: IMessage) {
+        if (message is ReadMessage) {
+            getWeight(message.message)
         }
     }
 
-    private fun updateWeight() {
-        try {
-            val currentWeight = FormatUtil.roundByScale(
-                ScaleModule.Instance(this@PurchaseGoodsActivity).RawValue - ScaleModule.Instance(
-                    this@PurchaseGoodsActivity
-                ).TareWeight,
-                ScaleModule.Instance(this@PurchaseGoodsActivity).SetDotPoint
-            )
-            if (!viewModel.currentWeightTypeFiled.get()) {
-                viewModel.currentWeightValue.set(formatUnit(currentWeight))
-                viewModel.thisPurchaseNumFiled.set(formatUnit(currentWeight))
-            } else {
-                viewModel.currentWeightValue.set("0.00")
+    private fun getWeight(input: String) {
+        if (input.length == 22) {
+            val temp: String = input.substring(6, 14).replace("(.{2})", "$1 ")
+            val hexChars = temp.split(" ".toRegex()).toTypedArray()
+            val sb = StringBuffer()
+            for (ch in hexChars) {
+                sb.append(ch.toInt(16).toChar())
             }
-
-        } catch (ee: java.lang.Exception) {
-            ee.printStackTrace()
-            ToastUtils.show(ee.message!!)
+            val strWeight = sb.toString()
+            if (strWeight.isNotEmpty()) {
+                if (!viewModel.currentWeightTypeFiled.get()) {
+                    viewModel.currentWeightValue.set(formatUnit(strWeight))
+                    viewModel.thisPurchaseNumFiled.set(formatUnit(strWeight))
+                } else {
+                    viewModel.currentWeightValue.set("0.00")
+                }
+            }
         }
+
     }
 
     /**
@@ -555,10 +575,12 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     }
 
     override fun onDestroy() {
-        super.onDestroy()
-        readDataReceiver?.let { unregisterReceiver(it) }
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this)
+        }
         Printer.getInstance().close()
-
+        SerialPortManager.instance().close()
+        super.onDestroy()
     }
 
     override fun toast(notice: String?) {

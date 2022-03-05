@@ -116,9 +116,9 @@ class CheckedDetailActivity : BaseMvvmActivity<ActivityCheckedDetailBinding, Tas
         if (msg.code == 3) {
             finish()
         } else if (msg.code == 300) {
-            val intent = Intent(this, CheckActivity::class.java)
-            intent.putExtra("id", currentOrder!!.trade_no)
-            startActivity(intent)
+//            val intent = Intent(this, CheckActivity::class.java)
+//            intent.putExtra("id", currentOrder!!.trade_no)
+//            startActivity(intent)
         }
     }
 }

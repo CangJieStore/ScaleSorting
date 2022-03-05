@@ -3,8 +3,8 @@ package cangjie.scale.sorting.ui
 import android.content.Intent
 import android.os.Bundle
 import cangjie.scale.sorting.R
+import cangjie.scale.sorting.base.getLocalVersionName
 import cangjie.scale.sorting.databinding.ActivityLoginBinding
-import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import cangjie.scale.sorting.vm.ScaleViewModel
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
@@ -22,9 +22,9 @@ class LoginActivity : BaseMvvmActivity<ActivityLoginBinding, ScaleViewModel>() {
 
     override fun initActivity(savedInstanceState: Bundle?) {
         mBinding.tvExit.setOnClickListener {
-            SerialPortUtilForScale.Instance().CloseSerialPort()
             exitProcess(0)
         }
+        mBinding.tvCurrentVersion.text = "当前版本:${getLocalVersionName(this)}"
     }
 
     override fun initVariableId(): Int = cangjie.scale.sorting.BR.loginModel
@@ -41,17 +41,12 @@ class LoginActivity : BaseMvvmActivity<ActivityLoginBinding, ScaleViewModel>() {
 
     override fun onBackPressed() {
         super.onBackPressed()
-        SerialPortUtilForScale.Instance().CloseSerialPort()
         exitProcess(0)
     }
 
     override fun toast(notice: String?) {
         super.toast(notice)
         show(this, 2000, notice!!)
-    }
-
-    override fun loading(word: String?) {
-        show(this, 2000, word!!)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {

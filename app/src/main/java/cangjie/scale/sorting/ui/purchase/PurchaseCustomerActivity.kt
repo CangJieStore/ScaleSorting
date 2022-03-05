@@ -19,8 +19,6 @@ import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.print.Printer
 import cangjie.scale.sorting.scale.FormatUtil
-import cangjie.scale.sorting.scale.ScaleModule
-import cangjie.scale.sorting.scale.SerialPortUtilForScale
 import cangjie.scale.sorting.vm.PurchaseViewModel
 import coil.load
 import com.blankj.utilcode.util.ViewUtils
@@ -51,7 +49,6 @@ class PurchaseCustomerActivity :
 
     override fun layoutId(): Int = R.layout.activity_purchase_customer
     private var taskItemInfo: TaskGoodsItem? = null
-    private var readDataReceiver: ReadDataReceiver? = null
     private val currentPurchaseLabelInfo = mutableListOf<LabelInfo>()
 
 
@@ -192,51 +189,30 @@ class PurchaseCustomerActivity :
      */
     private fun initWeight() {
         try {
-            ScaleModule.Instance(this) //初始化称重模块
+//            ScaleModule.Instance(this) //初始化称重模块
         } catch (e: java.lang.Exception) {
             e.printStackTrace()
             ViewUtils.runOnUiThread {
                 ToastUtils.show("初始化称重主板错误！")
             }
         }
-        readDataReceiver = ReadDataReceiver()
-        registerReceiver(
-            readDataReceiver,
-            IntentFilter(ScaleModule.WeightValueChanged)
-        )
-        registerReceiver(
-            readDataReceiver,
-            IntentFilter(ScaleModule.ERROR)
-        )
-    }
-
-    inner class ReadDataReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            if (ScaleModule.ERROR == intent.action) {
-                val error = intent.getStringExtra("error") as String
-                Log.e("error", error)
-                ToastUtils.show(error)
-            } else {
-                updateWeight()
-            }
-        }
     }
 
     private fun updateWeight() {
         try {
-            val currentWeight = FormatUtil.roundByScale(
-                ScaleModule.Instance(this@PurchaseCustomerActivity).RawValue - ScaleModule.Instance(
-                    this@PurchaseCustomerActivity
-                ).TareWeight,
-                ScaleModule.Instance(this@PurchaseCustomerActivity).SetDotPoint
-            )
-            Log.e("weight", currentWeight)
-            if (!viewModel.currentWeightTypeFiled.get()) {
-                viewModel.currentWeightValue.set(currentWeight)
-                viewModel.thisPurchaseNumFiled.set(currentWeight)
-            } else {
-                viewModel.currentWeightValue.set("0.00")
-            }
+//            val currentWeight = FormatUtil.roundByScale(
+//                ScaleModule.Instance(this@PurchaseCustomerActivity).RawValue - ScaleModule.Instance(
+//                    this@PurchaseCustomerActivity
+//                ).TareWeight,
+//                ScaleModule.Instance(this@PurchaseCustomerActivity).SetDotPoint
+//            )
+//            Log.e("weight", currentWeight)
+//            if (!viewModel.currentWeightTypeFiled.get()) {
+//                viewModel.currentWeightValue.set(currentWeight)
+//                viewModel.thisPurchaseNumFiled.set(currentWeight)
+//            } else {
+//                viewModel.currentWeightValue.set("0.00")
+//            }
 
         } catch (ee: java.lang.Exception) {
             ee.printStackTrace()
@@ -247,7 +223,6 @@ class PurchaseCustomerActivity :
 
     override fun onDestroy() {
         super.onDestroy()
-        readDataReceiver?.let { unregisterReceiver(it) }
         Printer.getInstance().close()
     }
 

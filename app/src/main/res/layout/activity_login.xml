@@ -179,11 +179,11 @@
                     android:textSize="@dimen/sp30" />
 
                 <androidx.appcompat.widget.AppCompatTextView
+                    android:id="@+id/tv_current_version"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/dp10"
                     android:layout_gravity="bottom"
-                    android:text="当前版本:v1.0"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sp15" />
             </androidx.appcompat.widget.LinearLayoutCompat>

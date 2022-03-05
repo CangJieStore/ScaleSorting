@@ -27,6 +27,11 @@ import java.net.URL
 import java.text.SimpleDateFormat
 import java.util.*
 
+import android.content.pm.PackageInfo
+import android.content.pm.PackageManager
+import cangjie.scale.sorting.base.getLocalVersionName
+
+
 class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
 
     override fun onStart() {
@@ -44,9 +49,12 @@ class MainActivity : BaseMvvmActivity<ActivityMainBinding, ScaleViewModel>() {
         )
     }
 
+
+
     override fun initActivity(savedInstanceState: Bundle?) {
         viewModel.loadUpdate()
         mBinding.vpOrders.adapter = mAdapter
+        mBinding.tvVersion.text= getLocalVersionName(this)
         mBinding.tabOrders.setViewPager(mBinding.vpOrders)
         mBinding.tabOrders.currentTab = 0
         netTime()
