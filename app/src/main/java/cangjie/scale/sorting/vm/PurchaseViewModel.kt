@@ -79,6 +79,11 @@ class PurchaseViewModel : BaseScaleViewModel() {
             action(MsgEvent(4))
         }
     })
+    var cancelCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(610))
+        }
+    })
     var resetZeroCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
         override fun call() {
             action(MsgEvent(6))

@@ -7,6 +7,7 @@ import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
@@ -84,6 +85,13 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         fromType = intent.getIntExtra("from", 0)
         initPurchase()
         setData(taskItemInfo)
+        if (fromType == 0) {
+            mBinding.btnUnSort.isChecked = true
+            mBinding.btnSorted.isChecked = false
+        } else {
+            mBinding.btnUnSort.isChecked = false
+            mBinding.btnSorted.isChecked = true
+        }
     }
 
     private fun setData(itemData: TaskGoodsItem?) {
@@ -101,13 +109,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
 
     private fun initPurchase() {
-        if (fromType == 0) {
-            mBinding.btnNormalSort.visibility = View.VISIBLE
-            mBinding.btnPrintAgain.visibility = View.GONE
-        } else {
-            mBinding.btnNormalSort.visibility = View.GONE
-            mBinding.btnPrintAgain.visibility = View.VISIBLE
-        }
         tabSelect(fromType)
         if (mBinding.ryPurchase.itemDecorationCount == 0) {
             dividerBuilder()
@@ -161,10 +162,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 .addTo(mBinding.ryScaleBatch)
         }
         labelAdapter.setOnItemClickListener { adapter, view, position ->
+            val label = labelAdapter.data[position]
+            labelAdapter.selectPos(position)
+            viewModel.currentLabel.set(label)
             if (mBinding.btnSorted.isChecked) {
-                val label = labelAdapter.data[position]
-                labelAdapter.selectPos(position)
-                viewModel.currentLabel.set(label)
                 viewModel.thisPurchaseNumFiled.set(label.currentNum.toString())
                 viewModel.currentGoodsOrderNumFiled.set(label.quantity.toString())
                 viewModel.currentGoodsReceiveNumField.set(label.deliver_quantity.toString())
@@ -172,6 +173,17 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                     viewModel.surplusNumFiled.set((label.quantity - label.deliver_quantity).toString())
                 }
             }
+            mBinding.btnNormalSort.visibility = View.GONE
+            mBinding.llPrintAgain.visibility = View.VISIBLE
+//            if (labelAdapter.getSelect() == position) {
+//                labelAdapter.selectPos(-1)
+//                viewModel.currentLabel.set(null)
+//            } else {
+//
+//                if () {
+//
+//                }
+//            }
         }
         mBinding.ryScaleBatch.adapter = labelAdapter
     }
@@ -182,8 +194,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 viewModel.currentPurchaseType.set(0)
                 mBinding.btnSorted.isChecked = false
                 mBinding.etThisNum.isEnabled = true
-                mBinding.btnPrintAgain.visibility = View.GONE
-                mBinding.btnNormalSort.visibility = View.VISIBLE
             }
         }
         mBinding.btnSorted.setOnCheckedChangeListener { p0, isChecked ->
@@ -191,24 +201,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 viewModel.currentPurchaseType.set(1)
                 mBinding.btnUnSort.isChecked = false
                 mBinding.etThisNum.isEnabled = false
-                mBinding.btnPrintAgain.visibility = View.VISIBLE
-                mBinding.btnNormalSort.visibility = View.GONE
                 if (sortedAdapter.data.size > 0) {
                     selectSortedCurrent(0)
                 }
             }
         }
-        when (pos) {
-            0 -> {
-                mBinding.btnUnSort.isChecked = true
-                mBinding.btnSorted.isChecked = false
-            }
-            1 -> {
-                mBinding.btnUnSort.isChecked = false
-                mBinding.btnSorted.isChecked = true
-            }
-        }
-
     }
 
     /**
@@ -306,6 +303,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 }
             }
             20 -> {
+                Log.e("status",viewModel.currentPrinterStatus.get().toString())
                 if (viewModel.currentPrinterStatus.get() == 2) {
                     viewModel.currentLabel.get()?.let {
                         Printer.getInstance().printText(it, 550, "0" + labelAdapter.data.size)
@@ -313,6 +311,12 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 } else {
                     toast("请先连接标签打印机")
                 }
+            }
+            610->{
+                labelAdapter.selectPos(-1)
+                viewModel.currentLabel.set(null)
+                mBinding.btnNormalSort.visibility = View.VISIBLE
+                mBinding.llPrintAgain.visibility = View.GONE
             }
             //重新分拣
             3 -> {
@@ -527,7 +531,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     }
 
     private fun getWeight(input: String) {
-        if (input.length == 22) {
+        if (input.length == 28) {
             val temp: String = input.substring(6, 14).replace("(.{2})", "$1 ")
             val hexChars = temp.split(" ".toRegex()).toTypedArray()
             val sb = StringBuffer()

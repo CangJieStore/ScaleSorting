@@ -1,5 +1,6 @@
 package cangjie.scale.sorting.ui.purchase
 
+import android.graphics.Color
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.LayoutLabelItemBinding
 import cangjie.scale.sorting.entity.LabelInfo
@@ -17,6 +18,15 @@ class LabelAdapter :
     override fun convert(holder: BaseDataBindingHolder<LayoutLabelItemBinding>, item: LabelInfo) {
         holder.dataBinding?.let {
             holder.itemView.isSelected = current == holder.layoutPosition
+            if (current == holder.layoutPosition) {
+                it.tvBatch.setTextColor(Color.WHITE)
+                it.tvNum.setTextColor(Color.WHITE)
+                it.tvUnit.setTextColor(Color.WHITE)
+            } else {
+                it.tvBatch.setTextColor(Color.BLACK)
+                it.tvNum.setTextColor(Color.BLACK)
+                it.tvUnit.setTextColor(Color.BLACK)
+            }
             it.tvBatch.text = "分拣批次：" + (getItemPosition(item) + 1)
             it.tvUnit.text = "配送单位：" + item.unit
             it.tvNum.text = "本批数量：" + item.currentNum
@@ -26,5 +36,9 @@ class LabelAdapter :
     fun selectPos(pos: Int) {
         this.current = pos
         notifyDataSetChanged()
+    }
+
+    fun getSelect(): Int {
+        return this.current
     }
 }

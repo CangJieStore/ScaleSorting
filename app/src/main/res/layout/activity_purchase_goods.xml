@@ -487,22 +487,42 @@
                         android:paddingTop="@dimen/dp15"
                         android:paddingEnd="@dimen/dp15">
 
-                        <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/btn_print_again"
+                        <androidx.appcompat.widget.LinearLayoutCompat
+                            android:id="@+id/ll_print_again"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:background="@drawable/shape_clear_btn"
-                            android:text="重打标签"
-                            android:textColor="@color/white"
-                            android:textSize="@dimen/sp16"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
                             android:visibility="gone"
-                            android:enabled="false"
-                            binding:onClickCommand="@{purchaseModel.printAgainCommand}" />
+                            android:weightSum="2">
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_print_again"
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_marginEnd="@dimen/dp5"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_clear_btn"
+                                android:text="重打标签"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp16"
+                                binding:onClickCommand="@{purchaseModel.printAgainCommand}" />
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="0dp"
+                                android:layout_height="40dp"
+                                android:layout_marginStart="@dimen/dp5"
+                                android:layout_weight="1"
+                                android:background="@drawable/shape_login_btn"
+                                android:text="取消"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp16"
+                                binding:onClickCommand="@{purchaseModel.cancelCommand}" />
+                        </androidx.appcompat.widget.LinearLayoutCompat>
+
 
                         <LinearLayout
                             android:id="@+id/btn_normal_sort"
                             android:layout_width="match_parent"
-                            android:visibility="gone"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:orientation="horizontal">
