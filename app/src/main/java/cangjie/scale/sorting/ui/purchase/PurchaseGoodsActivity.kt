@@ -303,16 +303,15 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 }
             }
             20 -> {
-                Log.e("status",viewModel.currentPrinterStatus.get().toString())
                 if (viewModel.currentPrinterStatus.get() == 2) {
                     viewModel.currentLabel.get()?.let {
                         Printer.getInstance().printText(it, 550, "0" + labelAdapter.data.size)
                     }
                 } else {
-                    toast("请先连接标签打印机")
+                    toast("标签打印机未连接或打印机故障")
                 }
             }
-            610->{
+            610 -> {
                 labelAdapter.selectPos(-1)
                 viewModel.currentLabel.set(null)
                 mBinding.btnNormalSort.visibility = View.VISIBLE
@@ -526,8 +525,19 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(message: IMessage) {
         if (message is ReadMessage) {
+            formatWeight(message.message)
             getWeight(message.message)
         }
+    }
+
+    private fun formatWeight(msg: String) {
+        val temp: String = msg.replace("(.{2})", "$1 ")
+        val hexChars = temp.split(" ".toRegex()).toTypedArray()
+        val sb = StringBuffer()
+        for (ch in hexChars) {
+            sb.append(ch.toInt(16).toChar())
+        }
+        mBinding.tvSerialTxt.text = sb.toString()
     }
 
     private fun getWeight(input: String) {

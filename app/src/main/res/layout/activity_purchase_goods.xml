@@ -326,6 +326,13 @@
                         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                         app:spanCount="3" />
 
+                    <androidx.appcompat.widget.AppCompatTextView
+                        android:id="@+id/tv_serial_txt"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp22" />
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">

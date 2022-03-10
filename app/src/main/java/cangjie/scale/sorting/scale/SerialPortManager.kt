@@ -27,7 +27,6 @@ class SerialPortManager private constructor() {
     @Synchronized
     fun open(baudrate: Int, filter: DeviceFilter? = null): Boolean {
         close()
-
         val serialPortFinder = SerialPortFinder()
         // 设备
         val mDevices = serialPortFinder.allDevicesPath
