@@ -525,28 +525,30 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onEvent(message: IMessage) {
         if (message is ReadMessage) {
-            formatWeight(message.message)
             getWeight(message.message)
         }
     }
 
     private fun formatWeight(msg: String) {
-        val temp: String = msg.replace("(.{2})", "$1 ")
-        val hexChars = temp.split(" ".toRegex()).toTypedArray()
+        val temp = msg.chunked(2)
         val sb = StringBuffer()
-        for (ch in hexChars) {
-            sb.append(ch.toInt(16).toChar())
+        if (temp.size >= 14) {
+            for ((index, ch) in temp.withIndex()) {
+                if (index > 2 && index < temp.size - 4) {
+                    sb.append(ch.toInt(16).toChar())
+                }
+            }
         }
-        mBinding.tvSerialTxt.text = sb.toString()
     }
 
     private fun getWeight(input: String) {
-        if (input.length == 28) {
-            val temp: String = input.substring(6, 14).replace("(.{2})", "$1 ")
-            val hexChars = temp.split(" ".toRegex()).toTypedArray()
-            val sb = StringBuffer()
-            for (ch in hexChars) {
-                sb.append(ch.toInt(16).toChar())
+        val temp = input.chunked(2)
+        val sb = StringBuffer()
+        if (temp.size >= 14) {
+            for ((index, ch) in temp.withIndex()) {
+                if (index > 2 && index < temp.size - 4) {
+                    sb.append(ch.toInt(16).toChar())
+                }
             }
             val strWeight = sb.toString()
             if (strWeight.isNotEmpty()) {
@@ -557,8 +559,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                     viewModel.currentWeightValue.set("0.00")
                 }
             }
+        } else {
+            viewModel.currentWeightValue.set("00.00")
         }
-
     }
 
     /**
