@@ -4,6 +4,7 @@ import android.graphics.Color
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.LayoutLabelItemBinding
 import cangjie.scale.sorting.entity.LabelInfo
+import cangjie.scale.sorting.scale.FormatUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseDataBindingHolder
 
@@ -29,7 +30,7 @@ class LabelAdapter :
             }
             it.tvBatch.text = "分拣批次：" + (getItemPosition(item) + 1)
             it.tvUnit.text = "配送单位：" + item.unit
-            it.tvNum.text = "本批数量：" + item.currentNum
+            it.tvNum.text = "本批数量：" + FormatUtil.roundByScale(item.currentNum.toDouble(), 2)
         }
     }
 

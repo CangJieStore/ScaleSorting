@@ -294,6 +294,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //打印标签
             2 -> {
+                viewModel.currentBatchFiled.get()?.stock
                 if (viewModel.currentBatchFiled.get() == null) {
                     toast("暂无库存，分拣失败")
                     return
@@ -529,18 +530,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
-    private fun formatWeight(msg: String) {
-        val temp = msg.chunked(2)
-        val sb = StringBuffer()
-        if (temp.size >= 14) {
-            for ((index, ch) in temp.withIndex()) {
-                if (index > 2 && index < temp.size - 4) {
-                    sb.append(ch.toInt(16).toChar())
-                }
-            }
-        }
-    }
-
     private fun getWeight(input: String) {
         val temp = input.chunked(2)
         val sb = StringBuffer()
@@ -568,27 +557,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
      *
      */
     private fun formatUnit(currentWeight: String): String {
-        viewModel.currentInfoFiled.get()?.let {
-            return when (it.unit) {
-                "斤" -> {
-                    (FormatUtil.roundByScale(
-                        currentWeight.toDouble() * 2,
-                        2
-                    )).toString()
-                }
-                "克" -> {
-                    (FormatUtil.roundByScale(
-                        currentWeight.toDouble() * 1000,
-                        2
-                    ))
-                        .toString()
-                }
-                else -> {
-                    currentWeight
-                }
-            }
-        }
-        return currentWeight
+        return (FormatUtil.roundByScale(
+            currentWeight.toDouble() * 2,
+            2
+        )).toString()
     }
 
     override fun onDestroy() {
@@ -645,8 +617,18 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         )
         currentPurchaseLabelInfo.add(labelInfo)
         labelAdapter.setList(currentPurchaseLabelInfo)
-        viewModel.currentGoodsReceiveNumField.set((surplusQuantity).toString())
-        viewModel.surplusNumFiled.set((allQuantity - surplusQuantity).toString())
+        viewModel.currentGoodsReceiveNumField.set(
+            FormatUtil.roundByScale(
+                surplusQuantity.toDouble(),
+                2
+            )
+        )
+        viewModel.surplusNumFiled.set(
+            FormatUtil.roundByScale(
+                ((allQuantity - surplusQuantity).toDouble()),
+                2
+            )
+        )
         if (viewModel.currentWeightTypeFiled.get()) {
             viewModel.thisPurchaseNumFiled.set("")
         }
