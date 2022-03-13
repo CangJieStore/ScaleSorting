@@ -175,15 +175,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             mBinding.btnNormalSort.visibility = View.GONE
             mBinding.llPrintAgain.visibility = View.VISIBLE
-//            if (labelAdapter.getSelect() == position) {
-//                labelAdapter.selectPos(-1)
-//                viewModel.currentLabel.set(null)
-//            } else {
-//
-//                if () {
-//
-//                }
-//            }
         }
         mBinding.ryScaleBatch.adapter = labelAdapter
     }
@@ -283,6 +274,16 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
+    private fun calAllStock(): Float {
+        var allStock = 0f
+        if (stockAdapter.data.size > 0) {
+            stockAdapter.data.map {
+                allStock += it.stock
+            }
+        }
+        return allStock
+    }
+
     override fun handleEvent(msg: MsgEvent) {
         super.handleEvent(msg)
         when (msg.code) {
@@ -294,9 +295,15 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //打印标签
             2 -> {
-                viewModel.currentBatchFiled.get()?.stock
                 if (viewModel.currentBatchFiled.get() == null) {
                     toast("暂无库存，分拣失败")
+                    return
+                }
+                val surplusQuantity =
+                    (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
+                val currentStock = calAllStock()
+                if (surplusQuantity > currentStock) {
+                    toast("库存不足，分拣失败")
                     return
                 }
                 viewModel.currentInfoFiled.get()?.let {
