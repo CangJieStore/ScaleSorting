@@ -98,10 +98,10 @@ class UncheckFragment : BaseMvvmFragment<FragmentUncheckBinding, ScaleViewModel>
     override fun layoutId(): Int = R.layout.fragment_uncheck
     override fun subscribeModel(model: ScaleViewModel) {
         super.subscribeModel(model)
-        model.getOrderInfo().observe(this, Observer {
+        model.getOrderInfo().observe(this, {
             it?.let {
-                orderAdapter.setList(it)
-//                orderAdapter.setList(it.filter { it -> it.item_count.toIntOrNull()!! > 0 })
+//                orderAdapter.setList(it)
+                orderAdapter.setList(it.filter { it1 -> it1.item_count.toIntOrNull()!! > 0 })
             }
         })
     }

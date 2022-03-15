@@ -10,7 +10,9 @@ import androidx.recyclerview.widget.GridLayoutManager
 import cangjie.scale.sorting.BR
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.databinding.FragmentReceiveItemBinding
+import cangjie.scale.sorting.entity.GoodsTaskInfo
 import cangjie.scale.sorting.entity.MessageEvent
+import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.ui.purchase.PurchaseCustomerActivity
 import cangjie.scale.sorting.ui.purchase.PurchaseGoodsActivity
 import cangjie.scale.sorting.vm.TaskViewModel
@@ -128,7 +130,25 @@ class TaskReceivedFragment : BaseMvvmFragment<FragmentReceiveItemBinding, TaskVi
             if (it.purchaser != null) {
                 taskReceiveAdapter.setList(it.purchaser)
             } else if (it.goods != null) {
-                taskReceiveAdapter.setList(it.goods)
+                val unSortList = mutableListOf<TaskGoodsItem>()
+                val sortedList = mutableListOf<TaskGoodsItem>()
+                val notSelfList = mutableListOf<TaskGoodsItem>()
+                it.goods.filter { it1 ->
+                    run {
+                        if (it1.staff_own != 1) {
+                            notSelfList.add(it1)
+                        } else {
+                            if (it1.sorting_quantity == it1.quantity) {
+                                sortedList.add(it1)
+                            } else {
+                                unSortList.add(it1)
+                            }
+                        }
+                    }
+                }
+                sortedList.addAll(notSelfList)
+                unSortList.addAll(sortedList)
+                taskReceiveAdapter.setList(unSortList)
             }
         })
     }

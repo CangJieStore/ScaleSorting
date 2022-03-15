@@ -37,15 +37,15 @@ class TaskReceiveAdapter :
                 } else {
                     it.mask.visibility = View.GONE
                     if (item.quantity == item.sorting_quantity) {
+                        it.tvGoodsName.setTextColor(Color.parseColor("#dddddd"))
+                        it.tvCustomerCount.setTextColor(Color.parseColor("#dddddd"))
+                        it.tvCustomerCount.text = "已完成"
+                    } else {
                         it.tvGoodsName.setTextColor(Color.parseColor("#52A645"))
                         it.tvCustomerCount.setTextColor(Color.parseColor("#52A645"))
-                        it.tvCustomerCount.text = "已完成分拣"
-                    } else {
-                        it.tvGoodsName.setTextColor(Color.parseColor("#F15252"))
-                        it.tvCustomerCount.setTextColor(Color.parseColor("#F15252"))
                         if (item.quantity != null && item.sorting_quantity != null) {
                             it.tvCustomerCount.text =
-                                "剩余数量:" + (item.quantity.toFloat() - item.sorting_quantity.toFloat())
+                                "剩余:" + (item.quantity.toFloat()-item.sorting_quantity.toFloat())
                         }
                     }
                 }
