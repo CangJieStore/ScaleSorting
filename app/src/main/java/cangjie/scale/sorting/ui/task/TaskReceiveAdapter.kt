@@ -36,16 +36,16 @@ class TaskReceiveAdapter :
                     it.tvCustomerCount.text = "领取人：" + item.staff_name
                 } else {
                     it.mask.visibility = View.GONE
-                    if (item.quantity == item.sorting_quantity) {
+                    if (item.purchaser_count == item.sorting_purchaser_count) {
                         it.tvGoodsName.setTextColor(Color.parseColor("#dddddd"))
                         it.tvCustomerCount.setTextColor(Color.parseColor("#dddddd"))
                         it.tvCustomerCount.text = "已完成"
                     } else {
                         it.tvGoodsName.setTextColor(Color.parseColor("#52A645"))
                         it.tvCustomerCount.setTextColor(Color.parseColor("#52A645"))
-                        if (item.quantity != null && item.sorting_quantity != null) {
+                        if (item.purchaser_count != null && item.sorting_purchaser_count != null) {
                             it.tvCustomerCount.text =
-                                "剩余:" + (item.quantity.toFloat()-item.sorting_quantity.toFloat())
+                                "剩余客户:" + (item.purchaser_count-item.sorting_purchaser_count).toString()
                         }
                     }
                 }

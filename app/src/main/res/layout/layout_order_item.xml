@@ -50,11 +50,11 @@
             android:background="@color/gray_c" />
 
         <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/tv_customer_count"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1.1"
             android:gravity="center"
-            android:text="@{info.purchaser_count}"
             android:textColor="@color/black_3"
             android:textSize="@dimen/sp16" />
 

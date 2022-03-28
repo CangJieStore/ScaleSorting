@@ -17,6 +17,7 @@ class TaskGoodsItem(
     val sorting_quantity: String,
     val staff_own: Int,
     val purchaser_count: Int,
+    val sorting_purchaser_count:Int,
     val picture: String,
     val sorting_id: String,
     val purchaser_id: String,
