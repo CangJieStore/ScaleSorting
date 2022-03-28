@@ -86,7 +86,7 @@ class CheckedFragment : BaseMvvmFragment<FragmentChekedBinding, ScaleViewModel>(
         super.subscribeModel(model)
         model.getOrderInfo().observe(this, Observer {
             it?.let {
-                orderAdapter.setList(it.filter { it -> it.item_count.toIntOrNull() == 0 })
+                orderAdapter.setList(it.filter { it1 -> it1.purchaser_count - it1.sorting_purchaser_count == 0 })
             }
         })
     }

@@ -100,8 +100,7 @@ class UncheckFragment : BaseMvvmFragment<FragmentUncheckBinding, ScaleViewModel>
         super.subscribeModel(model)
         model.getOrderInfo().observe(this, {
             it?.let {
-//                orderAdapter.setList(it)
-                orderAdapter.setList(it.filter { it1 -> it1.item_count.toIntOrNull()!! > 0 })
+                orderAdapter.setList(it.filter { it1 -> it1.purchaser_count - it1.sorting_purchaser_count != 0 })
             }
         })
     }

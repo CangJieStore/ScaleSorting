@@ -20,6 +20,8 @@ class OrderAdapter(type: Int) :
     override fun convert(holder: BaseDataBindingHolder<LayoutOrderItemBinding>, item: OrderInfo) {
         holder.dataBinding?.let {
             it.tvOrderNo.text = (getItemPosition(item) + 1).toString()
+            it.tvUnsort.text = item.purchaser_count.toString()
+            it.tvSorted.text = item.sorting_purchaser_count.toString()
             it.type = actionTYpe
             it.info = item
         }

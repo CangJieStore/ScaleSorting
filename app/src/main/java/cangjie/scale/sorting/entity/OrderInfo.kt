@@ -11,6 +11,7 @@ data class OrderInfo(
     val trade_no: String,
     val item_count: String,
     val sorting_count: String,
-    val purchaser_count: String,
+    val purchaser_count: Int,
+    val sorting_purchaser_count: Int,
     val collect_date: String
 ) : Serializable
