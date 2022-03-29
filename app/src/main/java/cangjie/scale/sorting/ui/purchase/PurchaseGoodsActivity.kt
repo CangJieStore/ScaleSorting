@@ -683,7 +683,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         name.text = "商品名称:" + labelInfo.goodsName
         quantity.text = "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
         batch.text =
-            "分拣货号:" + batchNo + spilt + labelInfo.currentNum + "-" + leftNum.toString()
+            "分拣货号:$batchNo$spilt" + FormatUtil.roundByScale(
+                labelInfo.currentNum.toDouble(),
+                2
+            ) + "-" + FormatUtil.roundByScale(leftNum.toDouble(), 2)
         currentQu.text = "本批数量:" + labelInfo.currentNum
         val customerName = "客户名称:" + labelInfo.customer
         if (customerName.length > 14) {
