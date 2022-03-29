@@ -18,6 +18,7 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.entity.LabelInfo
+import cangjie.scale.sorting.scale.FormatUtil
 import com.gprinter.command.EscCommand
 import com.gprinter.command.LabelCommand
 import java.util.*
@@ -149,7 +150,13 @@ class Printer private constructor() {
             LabelCommand.ROTATION.ROTATION_0,
             LabelCommand.FONTMUL.MUL_1,
             LabelCommand.FONTMUL.MUL_2,
-            "分拣货号:" + batchNo + spilt + labelInfo.currentNum + "-" + leftNum.toString()
+            "分拣货号:$batchNo$spilt" + FormatUtil.roundByScale(
+                labelInfo.currentNum.toDouble(),
+                2
+            ) + "-" + FormatUtil.roundByScale(
+                leftNum.toDouble(),
+                2
+            )
         );
         tsc.addText(
             20,
@@ -361,7 +368,8 @@ class Printer private constructor() {
                                 mActivity?.getString(R.string.str_conn_fail)
                             )
                         }
-                        else -> {}
+                        else -> {
+                        }
                     }
                 }
                 DeviceConnFactoryManager.ACTION_RUN_STATE -> {
@@ -382,7 +390,8 @@ class Printer private constructor() {
                         continuityprint = false
                     }
                 }
-                else -> {}
+                else -> {
+                }
             }
         }
     }

@@ -313,7 +313,8 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             20 -> {
                 if (viewModel.currentPrinterStatus.get() == 2) {
                     viewModel.currentLabel.get()?.let {
-                        Printer.getInstance().printText(it, 550, "0" + labelAdapter.data.size)
+                        val bNo = String.format("%02d", labelAdapter.getSelect() + 1)
+                        Printer.getInstance().printText(it, 550, bNo)
                     }
                 } else {
                     toast("标签打印机未连接或打印机故障")
@@ -640,7 +641,8 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.thisPurchaseNumFiled.set("")
         }
         if (viewModel.currentPrinterStatus.get() == 2) {
-            Printer.getInstance().printText(labelInfo, 550, "0" + labelAdapter.data.size)
+            val bNo = String.format("%02d", labelAdapter.data.size)
+            Printer.getInstance().printText(labelInfo, 550, bNo)
 //            Printer.getInstance().printBitmap(
 //                getBitmap(
 //                    labelInfo,
