@@ -317,7 +317,7 @@
                         android:id="@+id/iv_goods_img"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
-                        android:scaleType="fitXY" />
+                        android:layout_gravity="center_horizontal"/>
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/ry_scale_batch"

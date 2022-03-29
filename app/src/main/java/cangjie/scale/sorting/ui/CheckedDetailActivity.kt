@@ -38,7 +38,7 @@ class CheckedDetailActivity : BaseMvvmActivity<ActivityCheckedDetailBinding, Tas
     }
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mBinding.info = GoodsTaskInfo("******", "****-**-**", 0, 0, 0, null, null)
+        mBinding.info = GoodsTaskInfo("******", "****-**-**", 0, 0, 0,0, null, null)
         orderId = intent.getStringExtra("id").toString()
         viewModel.getProjectByGoods(orderId, "1", 0)
         val layoutManager = GridLayoutManager(this, 28)

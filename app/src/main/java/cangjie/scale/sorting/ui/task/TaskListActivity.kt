@@ -28,7 +28,7 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
 
 
     override fun initActivity(savedInstanceState: Bundle?) {
-        mBinding.info = GoodsTaskInfo("******", "****-**-**", 0, 0, 0, null, null)
+        mBinding.info = GoodsTaskInfo("******", "****-**-**", 0, 0, 0, 0, null, null)
         orderId = intent.getStringExtra("id").toString()
         viewModel.getProjectByGoods(orderId, "0", 0)
         val list = arrayListOf(
@@ -87,7 +87,7 @@ class TaskListActivity : BaseMvvmActivity<ActivityTaskBinding, TaskViewModel>() 
                 mBinding.tvPCount.text = "已分拣客户:" + it.sorting_count
             } else if (it.goods != null) {
                 mBinding.tvUnpCount.text = "待分拣商品:" + it.item_count
-                mBinding.tvPCount.text = "已分拣商品:" + it.sorting_count
+                mBinding.tvPCount.text = "已分拣商品:" + it.receive_count
             }
         })
     }
