@@ -2,9 +2,10 @@
   <library name="Gradle: id.zelory:cekrek:1.0.0@aar">
     <CLASSES>
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/f9349dde30bd896eb276355068f45f48/transformed/jetified-cekrek-1.0.0/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/6aa1d563239b11815522fa18d756bff0/transformed/jetified-cekrek-1.0.0/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6aa1d563239b11815522fa18d756bff0/transformed/jetified-cekrek-1.0.0/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/6aa1d563239b11815522fa18d756bff0/transformed/jetified-cekrek-1.0.0/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8452957a713da3a5975276dc84c25daa/transformed/jetified-cekrek-1.0.0/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/8452957a713da3a5975276dc84c25daa/transformed/jetified-cekrek-1.0.0/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/8452957a713da3a5975276dc84c25daa/transformed/jetified-cekrek-1.0.0/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/id.zelory/cekrek/1.0.0/b2e103333cd1cee391753d0907e0694501ca4d65/cekrek-1.0.0-javadoc.jar!/" />

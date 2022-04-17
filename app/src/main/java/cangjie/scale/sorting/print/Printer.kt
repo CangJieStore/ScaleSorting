@@ -105,12 +105,199 @@ class Printer private constructor() {
             )
         })
     }
-
+    fun printEText(
+        labelInfo: LabelInfo,
+        batchNo: String
+    ) {
+        val spilt = "EDE1-"
+        val leftNum = labelInfo.quantity - labelInfo.deliver_quantity
+        val tsc = LabelCommand()
+        tsc.addSize(width, height)
+        tsc.addGap(gapSize)
+        tsc.addDirection(LabelCommand.DIRECTION.FORWARD, LabelCommand.MIRROR.NORMAL)
+        tsc.addQueryPrinterStatus(LabelCommand.RESPONSE_MODE.ON)
+        tsc.addReference(0, 0)
+        tsc.addDensity(LabelCommand.DENSITY.DNESITY15)
+        tsc.addTear(EscCommand.ENABLE.ON)
+        tsc.addCls()
+        tsc.addText(
+            20,
+            16,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "商品名称:" + labelInfo.goodsName
+        );
+        tsc.addText(
+            20,
+            86,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
+        );
+        tsc.addText(
+            20,
+            156,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "分拣货号:$batchNo$spilt" + FormatUtil.roundByScale(
+                labelInfo.currentNum.toDouble(),
+                2
+            ) + "-" + FormatUtil.roundByScale(
+                leftNum.toDouble(),
+                2
+            )
+        );
+        tsc.addText(
+            20,
+            226,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "本批数量:" + labelInfo.currentNum + labelInfo.unit
+        );
+        tsc.addText(
+            20,
+            296,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "客户名称:" + labelInfo.customer
+        );
+        tsc.addQRCode(
+            400,
+            16,
+            LabelCommand.EEC.LEVEL_L,
+            4,
+            LabelCommand.ROTATION.ROTATION_0,
+            labelInfo.qrcode
+        )
+        tsc.addPrint(1, 1)
+        tsc.addSound(2, 100)
+        ThreadPool.instantiation?.addSerialTask(Runnable {
+            if (DeviceConnFactoryManager.deviceConnFactoryManagers[id] == null ||
+                !DeviceConnFactoryManager.deviceConnFactoryManagers[id]?.connState!!
+            ) {
+                return@Runnable
+            }
+            DeviceConnFactoryManager.deviceConnFactoryManagers[id]?.sendDataImmediately(
+                tsc.command
+            )
+        })
+    }
     fun printText(
+        labelInfo: LabelInfo,
+        nWidth: Int,
+        batchNo: String,
+        currentType: Boolean
+    ) {
+        var spilt = "-"
+        val leftNum = labelInfo.quantity - labelInfo.deliver_quantity
+        if (!currentType) {//计重
+            val percentLeft = ((leftNum / labelInfo.quantity) * 100)
+            if (percentLeft <= 1.0f) {
+                spilt = "E-"
+            }
+        } else {
+            if (leftNum <= 0) {
+                spilt = "E-"
+            }
+        }
+        val tsc = LabelCommand()
+        tsc.addSize(width, height)
+        tsc.addGap(gapSize)
+        tsc.addDirection(LabelCommand.DIRECTION.FORWARD, LabelCommand.MIRROR.NORMAL)
+        tsc.addQueryPrinterStatus(LabelCommand.RESPONSE_MODE.ON)
+        tsc.addReference(0, 0)
+        tsc.addDensity(LabelCommand.DENSITY.DNESITY15)
+        tsc.addTear(EscCommand.ENABLE.ON)
+        tsc.addCls()
+        tsc.addText(
+            20,
+            16,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "商品名称:" + labelInfo.goodsName
+        );
+        tsc.addText(
+            20,
+            86,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "订货数量:" + labelInfo.quantity.toString() + labelInfo.unit
+        );
+        tsc.addText(
+            20,
+            156,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "分拣货号:$batchNo$spilt" + FormatUtil.roundByScale(
+                labelInfo.currentNum.toDouble(),
+                2
+            ) + "-" + FormatUtil.roundByScale(
+                leftNum.toDouble(),
+                2
+            )
+        );
+        tsc.addText(
+            20,
+            226,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "本批数量:" + labelInfo.currentNum + labelInfo.unit
+        );
+        tsc.addText(
+            20,
+            296,
+            LabelCommand.FONTTYPE.SIMPLIFIED_CHINESE,
+            LabelCommand.ROTATION.ROTATION_0,
+            LabelCommand.FONTMUL.MUL_1,
+            LabelCommand.FONTMUL.MUL_2,
+            "客户名称:" + labelInfo.customer
+        );
+        tsc.addQRCode(
+            400,
+            16,
+            LabelCommand.EEC.LEVEL_L,
+            4,
+            LabelCommand.ROTATION.ROTATION_0,
+            labelInfo.qrcode
+        )
+        tsc.addPrint(1, 1)
+        tsc.addSound(2, 100)
+        ThreadPool.instantiation?.addSerialTask(Runnable {
+            if (DeviceConnFactoryManager.deviceConnFactoryManagers[id] == null ||
+                !DeviceConnFactoryManager.deviceConnFactoryManagers[id]?.connState!!
+            ) {
+                return@Runnable
+            }
+            DeviceConnFactoryManager.deviceConnFactoryManagers[id]?.sendDataImmediately(
+                tsc.command
+            )
+        })
+    }
+
+    fun printHistory(
         labelInfo: LabelInfo,
         nWidth: Int,
         batchNo: String
     ) {
+        var isLast = false
         var spilt = "-"
         val leftNum = labelInfo.quantity - labelInfo.deliver_quantity
         if (leftNum <= 0) {

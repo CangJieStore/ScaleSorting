@@ -295,17 +295,17 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //打印标签
             2 -> {
-                if (viewModel.currentBatchFiled.get() == null) {
-                    toast("暂无库存，分拣失败")
-                    return
-                }
-                val surplusQuantity =
-                    (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
-                val currentStock = calAllStock()
-                if (surplusQuantity > currentStock) {
-                    toast("库存不足，分拣失败")
-                    return
-                }
+//                if (viewModel.currentBatchFiled.get() == null) {
+//                    toast("暂无库存，分拣失败")
+//                    return
+//                }
+//                val surplusQuantity =
+//                    (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
+//                val currentStock = calAllStock()
+//                if (surplusQuantity > currentStock) {
+//                    toast("库存不足，分拣失败")
+//                    return
+//                }
                 viewModel.currentInfoFiled.get()?.let {
                     makeNewLabel()
                 }
@@ -314,7 +314,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 if (viewModel.currentPrinterStatus.get() == 2) {
                     viewModel.currentLabel.get()?.let {
                         val bNo = String.format("%02d", labelAdapter.getSelect() + 1)
-                        Printer.getInstance().printText(it, 550, bNo)
+                        Printer.getInstance().printHistory(it, 550, bNo)
                     }
                 } else {
                     toast("标签打印机未连接或打印机故障")
@@ -342,10 +342,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //完成提交
             4 -> {
-                if (viewModel.currentBatchFiled.get() == null) {
-                    toast("暂无库存，分拣失败")
-                    return
-                }
+//                if (viewModel.currentBatchFiled.get() == null) {
+//                    toast("暂无库存，分拣失败")
+//                    return
+//                }
                 if (labelAdapter.data.size == 0) {
                     toast("请先分拣才能完成提交")
                     return
@@ -356,6 +356,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                         da.batchId = viewModel.currentBatchFiled.get()?.batch_id.toString()
                     }
                 }
+                checkLastLabel()
                 bundle.putSerializable("info", currentPurchaseLabelInfo)
                 SubmitDialogFragment.newInstance(bundle)?.setAction(object :
                     SubmitDialogFragment.SubmitAction {
@@ -406,6 +407,31 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
+    private fun checkLastLabel() {
+        if (currentPurchaseLabelInfo.size > 0) {
+            val lastItem = currentPurchaseLabelInfo[currentPurchaseLabelInfo.size - 1]
+            val leftNum = lastItem.quantity - lastItem.deliver_quantity
+            var isLast = false
+            if (!viewModel.currentWeightTypeFiled.get()) {//计重
+                val percentLeft = ((leftNum / lastItem.quantity) * 100)
+                if (percentLeft <= 1.0f) {
+                    isLast = true
+                }
+            } else {
+                if (leftNum <= 0) {
+                    isLast = true
+                }
+            }
+            if (!isLast) {
+                if (viewModel.currentPrinterStatus.get() == 2) {
+                    val bNo = String.format("%02d", labelAdapter.data.size)
+                    Printer.getInstance()
+                        .printEText(lastItem,  bNo)
+                }
+            }
+        }
+    }
+
     private fun returnZero() {
         try {
             SerialPortManager.instance().send(ByteUtil.hexStr2bytes("5A03"))
@@ -418,7 +444,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun subscribeModel(model: PurchaseViewModel) {
         super.subscribeModel(model)
-        model.getPurchaseData().observe(this, {
+        model.getPurchaseData().observe(this) {
             purchaseAdapter.setList(it.filter { value -> value.deliver_quantity?.toFloat() ?: 0f == 0f })
             sortedAdapter.setList(it.filter { value -> value.deliver_quantity?.toFloat() ?: 0f > 0f })
             if (purchaseAdapter.data.size > 0) {
@@ -437,16 +463,16 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 selectSortedCurrent(0)
             }
 
-        })
-        model.getStockData().observe(this, {
+        }
+        model.getStockData().observe(this) {
             stockAdapter.setList(it)
             if (it.size > 0) {
                 selectBatchCurrent(0)
             }
-        })
-        model.getLabelData().observe(this, {
+        }
+        model.getLabelData().observe(this) {
             labelAdapter.setList(it)
-        })
+        }
     }
 
     override fun initImmersionBar() {
@@ -557,7 +583,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 }
             }
         } else {
-            viewModel.currentWeightValue.set("00.00")
+            viewModel.currentWeightValue.set("0.00")
         }
     }
 
@@ -642,13 +668,8 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
         if (viewModel.currentPrinterStatus.get() == 2) {
             val bNo = String.format("%02d", labelAdapter.data.size)
-            Printer.getInstance().printText(labelInfo, 550, bNo)
-//            Printer.getInstance().printBitmap(
-//                getBitmap(
-//                    labelInfo,
-//                    "0" + labelAdapter.data.size
-//                ), 550
-//            )
+            Printer.getInstance()
+                .printText(labelInfo, 550, bNo, viewModel.currentWeightTypeFiled.get())
         }
     }
 
