@@ -295,17 +295,17 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //打印标签
             2 -> {
-//                if (viewModel.currentBatchFiled.get() == null) {
-//                    toast("暂无库存，分拣失败")
-//                    return
-//                }
-//                val surplusQuantity =
-//                    (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
-//                val currentStock = calAllStock()
-//                if (surplusQuantity > currentStock) {
-//                    toast("库存不足，分拣失败")
-//                    return
-//                }
+                if (viewModel.currentBatchFiled.get() == null) {
+                    toast("暂无库存，分拣失败")
+                    return
+                }
+                val surplusQuantity =
+                    (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
+                val currentStock = calAllStock()
+                if (surplusQuantity > currentStock) {
+                    toast("库存不足，分拣失败")
+                    return
+                }
                 viewModel.currentInfoFiled.get()?.let {
                     makeNewLabel()
                 }
@@ -342,10 +342,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //完成提交
             4 -> {
-//                if (viewModel.currentBatchFiled.get() == null) {
-//                    toast("暂无库存，分拣失败")
-//                    return
-//                }
+                if (viewModel.currentBatchFiled.get() == null) {
+                    toast("暂无库存，分拣失败")
+                    return
+                }
                 if (labelAdapter.data.size == 0) {
                     toast("请先分拣才能完成提交")
                     return
