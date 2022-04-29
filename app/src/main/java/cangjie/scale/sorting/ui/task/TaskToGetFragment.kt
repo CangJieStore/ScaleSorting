@@ -126,19 +126,19 @@ class TaskToGetFragment : BaseMvvmFragment<FragmentTaskItemBinding, TaskViewMode
     }
 
     private fun changeType(type: Int) {
-        taskAdapter.data.clear()
+//        taskAdapter.data.clear()
         viewModel.getProjectByGoods(orderId, "0", type)
     }
 
     override fun subscribeModel(model: TaskViewModel) {
         super.subscribeModel(model)
-        model.getTaskData().observe(this, {
+        model.getTaskData().observe(this) {
             if (it.purchaser != null) {
                 taskAdapter.setList(it.purchaser)
             } else if (it.goods != null) {
                 taskAdapter.setList(it.goods)
             }
-        })
+        }
     }
 
     override fun handleEvent(msg: MsgEvent) {

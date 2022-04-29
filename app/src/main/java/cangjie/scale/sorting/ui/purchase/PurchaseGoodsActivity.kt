@@ -508,9 +508,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
         if (isWeight == 0) {
             viewModel.scaleTypeFiled.set("计重")
+            mBinding.btnRemove.visibility=View.VISIBLE
             viewModel.currentWeightTypeFiled.set(false)
         } else {
             viewModel.scaleTypeFiled.set("计数")
+            mBinding.btnRemove.visibility=View.GONE
             viewModel.currentWeightTypeFiled.set(true)
         }
     }

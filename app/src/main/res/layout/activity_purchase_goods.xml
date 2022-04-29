@@ -317,7 +317,7 @@
                         android:id="@+id/iv_goods_img"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/ry_scale_batch"
@@ -469,14 +469,36 @@
                                 android:textSize="@dimen/sp18" />
                         </androidx.appcompat.widget.LinearLayoutCompat>
 
-
-                        <androidx.appcompat.widget.AppCompatTextView
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp5"
-                            android:text="@{@string/str_surplus_num+purchaseModel.surplusNumFiled+purchaseModel.currentUnitFiled}"
-                            android:textColor="@color/black_3"
-                            android:textSize="@dimen/sp18" />
+                            android:orientation="horizontal">
+
+                            <androidx.appcompat.widget.AppCompatTextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:text="@{@string/str_surplus_num+purchaseModel.surplusNumFiled+purchaseModel.currentUnitFiled}"
+                                android:textColor="@color/black_3"
+                                android:textSize="@dimen/sp18" />
+
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/btn_remove"
+                                android:layout_width="wrap_content"
+                                android:layout_height="35dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="@dimen/dp10"
+                                android:background="@drawable/shape_clear_btn"
+                                android:paddingStart="10dp"
+                                android:paddingEnd="10dp"
+                                android:text="手动去皮"
+                                android:visibility="gone"
+                                android:textColor="@color/white"
+                                android:textSize="@dimen/sp16" />
+                        </RelativeLayout>
+
                     </androidx.appcompat.widget.LinearLayoutCompat>
 
                     <FrameLayout
@@ -484,7 +506,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="@dimen/dp5"
                         android:paddingStart="@dimen/dp15"
-                        android:paddingTop="@dimen/dp15"
+                        android:paddingTop="@dimen/dp10"
                         android:paddingEnd="@dimen/dp15">
 
                         <androidx.appcompat.widget.LinearLayoutCompat
