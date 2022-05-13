@@ -494,6 +494,7 @@
                                 android:paddingStart="10dp"
                                 android:paddingEnd="10dp"
                                 android:text="手动去皮"
+                                binding:onClickCommand="@{purchaseModel.removeShellCommand}"
                                 android:visibility="gone"
                                 android:textColor="@color/white"
                                 android:textSize="@dimen/sp16" />

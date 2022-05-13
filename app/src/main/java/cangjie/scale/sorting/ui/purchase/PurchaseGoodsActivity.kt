@@ -70,6 +70,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     private var taskItemInfo: TaskGoodsItem? = null
     private var fromType = 0
     private val currentPurchaseLabelInfo = arrayListOf<LabelInfo>()
+    private var currentShell: Float = 0.00F
 
 
     override fun initVariableId(): Int = BR.purchaseModel
@@ -403,10 +404,20 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 tabSelect(0)
                 viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
             }
+            119->{
+                showShell()
+            }
 
         }
     }
-
+    private fun showShell() {
+        EditPriceDialogFragment("手动去皮", "请输入皮重...").setContentCallback(object :
+            EditPriceDialogFragment.ContentCallback {
+            override fun content(content: String?) {
+                currentShell = if (content.isNullOrEmpty()) 0f else content.toFloat()
+            }
+        }).show(supportFragmentManager)
+    }
     private fun checkLastLabel() {
         if (currentPurchaseLabelInfo.size > 0) {
             val lastItem = currentPurchaseLabelInfo[currentPurchaseLabelInfo.size - 1]
@@ -594,7 +605,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
      */
     private fun formatUnit(currentWeight: String): String {
         return (FormatUtil.roundByScale(
-            currentWeight.toDouble() * 2,
+            currentWeight.toDouble() * 2-currentShell,
             2
         )).toString()
     }

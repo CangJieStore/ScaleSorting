@@ -89,7 +89,11 @@ class PurchaseViewModel : BaseScaleViewModel() {
             action(MsgEvent(6))
         }
     })
-
+    var removeShellCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
+        override fun call() {
+            action(MsgEvent(119))
+        }
+    })
     fun getUnPurchaseTask(taskType: Int, taskId: String, pId: String) {
         loading("")
         val params = mutableMapOf<String, Any>()
