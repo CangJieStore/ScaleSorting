@@ -100,6 +100,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.currentType.set(0)
             viewModel.currentPurchaseGoodsFiled.set(it.name)
             viewModel.getUnPurchaseTask(0, it.id, "")
+            viewModel.getAllBatch(it.goods_id)
             mBinding.ivGoodsImg.load(it.picture)
             calType(it.unit)
             viewModel.currentUnitFiled.set(" " + it.unit)
@@ -303,7 +304,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 val surplusQuantity =
                     (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
                 val currentStock = calAllStock()
-                if (surplusQuantity > currentStock) {
+                if (surplusQuantity > currentStock*1.1) {
                     toast("库存不足，分拣失败")
                     return
                 }
@@ -460,7 +461,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             sortedAdapter.setList(it.filter { value -> value.deliver_quantity?.toFloat() ?: 0f > 0f })
             if (purchaseAdapter.data.size > 0) {
                 selectCurrent(0)
-                viewModel.getAllBatch(purchaseAdapter.data[0].item_id)
             } else {
                 viewModel.currentGoodsReceiveNumField.set("0.00")
                 viewModel.surplusNumFiled.set("0.00")

@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.licheedev:android-serialport:2.1.2@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/0fe038e091169d25def3dc2d48ead542/transformed/jetified-android-serialport-2.1.2/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0fe038e091169d25def3dc2d48ead542/transformed/jetified-android-serialport-2.1.2/AndroidManifest.xml" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/0fe038e091169d25def3dc2d48ead542/transformed/jetified-android-serialport-2.1.2/res" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a60e21505d2fbe259ed5330782530f35/transformed/jetified-android-serialport-2.1.2/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a60e21505d2fbe259ed5330782530f35/transformed/jetified-android-serialport-2.1.2/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a60e21505d2fbe259ed5330782530f35/transformed/jetified-android-serialport-2.1.2/AndroidManifest.xml" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.licheedev/android-serialport/2.1.2/83470a2faf66725c6944f4c602b3985b26dda6b2/android-serialport-2.1.2-javadoc.jar!/" />

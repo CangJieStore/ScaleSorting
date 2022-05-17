@@ -4,9 +4,10 @@
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/3b46a1161e3ba73c30f6b6e3a9b65368/transformed/jetified-mmkv-1.0.23/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/4b15c87e2e8d10a15a41012848dd5eed/transformed/jetified-mmkv-1.0.23/res" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fbfcb0f5f457999223a8006231129509/transformed/jetified-mmkv-1.0.23/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/cf9678df37bb75b29aa594866d657bab/transformed/jetified-mmkv-1.0.23/AndroidManifest.xml" />
       <root url="file://$USER_HOME$/.gradle/caches/transforms-3/cf9678df37bb75b29aa594866d657bab/transformed/jetified-mmkv-1.0.23/res" />
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/cf9678df37bb75b29aa594866d657bab/transformed/jetified-mmkv-1.0.23/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a02ae7d0372c5d574314ce008a79973c/transformed/jetified-mmkv-1.0.23/res" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/a02ae7d0372c5d574314ce008a79973c/transformed/jetified-mmkv-1.0.23/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/a02ae7d0372c5d574314ce008a79973c/transformed/jetified-mmkv-1.0.23/jars/classes.jar!/" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.tencent/mmkv/1.0.23/d0061c122382f22f22d90fce06614ff586162d26/mmkv-1.0.23-javadoc.jar!/" />

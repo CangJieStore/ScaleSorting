@@ -1,9 +1,9 @@
 <component name="libraryTable">
   <library name="Gradle: com.wdullaer:materialdatetimepicker:4.2.3@aar">
     <CLASSES>
-      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/fa920df8a2b466884149c48e315aa588/transformed/jetified-materialdatetimepicker-4.2.3/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fa920df8a2b466884149c48e315aa588/transformed/jetified-materialdatetimepicker-4.2.3/res" />
-      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/fa920df8a2b466884149c48e315aa588/transformed/jetified-materialdatetimepicker-4.2.3/AndroidManifest.xml" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/64b2816ddf5e9f58d7093fa22d94f83b/transformed/jetified-materialdatetimepicker-4.2.3/AndroidManifest.xml" />
+      <root url="jar://$USER_HOME$/.gradle/caches/transforms-3/64b2816ddf5e9f58d7093fa22d94f83b/transformed/jetified-materialdatetimepicker-4.2.3/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.gradle/caches/transforms-3/64b2816ddf5e9f58d7093fa22d94f83b/transformed/jetified-materialdatetimepicker-4.2.3/res" />
     </CLASSES>
     <JAVADOC>
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.wdullaer/materialdatetimepicker/4.2.3/81fcce850de4868eadb323102669eb7be5c2802/materialdatetimepicker-4.2.3-javadoc.jar!/" />

@@ -15,7 +15,7 @@ class StockAdapter :
     override fun convert(holder: BaseDataBindingHolder<LayoutStockItemBinding>, item: StockInfo) {
         holder.dataBinding?.let {
             it.tvBatchNo.text = item.trade_no
-            it.tvSpec.text = if (item.spec.isEmpty()) "/" else item.spec
+            it.tvSpec.text = item.spec.ifEmpty { "/" }
             it.tvStockUnit.text = item.unit
             it.tvStockQuantity.text = item.stock.toString()
             it.tvBuyDate.text = item.collect_date
