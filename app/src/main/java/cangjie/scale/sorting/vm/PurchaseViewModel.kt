@@ -109,7 +109,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
 
     fun getAllBatch(itemId: String) {
         loading("")
-        val params = mutableMapOf<String, Any>("goods_id" to itemId)
+        val params = mutableMapOf<String, Any>("item_id" to itemId)
         postWithToken<MutableList<StockInfo>>(Url.purchase_batch, params, 200)
     }
 

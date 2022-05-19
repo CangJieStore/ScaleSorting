@@ -1,25 +1,25 @@
 package cangjie.scale.sorting.ui
 
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.DialogFragment
 import cangjie.scale.sorting.R
-import cangjie.scale.sorting.adapter.SubmitAdapter
 import cangjie.scale.sorting.databinding.DialogSubmitBinding
 import cangjie.scale.sorting.entity.LabelInfo
-import cangjie.scale.sorting.entity.SubmitInfo
 import cangjie.scale.sorting.ui.purchase.LabelAdapter
 import com.fondesa.recyclerviewdivider.dividerBuilder
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
 import kotlinx.android.synthetic.main.dialog_submit.*
+import java.util.stream.Collectors
 
 /**
  * @author nvwa@cangjie

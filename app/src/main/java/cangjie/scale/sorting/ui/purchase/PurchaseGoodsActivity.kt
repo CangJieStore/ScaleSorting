@@ -1,9 +1,5 @@
 package cangjie.scale.sorting.ui.purchase
 
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
@@ -22,7 +18,10 @@ import cangjie.scale.sorting.entity.LabelInfo
 import cangjie.scale.sorting.entity.PurchaseInfo
 import cangjie.scale.sorting.entity.TaskGoodsItem
 import cangjie.scale.sorting.print.Printer
-import cangjie.scale.sorting.scale.*
+import cangjie.scale.sorting.scale.ByteUtil
+import cangjie.scale.sorting.scale.DeviceFilter
+import cangjie.scale.sorting.scale.FormatUtil
+import cangjie.scale.sorting.scale.SerialPortManager
 import cangjie.scale.sorting.scale.message.IMessage
 import cangjie.scale.sorting.scale.message.ReadMessage
 import cangjie.scale.sorting.ui.SubmitDialogFragment
@@ -35,6 +34,7 @@ import com.cangjie.frame.kit.CodeUtils
 import com.cangjie.frame.kit.lib.ToastUtils
 import com.cangjie.frame.kit.show
 import com.fondesa.recyclerviewdivider.dividerBuilder
+import com.google.gson.Gson
 import com.gyf.immersionbar.BarHide
 import com.gyf.immersionbar.ktx.immersionBar
 import id.zelory.cekrek.extension.cekrekToBitmap
@@ -71,6 +71,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     private var fromType = 0
     private val currentPurchaseLabelInfo = arrayListOf<LabelInfo>()
     private var currentShell: Float = 0.00F
+    private var batchMap: MutableMap<String, Float> = mutableMapOf()
 
 
     override fun initVariableId(): Int = BR.purchaseModel
@@ -100,7 +101,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.currentType.set(0)
             viewModel.currentPurchaseGoodsFiled.set(it.name)
             viewModel.getUnPurchaseTask(0, it.id, "")
-            viewModel.getAllBatch(it.goods_id)
             mBinding.ivGoodsImg.load(it.picture)
             calType(it.unit)
             viewModel.currentUnitFiled.set(" " + it.unit)
@@ -206,6 +206,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
      */
     private fun selectCurrent(pos: Int) {
         refreshData(pos)
+        returnZero()
         val indexData = purchaseAdapter.data[pos]
         viewModel.currentInfoFiled.set(indexData)
         if (labelAdapter.data.size > 0) {
@@ -304,7 +305,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 val surplusQuantity =
                     (viewModel.thisPurchaseNumFiled.get()?.toFloat() ?: 0f) + calCurrentSurplusNum()
                 val currentStock = calAllStock()
-                if (surplusQuantity > currentStock*1.1) {
+                if (surplusQuantity > currentStock * 1.1) {
                     toast("库存不足，分拣失败")
                     return
                 }
@@ -330,6 +331,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //重新分拣
             3 -> {
+                batchMap.clear()
                 if (viewModel.currentBatchFiled.get() == null) {
                     toast("暂无库存，分拣失败")
                     return
@@ -353,21 +355,18 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                     return
                 }
                 val bundle = Bundle()
-                currentPurchaseLabelInfo.forEach { da ->
-                    run {
-                        da.batchId = viewModel.currentBatchFiled.get()?.batch_id.toString()
-                    }
-                }
                 checkLastLabel()
                 bundle.putSerializable("info", currentPurchaseLabelInfo)
                 SubmitDialogFragment.newInstance(bundle)?.setAction(object :
                     SubmitDialogFragment.SubmitAction {
                     override fun submit(quantity: Float) {
-                        viewModel.submit(
-                            viewModel.currentInfoFiled.get()?.item_id.toString(),
-                            viewModel.currentBatchFiled.get()?.batch_id.toString(),
-                            quantity.toString()
-                        )
+                        batchMap.forEach {
+                            viewModel.submit(
+                                viewModel.currentInfoFiled.get()?.item_id.toString(),
+                                it.key,
+                                it.value.toString()
+                            )
+                        }
                     }
                 })?.show(supportFragmentManager, "submit")
             }
@@ -392,6 +391,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 toast("提交成功")
                 currentPurchaseLabelInfo.clear()
                 labelAdapter.data.clear()
+                batchMap.clear()
                 labelAdapter.notifyDataSetChanged()
                 viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
 
@@ -405,12 +405,13 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 tabSelect(0)
                 viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
             }
-            119->{
+            119 -> {
                 showShell()
             }
 
         }
     }
+
     private fun showShell() {
         EditPriceDialogFragment("手动去皮", "请输入皮重...").setContentCallback(object :
             EditPriceDialogFragment.ContentCallback {
@@ -419,6 +420,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
         }).show(supportFragmentManager)
     }
+
     private fun checkLastLabel() {
         if (currentPurchaseLabelInfo.size > 0) {
             val lastItem = currentPurchaseLabelInfo[currentPurchaseLabelInfo.size - 1]
@@ -438,7 +440,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 if (viewModel.currentPrinterStatus.get() == 2) {
                     val bNo = String.format("%02d", labelAdapter.data.size)
                     Printer.getInstance()
-                        .printEText(lastItem,  bNo)
+                        .printEText(lastItem, bNo)
                 }
             }
         }
@@ -461,6 +463,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             sortedAdapter.setList(it.filter { value -> value.deliver_quantity?.toFloat() ?: 0f > 0f })
             if (purchaseAdapter.data.size > 0) {
                 selectCurrent(0)
+                viewModel.getAllBatch(purchaseAdapter.data[0].item_id)
             } else {
                 viewModel.currentGoodsReceiveNumField.set("0.00")
                 viewModel.surplusNumFiled.set("0.00")
@@ -479,6 +482,12 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             stockAdapter.setList(it)
             if (it.size > 0) {
                 selectBatchCurrent(0)
+            }
+            batchMap.clear()
+            it.forEach { batch ->
+                run {
+                    batchMap[batch.batch_id] = 0f
+                }
             }
         }
         model.getLabelData().observe(this) {
@@ -519,11 +528,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
         if (isWeight == 0) {
             viewModel.scaleTypeFiled.set("计重")
-            mBinding.btnRemove.visibility=View.VISIBLE
+            mBinding.btnRemove.visibility = View.VISIBLE
             viewModel.currentWeightTypeFiled.set(false)
         } else {
             viewModel.scaleTypeFiled.set("计数")
-            mBinding.btnRemove.visibility=View.GONE
+            mBinding.btnRemove.visibility = View.GONE
             viewModel.currentWeightTypeFiled.set(true)
         }
     }
@@ -605,7 +614,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
      */
     private fun formatUnit(currentWeight: String): String {
         return (FormatUtil.roundByScale(
-            currentWeight.toDouble() * 2-currentShell,
+            currentWeight.toDouble() * 2 - currentShell,
             2
         )).toString()
     }
@@ -660,8 +669,13 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             surplusQuantity,
             viewModel.currentInfoFiled.get()?.purchaser,
             viewModel.currentUnitFiled.get(),
-            viewModel.currentBatchFiled.get()?.qrcode.toString()
+            viewModel.currentBatchFiled.get()?.qrcode.toString(),
+            batchId = viewModel.currentBatchFiled.get()?.batch_id.toString()
         )
+        val lastBatchNum = batchMap[labelInfo.batchId]
+        lastBatchNum?.let {
+            batchMap[labelInfo.batchId] = it + labelInfo.currentNum
+        }
         currentPurchaseLabelInfo.add(labelInfo)
         labelAdapter.setList(currentPurchaseLabelInfo)
         viewModel.currentGoodsReceiveNumField.set(
