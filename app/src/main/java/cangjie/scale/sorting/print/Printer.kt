@@ -105,6 +105,7 @@ class Printer private constructor() {
             )
         })
     }
+
     fun printEText(
         labelInfo: LabelInfo,
         batchNo: String
@@ -192,6 +193,7 @@ class Printer private constructor() {
             )
         })
     }
+
     fun printText(
         labelInfo: LabelInfo,
         nWidth: Int,
@@ -642,7 +644,11 @@ class Printer private constructor() {
     }
 
     fun close() {
-        this.mActivity?.unregisterReceiver(receiver)
+        try {
+            this.mActivity?.unregisterReceiver(receiver)
+        } catch (e: Exception) {
+
+        }
         if (usbManager != null) {
             usbManager = null
         }

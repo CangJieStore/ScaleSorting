@@ -6,6 +6,7 @@ import android.os.IBinder
 import android.provider.MediaStore
 import cangjie.scale.sorting.base.http.Url
 import cangjie.scale.sorting.entity.MessageEvent
+import cangjie.scale.sorting.scale.SerialPortManager
 import com.blankj.utilcode.util.ViewUtils.runOnUiThread
 import com.cangjie.frame.core.db.CangJie
 import com.cangjie.frame.kit.lib.ToastUtils
@@ -62,7 +63,7 @@ class InitService : Service(), CoroutineScope by MainScope() {
             EventBus.getDefault().unregister(this)
         }
         if (CangJie.getString("token", "").isNotEmpty()) {
-//            SerialPortUtilForScale.Instance().CloseSerialPort()
+            SerialPortManager.instance().close()
             exitProcess(0)
         }
     }

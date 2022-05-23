@@ -71,14 +71,17 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
     private var fromType = 0
     private val currentPurchaseLabelInfo = arrayListOf<LabelInfo>()
     private var currentShell: Float = 0.00F
-    private var batchMap: MutableMap<String, Float> = mutableMapOf()
+    private var weightValue = 0.0
+    private val submiMap = mutableMapOf<String, Float>()
 
 
     override fun initVariableId(): Int = BR.purchaseModel
 
     override fun onStart() {
         super.onStart()
-        initWeight()
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this)
+        }
         initPrinter()
     }
 
@@ -148,6 +151,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
         })
         purchaseAdapter.setOnItemClickListener { _, _, position ->
+            if (weightValue < 0.0) {
+                returnZero()
+            }
             selectCurrent(position)
         }
         stockAdapter.setOnItemClickListener { _, _, position ->
@@ -331,7 +337,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             //重新分拣
             3 -> {
-                batchMap.clear()
+                submiMap.clear()
                 if (viewModel.currentBatchFiled.get() == null) {
                     toast("暂无库存，分拣失败")
                     return
@@ -360,7 +366,22 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                 SubmitDialogFragment.newInstance(bundle)?.setAction(object :
                     SubmitDialogFragment.SubmitAction {
                     override fun submit(quantity: Float) {
-                        batchMap.forEach {
+                        stockAdapter.data.forEach {
+                            val key = it.batch_id
+                            var weight = 0.0f
+                            currentPurchaseLabelInfo.forEach { label ->
+                                run {
+                                    if (key == label.batchId) {
+                                        weight += label.currentNum
+                                    }
+                                }
+                            }
+                            if (weight > 0f) {
+                                submiMap[key] = weight
+                            }
+                        }
+                        Log.e("batch", Gson().toJson(submiMap))
+                        submiMap.forEach {
                             viewModel.submit(
                                 viewModel.currentInfoFiled.get()?.item_id.toString(),
                                 it.key,
@@ -370,36 +391,9 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
                     }
                 })?.show(supportFragmentManager, "submit")
             }
-            //提交完成
-            5 -> {
-                val labelList = arrayListOf<OrderLabel>()
-                for (item in currentPurchaseLabelInfo) {
-                    val itemLabel = OrderLabel(
-                        itemId = viewModel.currentInfoFiled.get()?.item_id.toString(),
-                        goodsName = item.goodsName.toString(),
-                        quantity = item.quantity,
-                        currentNum = item.currentNum,
-                        deliver_quantity = item.deliver_quantity,
-                        customer = item.customer.toString(),
-                        unit = item.unit.toString(),
-                        qrcode = item.qrcode,
-                        batchId = item.batchId
-                    )
-                    labelList.add(itemLabel)
-                }
-                viewModel.add(labelList)
-                toast("提交成功")
-                currentPurchaseLabelInfo.clear()
-                labelAdapter.data.clear()
-                batchMap.clear()
-                labelAdapter.notifyDataSetChanged()
-                viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
-
-            }
             //置零
             6 -> {
                 returnZero()
-//                updateWeight()
             }
             300 -> {
                 tabSelect(0)
@@ -448,6 +442,7 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     private fun returnZero() {
         try {
+            currentShell = 0f
             SerialPortManager.instance().send(ByteUtil.hexStr2bytes("5A03"))
         } catch (e: Exception) {
             ViewUtils.runOnUiThread {
@@ -458,12 +453,46 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
 
     override fun subscribeModel(model: PurchaseViewModel) {
         super.subscribeModel(model)
+        model.getFillData().observe(this) {
+            it.forEach { info ->
+                run {
+                    submiMap.remove(info.batch_id)
+                }
+            }
+            if (submiMap.isEmpty()) {
+                val labelList = arrayListOf<OrderLabel>()
+                for (item in currentPurchaseLabelInfo) {
+                    val itemLabel = OrderLabel(
+                        itemId = viewModel.currentInfoFiled.get()?.item_id.toString(),
+                        goodsName = item.goodsName.toString(),
+                        quantity = item.quantity,
+                        currentNum = item.currentNum,
+                        deliver_quantity = item.deliver_quantity,
+                        customer = item.customer.toString(),
+                        unit = item.unit.toString(),
+                        qrcode = item.qrcode,
+                        batchId = item.batchId
+                    )
+                    labelList.add(itemLabel)
+                }
+                viewModel.add(labelList)
+                toast("提交成功")
+                currentPurchaseLabelInfo.clear()
+                labelAdapter.data.clear()
+                labelAdapter.notifyDataSetChanged()
+                viewModel.getUnPurchaseTask(0, taskItemInfo!!.id, "")
+            }
+        }
         model.getPurchaseData().observe(this) {
             purchaseAdapter.setList(it.filter { value -> value.deliver_quantity?.toFloat() ?: 0f == 0f })
             sortedAdapter.setList(it.filter { value -> value.deliver_quantity?.toFloat() ?: 0f > 0f })
             if (purchaseAdapter.data.size > 0) {
                 selectCurrent(0)
                 viewModel.getAllBatch(purchaseAdapter.data[0].item_id)
+                submiMap.clear()
+                if (weightValue < 0.0) {
+                    returnZero()
+                }
             } else {
                 viewModel.currentGoodsReceiveNumField.set("0.00")
                 viewModel.surplusNumFiled.set("0.00")
@@ -482,12 +511,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             stockAdapter.setList(it)
             if (it.size > 0) {
                 selectBatchCurrent(0)
-            }
-            batchMap.clear()
-            it.forEach { batch ->
-                run {
-                    batchMap[batch.batch_id] = 0f
-                }
             }
         }
         model.getLabelData().observe(this) {
@@ -537,34 +560,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
         }
     }
 
-    /** 设备过滤器 */
-    private val deviceFilter = object : DeviceFilter {
-        override fun allow(device: String): Boolean {
-            // 不允许打开usb的串口
-            return !device.contains("usb", true)
-        }
-    }
-
-    private fun initWeight() {
-        if (!EventBus.getDefault().isRegistered(this)) {
-            EventBus.getDefault().register(this)
-        }
-        try {
-            viewModel.viewModelScope.launch {
-                val opened = withContext(Dispatchers.IO) {
-                    SerialPortManager.instance().open(9600, deviceFilter)
-                }
-                if (!opened) {
-                    ToastUtils.show("初始化称重主板错误！")
-                }
-            }
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
-            ViewUtils.runOnUiThread {
-                ToastUtils.show("初始化称重主板错误！")
-            }
-        }
-    }
 
     /**
      * 初始化打印机
@@ -597,6 +592,11 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             }
             val strWeight = sb.toString()
             if (strWeight.isNotEmpty()) {
+                var cuWeight = strWeight.toDouble() * 2
+                if (cuWeight < 0) {
+                    cuWeight = 0.0
+                }
+                weightValue = cuWeight - currentShell
                 if (!viewModel.currentWeightTypeFiled.get()) {
                     viewModel.currentWeightValue.set(formatUnit(strWeight))
                     viewModel.thisPurchaseNumFiled.set(formatUnit(strWeight))
@@ -624,7 +624,6 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             EventBus.getDefault().unregister(this)
         }
         Printer.getInstance().close()
-        SerialPortManager.instance().close()
         super.onDestroy()
     }
 
@@ -672,10 +671,10 @@ class PurchaseGoodsActivity : BaseMvvmActivity<ActivityPurchaseGoodsBinding, Pur
             viewModel.currentBatchFiled.get()?.qrcode.toString(),
             batchId = viewModel.currentBatchFiled.get()?.batch_id.toString()
         )
-        val lastBatchNum = batchMap[labelInfo.batchId]
-        lastBatchNum?.let {
-            batchMap[labelInfo.batchId] = it + labelInfo.currentNum
-        }
+//        val lastBatchNum = batchMap[labelInfo.batchId]
+//        lastBatchNum?.let {
+//            batchMap[labelInfo.batchId] = it + labelInfo.currentNum
+//        }
         currentPurchaseLabelInfo.add(labelInfo)
         labelAdapter.setList(currentPurchaseLabelInfo)
         viewModel.currentGoodsReceiveNumField.set(

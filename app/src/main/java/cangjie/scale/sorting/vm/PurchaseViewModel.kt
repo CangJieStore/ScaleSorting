@@ -10,10 +10,7 @@ import cangjie.scale.sorting.base.http.Url
 import cangjie.scale.sorting.db.AppDatabase
 import cangjie.scale.sorting.db.OrderLabel
 import cangjie.scale.sorting.db.SubmitRepository
-import cangjie.scale.sorting.entity.LabelInfo
-import cangjie.scale.sorting.entity.MessageEvent
-import cangjie.scale.sorting.entity.PurchaseInfo
-import cangjie.scale.sorting.entity.StockInfo
+import cangjie.scale.sorting.entity.*
 import com.cangjie.frame.core.binding.BindingAction
 import com.cangjie.frame.core.binding.BindingCommand
 import com.cangjie.frame.core.event.MsgEvent
@@ -47,6 +44,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
     var currentPrinterStatus = ObservableField(0)
     var currentLabel = ObservableField<LabelInfo>()
     private val bookRepository: SubmitRepository
+    private val fillResultData = MutableLiveData<MutableList<FillResultInfo>>()
 
 
     var finishCommand: BindingCommand<Any> = BindingCommand(object : BindingAction {
@@ -94,6 +92,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
             action(MsgEvent(119))
         }
     })
+
     fun getUnPurchaseTask(taskType: Int, taskId: String, pId: String) {
         loading("")
         val params = mutableMapOf<String, Any>()
@@ -127,7 +126,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
             "quantity" to quantity,
             "type" to "goods"
         )
-        postWithToken<String>(Url.submit_sorting, params, 201)
+        postWithToken<MutableList<FillResultInfo>>(Url.submit_sorting, params, 201)
     }
 
     fun again(id: String) {
@@ -147,7 +146,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
                 stockLiveData.postValue(result as MutableList<StockInfo>)
             }
             201 -> {
-                action(MsgEvent(5))
+                fillResultData.postValue(result as MutableList<FillResultInfo>)
             }
             204 -> {
                 delete(currentInfoFiled.get()?.item_id.toString())
@@ -195,6 +194,7 @@ class PurchaseViewModel : BaseScaleViewModel() {
     fun getPurchaseData() = purchaseLiveData
     fun getStockData() = stockLiveData
     fun getLabelData() = labelLiveData
+    fun getFillData() = fillResultData
     override fun error(errorCode: Int, errorMsg: String?) {
         super.error(errorCode, errorMsg)
         dismissLoading()

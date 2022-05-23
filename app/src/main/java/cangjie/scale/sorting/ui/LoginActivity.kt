@@ -5,6 +5,7 @@ import android.os.Bundle
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.base.getLocalVersionName
 import cangjie.scale.sorting.databinding.ActivityLoginBinding
+import cangjie.scale.sorting.scale.SerialPortManager
 import cangjie.scale.sorting.vm.ScaleViewModel
 import com.cangjie.frame.core.BaseMvvmActivity
 import com.cangjie.frame.core.event.MsgEvent
@@ -41,6 +42,7 @@ class LoginActivity : BaseMvvmActivity<ActivityLoginBinding, ScaleViewModel>() {
 
     override fun onBackPressed() {
         super.onBackPressed()
+        SerialPortManager.instance().close()
         exitProcess(0)
     }
 

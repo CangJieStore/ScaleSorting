@@ -1,8 +1,12 @@
 package cangjie.scale.sorting.base
 
 import android.app.Application
+import androidx.lifecycle.viewModelScope
 import cangjie.scale.sorting.R
 import cangjie.scale.sorting.base.http.HttpManager
+import cangjie.scale.sorting.scale.DeviceFilter
+import cangjie.scale.sorting.scale.SerialPortManager
+import com.blankj.utilcode.util.ViewUtils
 import com.cangjie.frame.core.db.CangJie
 import com.cangjie.frame.kit.OkHttp3Connection
 import com.cangjie.frame.kit.lib.ToastUtils
@@ -12,6 +16,7 @@ import com.cangjie.frame.kit.update.model.UpdateConfig
 import com.cangjie.frame.kit.update.utils.AppUpdateUtils
 import com.cangjie.frame.kit.update.utils.SSLUtils
 import com.kongzue.dialogx.DialogX
+import kotlinx.coroutines.*
 
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -26,18 +31,45 @@ class ScaleApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         setApplication(this)
-//        SerialPortUtilForScale.Instance().OpenSerialPort() //打开称重串口
         CangJie.init(this)
         CangJie.config {
             multiProcess = true
             encryptKey = "encryptKey"
         }
-        ToastUtils.init(this,
+        ToastUtils.init(
+            this,
             BlackToastStyle()
         )
+        initWeight()
         HttpManager.init(this)
         update()
         DialogX.init(this)
+    }
+
+    /** 设备过滤器 */
+    private val deviceFilter = object : DeviceFilter {
+        override fun allow(device: String): Boolean {
+            // 不允许打开usb的串口
+            return !device.contains("usb", true)
+        }
+    }
+
+    private fun initWeight() {
+        try {
+            GlobalScope.launch {
+                val opened = withContext(Dispatchers.IO) {
+                    SerialPortManager.instance().open(9600, deviceFilter)
+                }
+                if (!opened) {
+                    ToastUtils.show("初始化称重主板错误！")
+                }
+            }
+        } catch (e: java.lang.Exception) {
+            e.printStackTrace()
+            ViewUtils.runOnUiThread {
+                ToastUtils.show("初始化称重主板错误！")
+            }
+        }
     }
 
     private fun update() {
